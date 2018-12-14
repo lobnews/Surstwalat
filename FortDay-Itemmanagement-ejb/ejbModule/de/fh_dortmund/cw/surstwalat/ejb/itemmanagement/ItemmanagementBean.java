@@ -10,15 +10,19 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.jms.Destination;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.Topic;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import de.fh_dortmund.cw.surstwalat.common.HealthItem;
 import de.fh_dortmund.cw.surstwalat.common.HealthItem.Level;
 import de.fh_dortmund.cw.surstwalat.common.Item;
 import de.fh_dortmund.cw.surstwalat.common.MessageType;
+import de.fh_dortmund.cw.surstwalat.common.User;
 import de.fh_dortmund.cw.surstwalat.common.Wuerfel;
 
 @Startup
@@ -27,6 +31,9 @@ public class ItemmanagementBean {
 	
 	@Inject
 	private JMSContext jmsContext;
+	
+	@PersistenceContext
+	private EntityManager entitymanager;
 	
 	@Resource(lookup="java:global/jms/ItemmanagementMessageTopic")
 	private Topic topic;
@@ -94,6 +101,28 @@ public class ItemmanagementBean {
 		
 		defaultItems.add(new Wuerfel(new int[]{1,3,5}, "Ungrade"));
 		defaultItems.add(new Wuerfel(new int[]{2,4,6}, "Grade"));
+	}
+	
+	public void addItemToUser(String UserID, Item item) {
+		User user = entitymanager.find(User.class, UserID);
+		if(user != null) {
+			user.addInventar(item);
+			entitymanager.merge(user);
+		}
+	}
+	
+	public void sendUserInventar(String UserID, Destination dest) {
+		User user = entitymanager.find(User.class, UserID);
+		Message msg = jmsContext.createMessage();
+		
+		try {
+			msg.setStringProperty("MessageType", MessageType.PlayerInventar.name());
+			msg.setStringProperty("UserID", UserID);
+			msg.setObjectProperty("Inventar", user.getInventar());
+			jmsContext.createProducer().send(dest, msg);
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void spawnAirDrop() {

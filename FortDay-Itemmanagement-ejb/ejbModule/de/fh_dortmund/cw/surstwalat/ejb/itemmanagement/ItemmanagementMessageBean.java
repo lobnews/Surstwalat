@@ -5,6 +5,7 @@ import java.util.List;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
+import javax.jms.Destination;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -33,6 +34,14 @@ public class ItemmanagementMessageBean implements MessageListener {
 			} else if (MessageType.SpawnPlayerItems.name().equals(msgType)) {
 				List<Item> items = (List<Item>) message.getObjectProperty("ItemList");
 				itemBean.spawnAllItems(items);
+			} else if (MessageType.AddItemToPlayer.name().equals(msgType)) {
+				Item item = (Item) message.getObjectProperty("Item");
+				String UserID = message.getStringProperty("UserID");
+				itemBean.addItemToUser(UserID, item);
+			}else if (MessageType.GetPlayerInventar.name().equals(msgType)) {
+				String UserID = message.getStringProperty("UserID");
+				Destination dest = (Destination) message.getObjectProperty("Dest");
+				itemBean.sendUserInventar(UserID, dest);
 			}
 		} catch (JMSException e) {
 			e.printStackTrace();

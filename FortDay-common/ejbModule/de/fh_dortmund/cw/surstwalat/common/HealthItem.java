@@ -1,5 +1,6 @@
 package de.fh_dortmund.cw.surstwalat.common;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
@@ -10,26 +11,16 @@ public class HealthItem extends Item {
 		Stufe_1, Stufe_2, Stufe_3
 	};
 	
+	@Column
 	private Level level;
 	
-	/**
-	 * Menge der Heilung bei Anwenung
-	 */
-	private int amount;
+	public HealthItem() {
+		this(null);
+	}
 	
 	public HealthItem(Level level) {
 		this.level = level;
-		switch (level) {
-			case Stufe_1:
-				amount = 20;
-				break;
-			case Stufe_2:
-				amount = 50;
-				break;
-			case Stufe_3:
-				amount = 100;
-				break;
-		}
+		
 	}
 
 	public Level getLevel() {
@@ -37,6 +28,15 @@ public class HealthItem extends Item {
 	}
 
 	public int getAmount() {
-		return amount;
+		switch (level) {
+			case Stufe_1:
+				return 20;
+			case Stufe_2:
+				return 50;
+			case Stufe_3:
+				return 100;
+			default:
+				return 0;
+		}
 	}
 }
