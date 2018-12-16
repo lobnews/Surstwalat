@@ -1,4 +1,4 @@
-package de.fh_dortmund.cw.surstwalat.client;
+package de.fh_dortmund.inf.cw.surstwalat.client;
 
 public class Main {
 	public static void main(String[] args) {

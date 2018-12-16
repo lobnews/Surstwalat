@@ -1,4 +1,4 @@
-package net.fh_dortmund.cw.surstwalat.ejb.health;
+package de.fh_dortmund.inf.cw.surstwalat.health;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
