@@ -3,10 +3,8 @@
 */.settings
 /.metadata/
 /.recommenders/
-/glassfish4/glassfish/domains/*
 */build.xml
 */nbproject/
-*/manifest.mf
 */build/
 */dist/
 *.MF
