@@ -12,21 +12,22 @@ import javax.swing.JPanel;
  * @author Lars
  */
 public class MainFrame extends javax.swing.JFrame {
-    
+
     private static MainFrame INSTANCE;
-    
+
     public static MainFrame getInstance() {
-        if(INSTANCE == null) {
+        if (INSTANCE == null) {
             INSTANCE = new MainFrame();
         }
         return INSTANCE;
     }
-    
+
     /**
      * Creates new form MainFrame
      */
     private MainFrame() {
         initComponents();
+//        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -46,7 +47,8 @@ public class MainFrame extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(100, 100));
         getContentPane().add(loginPanel1, java.awt.BorderLayout.CENTER);
 
-        pack();
+        setSize(new java.awt.Dimension(416, 339));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -65,25 +67,19 @@ public class MainFrame extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        
+        //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                getInstance().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            getInstance().setVisible(true);
         });
     }
-    
+
     public void setFrame(JPanel newFrame) {
         getContentPane().removeAll();
         getContentPane().add(newFrame, java.awt.BorderLayout.CENTER);
