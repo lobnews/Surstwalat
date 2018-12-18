@@ -89,7 +89,7 @@ public class ChangePasswordDialog extends JDialog {
 				// TODO Login check
 
 				JOptionPane.showMessageDialog(ChangePasswordDialog.this,
-				        "Das Passwort wurde erfolgreich ge‰ndert", "Passwort ge‰ndert",
+				        "Das Passwort wurde erfolgreich ge√§ndert", "Passwort ge√§ndert",
 				        JOptionPane.INFORMATION_MESSAGE);
 				dispose();
 			}

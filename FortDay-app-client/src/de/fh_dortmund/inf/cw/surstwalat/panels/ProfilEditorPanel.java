@@ -78,7 +78,7 @@ public class ProfilEditorPanel extends JPanel {
 		gridBag.gridwidth = 2;
 		this.add(tf_email, gridBag);
 
-		bt_changePassword = new JButton("Passwort ändern");
+		bt_changePassword = new JButton("Passwort Ã¤ndern");
 		ProfilEditorPanel panel = this;
 		bt_changePassword.addActionListener(new ActionListener() {
 
