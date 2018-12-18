@@ -15,8 +15,8 @@
     <destination-name>HealthMessageTopic</destination-name>
   </jms-destination>
   <jms-destination>
-    <name>java:global/jms/LoginQueue</name>
-    <interface-name>javax.jms.Queue</interface-name>
-    <destination-name>LoginQueue</destination-name>
+    <name>java:global/jms/UserMessageTopic</name>
+    <interface-name>javax.jms.Topic</interface-name>
+    <destination-name>UserMessageTopic</destination-name>
   </jms-destination>
 </application>

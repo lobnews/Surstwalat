@@ -1,9 +1,24 @@
 package de.fh_dortmund.inf.cw.surstwalat.usermanagment;
 
-import javax.ejb.Stateless;
+import javax.ejb.ActivationConfigProperty;
+import javax.ejb.MessageDriven;
+import javax.jms.Message;
+import javax.jms.MessageListener;
 
-@Stateless
-public class UserManagementBean {
+/**
+ * @author ExaShox
+ *
+ */
+@MessageDriven(
+		activationConfig = { @ActivationConfigProperty(
+				propertyName = "destinationType", propertyValue = "javax.jms.Topic")
+		}, 
+		mappedName = "java:global/jms/UserMessageTopic")
+public class UserManagementBean implements MessageListener {
+
+	public void onMessage(Message message) {
+		// TODO Auto-generated method stub
+	}
 
 //	@PersistenceContext(unitName = "ChatDB")
 //	private EntityManager manager;
