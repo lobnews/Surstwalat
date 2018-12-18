@@ -5,7 +5,7 @@
 	version="3.2">
 	<enterprise-beans>
 		<message-driven>
-			<ejb-name>UserMessageTopic</ejb-name>
+			<ejb-name>UserManagementBean</ejb-name>
 		</message-driven>
 	</enterprise-beans>
 	<ejb-client-jar>FortDay-common.jar</ejb-client-jar>
