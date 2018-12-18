@@ -4,11 +4,19 @@
     <ejb>FortDay-Health-ejb.jar</ejb>
   </module>
   <module>
+    <ejb>FortDay-User-ejb.jar</ejb>
+  </module>
+  <module>
     <java>FortDay-common.jar</java>
   </module>
   <jms-destination>
     <name>java:global/jms/HealthMessageTopic</name>
     <interface-name>javax.jms.Topic</interface-name>
     <destination-name>HealthMessageTopic</destination-name>
+  </jms-destination>
+  <jms-destination>
+    <name>java:global/jms/LoginQueue</name>
+    <interface-name>javax.jms.Queue</interface-name>
+    <destination-name>LoginQueue</destination-name>
   </jms-destination>
 </application>
