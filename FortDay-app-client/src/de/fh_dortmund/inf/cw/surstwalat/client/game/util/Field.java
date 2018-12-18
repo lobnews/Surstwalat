@@ -10,5 +10,5 @@ package de.fh_dortmund.inf.cw.surstwalat.client.game.util;
  * @author Lars
  */
 public class Field {
-    
+
 }

@@ -21,10 +21,10 @@ import javax.swing.event.ListDataListener;
  * @author Lars
  */
 public class MainFrame extends javax.swing.JFrame {
-    
+
     private static final String mapsFile = "maps.yml";
     private MapModel mapModel;
-    
+
     /**
      * Creates new form MainFrame
      */
@@ -96,12 +96,12 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<String> jComboBox1;
     // End of variables declaration//GEN-END:variables
 
-    private class MapModel extends Observable implements ComboBoxModel<String>{
-        
+    private class MapModel extends Observable implements ComboBoxModel<String> {
+
         private static final String CONFIG_PATH = "resources/mapdata/";
         private final List<Map> maps;
         private int selected;
-        
+
         public MapModel(String fileName) {
             MapLoader loader = new MapLoader(CONFIG_PATH + fileName);
             List<Map> mapsCache = new LinkedList<>();
@@ -114,13 +114,13 @@ public class MainFrame extends javax.swing.JFrame {
                 maps = mapsCache;
             }
         }
-        
+
         @Override
         public void setSelectedItem(Object anItem) {
             System.out.println("Set Item " + anItem);
             int i = 0;
-            for(Map map:maps) {
-                if(anItem.equals(map.getName())) {
+            for (Map map : maps) {
+                if (anItem.equals(map.getName())) {
                     System.out.println("Found item at " + i);
                     selected = i;
                     System.out.println(String.format("Found %d observers.", countObservers()));
@@ -148,11 +148,13 @@ public class MainFrame extends javax.swing.JFrame {
         }
 
         @Override
-        public void addListDataListener(ListDataListener l) {}
+        public void addListDataListener(ListDataListener l) {
+        }
 
         @Override
-        public void removeListDataListener(ListDataListener l) {}
-        
+        public void removeListDataListener(ListDataListener l) {
+        }
+
     }
-    
+
 }

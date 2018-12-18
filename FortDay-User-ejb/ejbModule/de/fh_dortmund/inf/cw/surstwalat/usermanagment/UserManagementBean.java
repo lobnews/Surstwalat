@@ -10,16 +10,17 @@ import javax.jms.MessageListener;
  *
  */
 @MessageDriven(
-		activationConfig = { @ActivationConfigProperty(
-				propertyName = "destinationType", propertyValue = "javax.jms.Topic")
-		}, 
-		mappedName = "java:global/jms/UserMessageTopic")
+        activationConfig = {
+            @ActivationConfigProperty(
+                    propertyName = "destinationType", propertyValue = "javax.jms.Topic")
+        },
+        mappedName = "java:global/jms/UserMessageTopic")
 public class UserManagementBean implements MessageListener {
 
-	@Override
-	public void onMessage(Message message) {
-		// TODO Auto-generated method stub
-	}
+    @Override
+    public void onMessage(Message message) {
+        // TODO Auto-generated method stub
+    }
 
 //	@PersistenceContext(unitName = "ChatDB")
 //	private EntityManager manager;

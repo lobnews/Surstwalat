@@ -10,9 +10,9 @@ package de.fh_dortmund.inf.cw.surstwalat.client.game.util;
  * @author Lars
  */
 public class Map {
-    
+
     private static final String BACKGROUND_PREFIX = "resources/mapdata/backgrounds/";
-    
+
     private final String name;
     private final int xHeight;
     private final int yHeight;
@@ -46,9 +46,9 @@ public class Map {
     public int[][] getField() {
         return field;
     }
-    
+
     public int getField(int x, int y) {
         return field[x][y];
     }
-    
+
 }

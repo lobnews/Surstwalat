@@ -9,18 +9,19 @@ import javax.jms.MessageListener;
  * Message-Driven Bean implementation class for: HealthMessageBean
  */
 @MessageDriven(
-		activationConfig = { @ActivationConfigProperty(
-				propertyName = "destinationType", propertyValue = "javax.jms.Topic")
-		}, 
-		mappedName = "java:global/jms/HealthMessageTopic")
+        activationConfig = {
+            @ActivationConfigProperty(
+                    propertyName = "destinationType", propertyValue = "javax.jms.Topic")
+        },
+        mappedName = "java:global/jms/HealthMessageTopic")
 public class HealthMessageBean implements MessageListener {
-	
-	/**
+
+    /**
      * @see MessageListener#onMessage(Message)
      */
     public void onMessage(Message message) {
         // TODO Auto-generated method stub
-        
+
     }
 
 }

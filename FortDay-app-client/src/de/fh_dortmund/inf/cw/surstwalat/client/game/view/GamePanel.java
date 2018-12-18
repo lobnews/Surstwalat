@@ -24,11 +24,11 @@ import javax.swing.ImageIcon;
  *
  * @author Lars
  */
-public class GamePanel extends javax.swing.JPanel implements Observer{
-    
+public class GamePanel extends javax.swing.JPanel implements Observer {
+
     private Map aktMap = null;
     private BufferedImage background = null;
-    
+
     /**
      * Creates new form GamePanel
      */
@@ -67,7 +67,7 @@ public class GamePanel extends javax.swing.JPanel implements Observer{
 
         add(jLayeredPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
-    
+
     @Override
     public void update(Observable o, Object arg) {
         Map map = (Map) arg;
@@ -77,8 +77,8 @@ public class GamePanel extends javax.swing.JPanel implements Observer{
         gamePanel.setLayout(layout);
         gamePanel.removeAll();
         aktMap = map;
-        for(int y = 0; y < map.getyHeight(); y++) {
-            for(int x = 0; x < map.getxHeight(); x++) {
+        for (int y = 0; y < map.getyHeight(); y++) {
+            for (int x = 0; x < map.getxHeight(); x++) {
                 gamePanel.add(new FieldPanel(x, y, map.getField(x, y)));
             }
         }
@@ -88,7 +88,7 @@ public class GamePanel extends javax.swing.JPanel implements Observer{
         } catch (IOException ex) {
             Logger.getLogger(GamePanel.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         repaint();
     }
 
@@ -96,7 +96,7 @@ public class GamePanel extends javax.swing.JPanel implements Observer{
     public void paint(Graphics g) {
         super.paint(g);
         backgroundPanel.setSize(jLayeredPane1.getSize());
-        if(background != null) {
+        if (background != null) {
             BufferedImage newBackground = new BufferedImage(backgroundPanel.getWidth(), backgroundPanel.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
             Graphics2D g2D = (Graphics2D) newBackground.getGraphics();
             g2D.drawImage(background, 0, 0, newBackground.getWidth(), newBackground.getHeight(), 0, 0, background.getWidth(), background.getHeight(), null);

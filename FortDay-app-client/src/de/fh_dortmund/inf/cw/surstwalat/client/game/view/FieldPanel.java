@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package de.fh_dortmund.inf.cw.surstwalat.client.game.view;
-    
+
 import de.fh_dortmund.inf.cw.surstwalat.client.util.Pawn;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.PawnColor;
 import java.awt.Dimension;
@@ -23,13 +23,13 @@ public class FieldPanel extends javax.swing.JPanel {
     public static final int MIN_WIDTH = 25;
     public static final int MIN_HEIGHT = 25;
     public static final double HEALTH_HEIGHT_FACTOR = 0.1;
-    
+
     private final int x;
     private final int y;
     private final int value;
-    
+
     private final Pawn pawn;
-    
+
     /**
      * Creates new form FieldPanel
      */
@@ -37,9 +37,9 @@ public class FieldPanel extends javax.swing.JPanel {
         this.x = x;
         this.y = y;
         this.value = value;
-        if(value > 0) {
+        if (value > 0) {
             Random r = new Random();
-            if(r.nextBoolean()) {
+            if (r.nextBoolean()) {
                 pawn = new Pawn(PawnColor.values()[r.nextInt(PawnColor.values().length)], r.nextInt(10) + 1);
                 pawn.setHealth(r.nextInt((int) pawn.getMaxHealth()));
             } else {
@@ -122,15 +122,15 @@ public class FieldPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
-        if(value != 0) {
+        if (value != 0) {
             System.out.println(String.format("clicked X: %3d Y: %3d Value: %2d", x, y, value));
         }
     }//GEN-LAST:event_formMouseClicked
-    
+
     public boolean isClickable() {
         return value != 0;
     }
-    
+
     public int getValue() {
         return value;
     }
@@ -139,7 +139,7 @@ public class FieldPanel extends javax.swing.JPanel {
     public void paint(Graphics g) {
         backgroundLayer.setSize(jLayeredPane1.getSize());
         foregroundLayer.setSize(jLayeredPane1.getSize());
-        if(pawn != null) {
+        if (pawn != null) {
             BufferedImage newBackground = new BufferedImage(backgroundLayer.getWidth(), backgroundLayer.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
             Graphics2D g2D = (Graphics2D) newBackground.getGraphics();
             g2D.drawImage(pawn.getColor().getPawnImage(), 0, 0, newBackground.getWidth(), newBackground.getHeight(), 0, 0, pawn.getColor().getPawnImage().getWidth(), pawn.getColor().getPawnImage().getHeight(), null);
@@ -154,7 +154,7 @@ public class FieldPanel extends javax.swing.JPanel {
         }
         super.paint(g);
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel backgroundLabel;
