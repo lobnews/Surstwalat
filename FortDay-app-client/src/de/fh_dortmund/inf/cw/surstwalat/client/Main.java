@@ -5,9 +5,9 @@ import java.awt.FlowLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import de.fh_dortmund.inf.cw.surstwalat.panels.LoginPanel;
-import de.fh_dortmund.inf.cw.surstwalat.panels.ProfilEditorPanel;
-import de.fh_dortmund.inf.cw.surstwalat.panels.RegistryPanel;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.view.LoginPanel;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.view.ProfilEditorPanel;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.view.RegistryPanel;
 
 public class Main {
 
