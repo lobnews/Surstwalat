@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package de.fh_dortmund.inf.cw.surstwalat.dialogs;
 
@@ -51,7 +51,7 @@ public class ChangePasswordDialog extends JDialog {
 		JPanel gridPanel = new JPanel(new GridBagLayout());
 		GridBagConstraints gridBag = new GridBagConstraints();
 		gridBag.fill = GridBagConstraints.HORIZONTAL;
-		
+
 		int gridRow = 0;
 
 		lb_password = new JLabel("Password: ");
@@ -79,7 +79,6 @@ public class ChangePasswordDialog extends JDialog {
 		gridBag.gridwidth = 2;
 		gridPanel.add(pf_password_repeat, gridBag);
 		gridPanel.setBorder(new LineBorder(Color.GRAY));
-
 
 		bt_update = new JButton("Speichern");
 

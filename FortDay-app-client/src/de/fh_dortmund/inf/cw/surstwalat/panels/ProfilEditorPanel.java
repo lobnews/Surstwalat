@@ -46,7 +46,7 @@ public class ProfilEditorPanel extends JPanel {
 	 */
 	private void initComponent() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		this.setLayout(gridBagLayout);
+		setLayout(gridBagLayout);
 		GridBagConstraints gridBag = new GridBagConstraints();
 		gridBag.fill = GridBagConstraints.HORIZONTAL;
 		gridBag.insets = new Insets(5, 5, 5, 5);
@@ -109,7 +109,7 @@ public class ProfilEditorPanel extends JPanel {
 
 	/**
 	 * Get email adress
-	 * 
+	 *
 	 * @return email
 	 */
 	public String getEMail() {

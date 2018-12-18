@@ -6,7 +6,7 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 
 /**
- * @author ExaShox
+ * @author Stephan Klimek
  *
  */
 @MessageDriven(
@@ -16,6 +16,7 @@ import javax.jms.MessageListener;
 		mappedName = "java:global/jms/UserMessageTopic")
 public class UserManagementBean implements MessageListener {
 
+	@Override
 	public void onMessage(Message message) {
 		// TODO Auto-generated method stub
 	}

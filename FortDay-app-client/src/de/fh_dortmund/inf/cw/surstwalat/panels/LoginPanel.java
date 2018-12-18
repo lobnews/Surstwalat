@@ -48,7 +48,7 @@ public class LoginPanel extends JPanel {
 	 */
 	private void initComponent() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		this.setLayout(gridBagLayout);
+		setLayout(gridBagLayout);
 		GridBagConstraints gridBag = new GridBagConstraints();
 		gridBag.fill = GridBagConstraints.HORIZONTAL;
 		gridBag.insets = new Insets(5, 5, 5, 5);
@@ -76,7 +76,7 @@ public class LoginPanel extends JPanel {
 		gridBag.gridy = 1;
 		gridBag.gridwidth = 2;
 		this.add(pf_password, gridBag);
-		this.setBorder(new LineBorder(Color.GRAY));
+		setBorder(new LineBorder(Color.GRAY));
 
 		bt_login = new JButton("Login");
 		bt_login.addActionListener(new ActionListener() {
@@ -98,7 +98,7 @@ public class LoginPanel extends JPanel {
 
 	/**
 	 * Get Username
-	 * 
+	 *
 	 * @return username
 	 */
 	public String getUsername() {
@@ -107,7 +107,7 @@ public class LoginPanel extends JPanel {
 
 	/**
 	 * Get Password
-	 * 
+	 *
 	 * @return password
 	 */
 	public String getPassword() {
@@ -116,7 +116,7 @@ public class LoginPanel extends JPanel {
 
 	/**
 	 * Get bool succeeded
-	 * 
+	 *
 	 * @return succeeded
 	 */
 	public boolean isSucceeded() {

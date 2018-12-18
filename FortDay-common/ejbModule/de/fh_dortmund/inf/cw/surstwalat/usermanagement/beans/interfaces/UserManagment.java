@@ -4,7 +4,7 @@
 package de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces;
 
 /**
- * @author ExaShox
+ * @author Stephan Klimek
  *
  */
 public interface UserManagment {

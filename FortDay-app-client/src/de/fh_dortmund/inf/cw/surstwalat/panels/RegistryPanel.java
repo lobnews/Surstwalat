@@ -51,7 +51,7 @@ public class RegistryPanel extends JPanel {
 	 */
 	private void initComponent() {
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		this.setLayout(gridBagLayout);
+		setLayout(gridBagLayout);
 		GridBagConstraints gridBag = new GridBagConstraints();
 		gridBag.fill = GridBagConstraints.HORIZONTAL;
 		gridBag.insets = new Insets(5, 5, 5, 5);
@@ -93,7 +93,7 @@ public class RegistryPanel extends JPanel {
 		gridBag.gridy = gridRow;
 		gridBag.gridwidth = 2;
 		this.add(pf_password, gridBag);
-		this.setBorder(new LineBorder(Color.GRAY));
+		setBorder(new LineBorder(Color.GRAY));
 
 		lb_password_repeat = new JLabel("Passwort wiederholen: ");
 		gridBag.gridx = 0;
@@ -106,7 +106,7 @@ public class RegistryPanel extends JPanel {
 		gridBag.gridy = gridRow;
 		gridBag.gridwidth = 2;
 		this.add(pf_password_repeat, gridBag);
-		this.setBorder(new LineBorder(Color.GRAY));
+		setBorder(new LineBorder(Color.GRAY));
 
 		bt_registry = new JButton("Registrieren");
 		bt_registry.addActionListener(new ActionListener() {
@@ -126,7 +126,7 @@ public class RegistryPanel extends JPanel {
 
 	/**
 	 * Get Username
-	 * 
+	 *
 	 * @return username
 	 */
 	public String getUsername() {
@@ -135,7 +135,7 @@ public class RegistryPanel extends JPanel {
 
 	/**
 	 * Get Password
-	 * 
+	 *
 	 * @return password
 	 */
 	public String getPassword() {

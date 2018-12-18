@@ -3,20 +3,18 @@ package de.fh_dortmund.inf.cw.surstwalat.usermanagement;
 /**
  * @author Stephan Klimek
  *
- * User account
+ *         User account
  */
 public class Account {
 
 	private String username;
 	private String email;
 	private String password;
-	
+
 	/**
 	 * Default Constructor
 	 */
-	public Account() {
-		// TODO Auto-generated constructor stub
-	}
+	public Account() {}
 
 	/**
 	 * @return the username
@@ -60,7 +58,8 @@ public class Account {
 		this.password = password;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
 	@Override
@@ -72,7 +71,8 @@ public class Account {
 		return result;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	@Override
