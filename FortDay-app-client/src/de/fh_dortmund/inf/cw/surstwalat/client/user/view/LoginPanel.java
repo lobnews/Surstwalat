@@ -1,5 +1,8 @@
 package de.fh_dortmund.inf.cw.surstwalat.client.user.view;
 
+import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
+import de.fh_dortmund.inf.cw.surstwalat.client.game.view.GamePanel;
+import de.fh_dortmund.inf.cw.surstwalat.client.game.view.MainPanel;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -85,6 +88,7 @@ public class LoginPanel extends JPanel {
                         "Hallo " + getUsername() + "! You have successfully logged in.", "Login",
                         JOptionPane.INFORMATION_MESSAGE);
                 succeeded = true;
+                MainFrame.getInstance().setFrame(new MainPanel());
             }
         });
         gridBag.gridx = 0;

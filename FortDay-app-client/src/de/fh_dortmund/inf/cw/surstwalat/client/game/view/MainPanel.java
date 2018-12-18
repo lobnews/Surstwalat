@@ -20,15 +20,16 @@ import javax.swing.event.ListDataListener;
  *
  * @author Lars
  */
-public class MainFrame extends javax.swing.JFrame {
+public class MainPanel extends javax.swing.JPanel {
 
     private static final String mapsFile = "maps.yml";
     private MapModel mapModel;
 
     /**
-     * Creates new form MainFrame
+     * Creates new form MainPanel
      */
-    public MainFrame() {
+    public MainPanel() {
+        System.out.println("test");
         initComponents();
         mapModel.addObserver(gamePanel1);
     }
@@ -46,50 +47,17 @@ public class MainFrame extends javax.swing.JFrame {
         jComboBox1 = new javax.swing.JComboBox<>();
         gamePanel1 = new de.fh_dortmund.inf.cw.surstwalat.client.game.view.GamePanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(300, 300));
+        setMinimumSize(new java.awt.Dimension(200, 200));
+        setLayout(new java.awt.BorderLayout());
 
         jComboBox1.setModel(mapModel);
-        getContentPane().add(jComboBox1, java.awt.BorderLayout.NORTH);
-        getContentPane().add(gamePanel1, java.awt.BorderLayout.CENTER);
+        jComboBox1.setSelectedIndex(1);
+        add(jComboBox1, java.awt.BorderLayout.NORTH);
 
-        pack();
+        gamePanel1.setMinimumSize(new java.awt.Dimension(200, 200));
+        add(gamePanel1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new MainFrame().setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.fh_dortmund.inf.cw.surstwalat.client.game.view.GamePanel gamePanel1;
@@ -109,7 +77,7 @@ public class MainFrame extends javax.swing.JFrame {
                 loader.loadAll();
                 mapsCache = loader.getMaps();
             } catch (MapFormatException ex) {
-                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(MainPanel.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
                 maps = mapsCache;
             }
@@ -156,5 +124,4 @@ public class MainFrame extends javax.swing.JFrame {
         }
 
     }
-
 }
