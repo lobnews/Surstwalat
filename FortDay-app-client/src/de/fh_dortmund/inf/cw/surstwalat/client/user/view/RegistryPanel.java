@@ -1,5 +1,6 @@
 package de.fh_dortmund.inf.cw.surstwalat.client.user.view;
 
+import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -35,6 +36,7 @@ public class RegistryPanel extends JPanel {
     private JLabel lb_password_repeat;
     private JPasswordField pf_password_repeat;
     private JButton bt_registry;
+    private JButton bt_abort;
 
     /**
      * Default Constructor
@@ -49,12 +51,15 @@ public class RegistryPanel extends JPanel {
     private void initComponent() {
         GridBagLayout gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);
+        setMinimumSize(new java.awt.Dimension(600, 400));
+        
         GridBagConstraints gridBag = new GridBagConstraints();
         gridBag.fill = GridBagConstraints.HORIZONTAL;
         gridBag.insets = new Insets(5, 5, 5, 5);
 
         int gridRow = 0;
 
+        // Username
         lb_username = new JLabel("Benutzername: ");
         gridBag.gridx = 0;
         gridBag.gridy = gridRow;
@@ -67,6 +72,7 @@ public class RegistryPanel extends JPanel {
         gridBag.gridwidth = 2;
         this.add(tf_username, gridBag);
 
+        // Email
         lb_email = new JLabel("E-Mail Adresse: ");
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
@@ -79,6 +85,7 @@ public class RegistryPanel extends JPanel {
         gridBag.gridwidth = 2;
         this.add(tf_email, gridBag);
 
+        // Password
         lb_password = new JLabel("Password: ");
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
@@ -92,6 +99,7 @@ public class RegistryPanel extends JPanel {
         this.add(pf_password, gridBag);
         setBorder(new LineBorder(Color.GRAY));
 
+        // Password repeat
         lb_password_repeat = new JLabel("Passwort wiederholen: ");
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
@@ -105,20 +113,31 @@ public class RegistryPanel extends JPanel {
         this.add(pf_password_repeat, gridBag);
         setBorder(new LineBorder(Color.GRAY));
 
+        // Registry Button
         bt_registry = new JButton("Registrieren");
-        bt_registry.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(RegistryPanel.this,
-                        "Hallo " + getUsername() + "! You have successfully registry you.", "registry",
-                        JOptionPane.INFORMATION_MESSAGE);
-            }
+        bt_registry.addActionListener((ActionEvent e) -> {
+            // TODO Registry
+    
+            JOptionPane.showMessageDialog(RegistryPanel.this,
+                    "Hallo " + getUsername() + "! You have successfully registry you.", "Registry success",
+                    JOptionPane.INFORMATION_MESSAGE);
+            
+            MainFrame.getInstance().setFrame(new LoginPanel());
         });
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 3;
         this.add(bt_registry, gridBag);
+
+        // Back Button
+        bt_abort = new JButton("Abbrechen");
+        bt_abort.addActionListener((ActionEvent e) -> {
+            MainFrame.getInstance().setFrame(new LoginPanel());
+        });
+        gridBag.gridx = 0;
+        gridBag.gridy = ++gridRow;
+        gridBag.gridwidth = 3;
+        this.add(bt_abort, gridBag);
     }
 
     /**

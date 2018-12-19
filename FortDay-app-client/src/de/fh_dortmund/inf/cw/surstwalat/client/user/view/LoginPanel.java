@@ -34,6 +34,7 @@ public class LoginPanel extends JPanel {
     private JLabel lb_password;
     private JPasswordField pf_password;
     private JButton bt_login;
+    private JButton bt_close;
     private boolean succeeded;
 
     /**
@@ -49,52 +50,61 @@ public class LoginPanel extends JPanel {
     private void initComponent() {
         GridBagLayout gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);
+        setMinimumSize(new java.awt.Dimension(600, 400));
+        
         GridBagConstraints gridBag = new GridBagConstraints();
         gridBag.fill = GridBagConstraints.HORIZONTAL;
         gridBag.insets = new Insets(5, 5, 5, 5);
 
+        int gridRow = 0;
+        
+        // Username
         lb_username = new JLabel("Username: ");
         gridBag.gridx = 0;
-        gridBag.gridy = 0;
+        gridBag.gridy = gridRow;
         gridBag.gridwidth = 1;
         this.add(lb_username, gridBag);
 
         tf_username = new JTextField(20);
         gridBag.gridx = 1;
-        gridBag.gridy = 0;
+        gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
         this.add(tf_username, gridBag);
 
+        // Password
         lb_password = new JLabel("Password: ");
         gridBag.gridx = 0;
-        gridBag.gridy = 1;
+        gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
         this.add(lb_password, gridBag);
 
         pf_password = new JPasswordField(20);
         gridBag.gridx = 1;
-        gridBag.gridy = 1;
+        gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
         this.add(pf_password, gridBag);
         setBorder(new LineBorder(Color.GRAY));
 
+        // Login button
         bt_login = new JButton("Login");
-        bt_login.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO Login check
-
-                JOptionPane.showMessageDialog(LoginPanel.this,
-                        "Hallo " + getUsername() + "! You have successfully logged in.", "Login",
-                        JOptionPane.INFORMATION_MESSAGE);
-                succeeded = true;
-                MainFrame.getInstance().setFrame(new MainPanel());
-            }
+        bt_login.addActionListener((ActionEvent e) -> {
+            // TODO Login check            
+            MainFrame.getInstance().setFrame(new StarterPanel());
         });
         gridBag.gridx = 0;
-        gridBag.gridy = 2;
+        gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 3;
         this.add(bt_login, gridBag);
+
+        // Close button
+        bt_close = new JButton("Beenden");
+        bt_close.addActionListener((ActionEvent e) -> {
+            MainFrame.getInstance().dispose();
+        });
+        gridBag.gridx = 0;
+        gridBag.gridy = ++gridRow;
+        gridBag.gridwidth = 3;
+        this.add(bt_close, gridBag);
     }
 
     /**

@@ -36,6 +36,7 @@ public class ChangePasswordDialog extends JDialog {
 
     /**
      * Default Constructor
+     * @param parent
      */
     public ChangePasswordDialog(Component parent) {
         initComponent(parent);
@@ -93,12 +94,8 @@ public class ChangePasswordDialog extends JDialog {
         });
 
         bt_cancel = new JButton("Cancel");
-        bt_cancel.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-            }
+        bt_cancel.addActionListener((ActionEvent e) -> {
+            dispose();
         });
 
         JPanel bp = new JPanel();

@@ -1,5 +1,6 @@
 package de.fh_dortmund.inf.cw.surstwalat.client.user.view;
 
+import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -29,6 +30,7 @@ public class ProfilEditorPanel extends JPanel {
     private JLabel lb_email;
     private JTextField tf_email;
     private JButton bt_updateProfil;
+    private JButton bt_back;
     private JButton bt_changePassword;
 
     /**
@@ -44,13 +46,16 @@ public class ProfilEditorPanel extends JPanel {
     private void initComponent() {
         GridBagLayout gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);
+        setMinimumSize(new java.awt.Dimension(600, 400));
+
         GridBagConstraints gridBag = new GridBagConstraints();
         gridBag.fill = GridBagConstraints.HORIZONTAL;
         gridBag.insets = new Insets(5, 5, 5, 5);
 
         int gridRow = 0;
 
-        lb_username = new JLabel("Benutzername");
+        // Username
+        lb_username = new JLabel("Benutzername: ");
         gridBag.gridx = 0;
         gridBag.gridy = gridRow;
         gridBag.gridwidth = 1;
@@ -63,6 +68,7 @@ public class ProfilEditorPanel extends JPanel {
         gridBag.gridwidth = 2;
         this.add(tf_username, gridBag);
 
+        // Email
         lb_email = new JLabel("E-Mail Adresse: ");
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
@@ -75,33 +81,37 @@ public class ProfilEditorPanel extends JPanel {
         gridBag.gridwidth = 2;
         this.add(tf_email, gridBag);
 
+        // Change password button
         bt_changePassword = new JButton("Passwort ändern");
         ProfilEditorPanel panel = this;
-        bt_changePassword.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                ChangePasswordDialog changePasswordDialog = new ChangePasswordDialog(panel);
-                changePasswordDialog.setVisible(true);
-            }
+        bt_changePassword.addActionListener((ActionEvent e) -> {
+            ChangePasswordDialog changePasswordDialog = new ChangePasswordDialog(panel);
+            changePasswordDialog.setVisible(true);
         });
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 3;
         this.add(bt_changePassword, gridBag);
 
+        // Edit profil button
         bt_updateProfil = new JButton("Speichern");
-        bt_updateProfil.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-            }
+        bt_updateProfil.addActionListener((ActionEvent e) -> {
+            // TODO update function
         });
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 3;
         this.add(bt_updateProfil, gridBag);
+
+        // Back button
+        bt_back = new JButton("Zurück");
+        bt_back.addActionListener((ActionEvent e) -> {
+            MainFrame.getInstance().setFrame(new StarterPanel());
+        });
+        gridBag.gridx = 0;
+        gridBag.gridy = ++gridRow;
+        gridBag.gridwidth = 3;
+        this.add(bt_back, gridBag);
     }
 
     /**
