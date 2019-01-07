@@ -1,4 +1,4 @@
-package de.fh_dortmund.inf.cw.surstwalat.dispatcher;
+package de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces;
 
 import javax.ejb.Local;
 /**
