@@ -1,4 +1,4 @@
-package de.fh_dortmund.inf.cw.surstwalat.dispatcher;
+package de.fh_dortmund.inf.cw.surstwalat.dispatcher.beans.events;
 
 import java.io.Serializable;
 
@@ -13,13 +13,14 @@ import javax.jms.Topic;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
+import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.EventHelperLocal;
 
 /**
  * Session Bean implementation class EventHelperBean
  * @author Johannes Heiderich
  */
 @Stateless
-public class EventHelperBean implements EventHelperLocal {
+public class OutgoingEventHelperBean implements EventHelperLocal {
 	
 	@Inject
 	private JMSContext jmsContext;
@@ -29,65 +30,65 @@ public class EventHelperBean implements EventHelperLocal {
 	
 	@Override
 	public void triggerAssignPlayerEvent(Integer gameId, Integer userId, Integer playerNo) {
-		ObjectMessage message = createObjectMessage(gameId, MessageType.AssignPlayer);
-		trySetIntProperty(message, PropertyType.UserId, userId);
+		ObjectMessage message = createObjectMessage(gameId, MessageType.ASSIGN_PLAYER);
+		trySetIntProperty(message, PropertyType.USER_ID, userId);
 		trySetObject(message, playerNo);
 		sendMessage(message);
 	}
 	@Override
 	public void triggerStartRoundEvent(Integer gameId, Integer roundNo) {
-		ObjectMessage message = createObjectMessage(gameId, MessageType.StartRound);
-		trySetStringProperty(message, PropertyType.DisplayMessage, "Runde " + roundNo);
+		ObjectMessage message = createObjectMessage(gameId, MessageType.START_ROUND);
+		trySetStringProperty(message, PropertyType.DISPLAY_MESSAGE, "Runde " + roundNo);
 		trySetObject(message, roundNo);
 		sendMessage(message);
 	}
 	@Override
 	public void triggerAssignActivePlayerEvent(Integer gameId, Integer playerNo) {
-		ObjectMessage message = createObjectMessage(gameId, MessageType.AssignActivePlayer);
-		trySetStringProperty(message, PropertyType.DisplayMessage, "Spieler " + playerNo + " ist an der Reihe");
+		ObjectMessage message = createObjectMessage(gameId, MessageType.ASSIGN_ACTIVE_PLAYER);
+		trySetStringProperty(message, PropertyType.DISPLAY_MESSAGE, "Spieler " + playerNo + " ist an der Reihe");
 		trySetObject(message, playerNo);
 		sendMessage(message);
 	}
 	@Override
 	public void triggerPlayerRollEvent(Integer gameId, Integer playerNo, Integer value) {
-		ObjectMessage message = createObjectMessage(gameId, MessageType.PlayerRoll);
-		trySetIntProperty(message, PropertyType.PlayerNo, value);
-		trySetStringProperty(message, PropertyType.DisplayMessage, "Spieler " + playerNo + " würfelt eine " + value);
+		ObjectMessage message = createObjectMessage(gameId, MessageType.PLAYER_ROLL);
+		trySetIntProperty(message, PropertyType.PLAYER_NO, value);
+		trySetStringProperty(message, PropertyType.DISPLAY_MESSAGE, "Spieler " + playerNo + " würfelt eine " + value);
 		trySetObject(message, value);
 		sendMessage(message);
 	}
 	@Override
 	public void triggerEndRoundEvent(Integer gameId, Integer roundNo) {
-		ObjectMessage message = createObjectMessage(gameId, MessageType.EndRound);
+		ObjectMessage message = createObjectMessage(gameId, MessageType.END_ROUND);
 		trySetObject(message, roundNo);
 		sendMessage(message);
 	}
 	@Override
 	public void triggerEliminatePlayerEvent(Integer gameId, Integer playerNo) {
-		ObjectMessage message = createObjectMessage(gameId, MessageType.EliminatePlayer);
-		trySetStringProperty(message, PropertyType.DisplayMessage, "Spieler " + playerNo + " scheidet aus");
+		ObjectMessage message = createObjectMessage(gameId, MessageType.ELIMINATE_PLAYER);
+		trySetStringProperty(message, PropertyType.DISPLAY_MESSAGE, "Spieler " + playerNo + " scheidet aus");
 		trySetObject(message, playerNo);
 		sendMessage(message);
 	}
 	
-	private ObjectMessage createObjectMessage(Integer gameId, MessageType messageType) {
+	private ObjectMessage createObjectMessage(Integer gameId, int messageType) {
 		ObjectMessage message = jmsContext.createObjectMessage();
-		trySetIntProperty(message, PropertyType.MessageType, messageType.ordinal());
-		trySetIntProperty(message, PropertyType.GameId, gameId);
+		trySetIntProperty(message, PropertyType.MESSAGE_TYPE, messageType);
+		trySetIntProperty(message, PropertyType.GAME_ID, gameId);
 		return message;
 	}
 	
-	private void trySetIntProperty(Message message, PropertyType propertyType, Integer value) {
+	private void trySetIntProperty(Message message, String propertyType, Integer value) {
 		try {
-			message.setIntProperty(propertyType.toString(), value);
+			message.setIntProperty(propertyType, value);
 		} catch (JMSException e) {
 			System.out.println("Failed to set" + propertyType.toString() + "to " + value);
 		}
 	}
 	
-	private void trySetStringProperty(Message message, PropertyType propertyType, String value) {
+	private void trySetStringProperty(Message message, String propertyType, String value) {
 		try {
-			message.setStringProperty(propertyType.toString(), value);
+			message.setStringProperty(propertyType, value);
 		} catch (JMSException e) {
 			System.out.println("Failed to set" + propertyType.toString() + "to " + value);
 		}
