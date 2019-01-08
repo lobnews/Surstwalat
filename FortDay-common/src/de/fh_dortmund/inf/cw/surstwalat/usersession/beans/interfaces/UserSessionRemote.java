@@ -6,7 +6,7 @@ import javax.ejb.Remote;
  * @author Daniel Buschmann
  *
  */
-Remote
-public interface UserSessionLocal extends UserSession{
+@Remote
+public interface UserSessionRemote extends UserSession{
 
 }
