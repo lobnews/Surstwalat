@@ -11,6 +11,7 @@ import javax.jms.Message;
 import javax.jms.ObjectMessage;
 import javax.jms.Topic;
 
+import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionLocal;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
@@ -28,9 +29,46 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	@Resource(lookup = "java:global/jms/FortDayEventTopic")
 	private Topic eventTopic;
 	
+	@Override
 	public void login() 
 	{
-		ObjectMessage msg = jmsContext.createObjectMessage();
+		ObjectMessage msg = createObjectMessage(2, MessageType.USER_LOGIN);
+//		trySetIntProperty(msg, PropertyType.MESSAGE_TYPE, messageType);
+//		trySetIntProperty(msg, PropertyType.GAME_ID, gameId);
+		sendMessage(msg);
+	}
+	
+	@Override
+	public void logout() 
+	{
+		ObjectMessage msg = createObjectMessage(2, MessageType.USER_LOGOUT);
+//		trySetIntProperty(msg, PropertyType.MESSAGE_TYPE, messageType);
+//		trySetIntProperty(msg, PropertyType.GAME_ID, gameId);
+		sendMessage(msg);
+	}
+	
+	@Override
+	public void register() 
+	{
+		ObjectMessage msg = createObjectMessage(2, MessageType.USER_REGISTER);
+//		trySetIntProperty(msg, PropertyType.MESSAGE_TYPE, messageType);
+//		trySetIntProperty(msg, PropertyType.GAME_ID, gameId);
+		sendMessage(msg);
+	}
+	
+	@Override
+	public void disconnect() 
+	{
+		ObjectMessage msg = createObjectMessage(2, MessageType.USER_DISCONNECT);
+//		trySetIntProperty(msg, PropertyType.MESSAGE_TYPE, messageType);
+//		trySetIntProperty(msg, PropertyType.GAME_ID, gameId);
+		sendMessage(msg);
+	}
+	
+	@Override
+	public void timeout() 
+	{
+		ObjectMessage msg = createObjectMessage(2, MessageType.USER_TIMEOUT);
 //		trySetIntProperty(msg, PropertyType.MESSAGE_TYPE, messageType);
 //		trySetIntProperty(msg, PropertyType.GAME_ID, gameId);
 		sendMessage(msg);
@@ -38,6 +76,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	
 	
 	
+	// administrative methods below //
 	
 	/* Creates an Object message with the gameId and message Type */
 	private ObjectMessage createObjectMessage(Integer gameId, int messageType) {
