@@ -1,4 +1,4 @@
-package de.fh_dortmund.inf.cw.surstwalat.usermanagement;
+package de.fh_dortmund.inf.cw.surstwalat.common.usermanagement;
 
 /**
  * @author Stephan Klimek

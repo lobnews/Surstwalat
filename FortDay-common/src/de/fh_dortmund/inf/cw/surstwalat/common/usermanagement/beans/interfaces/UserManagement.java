@@ -1,10 +1,10 @@
-package de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces;
+package de.fh_dortmund.inf.cw.surstwalat.common.usermanagement.beans.interfaces;
 
 /**
  * @author Stephan Klimek
  *
  */
-public interface UserManagment {
+public interface UserManagement {
 
     public void changePassword(String password, String newPassword) throws Exception;
 

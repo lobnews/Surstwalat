@@ -1,4 +1,4 @@
-package de.fh_dortmund.inf.cw.surstwalat.usermanagment;
+package de.fh_dortmund.inf.cw.surstwalat.usermanagement;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
