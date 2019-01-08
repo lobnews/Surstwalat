@@ -1,4 +1,4 @@
-package de.fh_dortmund.inf.cw.surstwalat.usermanagement;
+package de.fh_dortmund.inf.cw.surstwalat.common.model;
 
 /**
  * @author Stephan Klimek
@@ -7,6 +7,7 @@ package de.fh_dortmund.inf.cw.surstwalat.usermanagement;
  */
 public class Account {
 
+	private int id;
     private String username;
     private String email;
     private String password;
@@ -104,4 +105,12 @@ public class Account {
         }
         return true;
     }
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 }
