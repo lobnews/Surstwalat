@@ -12,15 +12,13 @@ import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import javax.jms.Queue;
 import javax.jms.Topic;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 /**
- *
- * @author ExaShox
+ * @author Stephan Klimek
  */
 public class UserManagementHandler implements MessageListener, ExceptionListener {
 
@@ -32,8 +30,8 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
     private JMSContext jmsContext;
 
     public UserManagementHandler() {
-        String userManagementLookUp 
-                = "java:global/FortDay-ear/FortDay-User-ejb/UserManagementBean!de.fh_dortmund.inf.cw.surstwalat.common.usermanagement.beans.interfaces.UserManagementRemote";
+        String userManagementLookUp
+                = "java:global/FortDay-ear/FortDay-User-ejb/UserBean!de.fh_dortmund.inf.cw.surstwalat.common.usermanagement.beans.interfaces.UserManagementRemote";
 
         try {
             ctx = new InitialContext();
@@ -41,7 +39,7 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
             // ChatRemote
             userManagementRemote = (UserManagementRemote) ctx.lookup(userManagementLookUp);
 
-//            initJMSConnection();
+            // initJMSConnection();
         } catch (NamingException ex) {
             System.err.println(ex.getMessage());
         }
@@ -64,9 +62,8 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
         }
     }
 
-    public void register(String accountName, String password) throws Exception {
-        System.out.println("run register");
-        userManagementRemote.register(accountName, password);
+    public void register(String accountName, String email, String password) throws Exception {
+        userManagementRemote.register(accountName, email, password);
     }
 
     public static UserManagementHandler getInstance() {

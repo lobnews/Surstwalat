@@ -7,28 +7,43 @@ package de.fh_dortmund.inf.cw.surstwalat.common.usermanagement;
  */
 public class Account {
 
-    private String username;
+    private int id;
+    private String name;
     private String email;
     private String password;
 
     /**
-     * Default Constructor
+     * Default constructor
      */
     public Account() {
     }
 
     /**
-     * @return the username
+     * @return the id
      */
-    public String getUsername() {
-        return username;
+    public int getId() {
+        return id;
     }
 
     /**
-     * @param username the username to set
+     * @param id the id to set
      */
-    public void setUsername(String username) {
-        this.username = username;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -68,7 +83,7 @@ public class Account {
         final int prime = 31;
         int result = 1;
         result = prime * result + ((password == null) ? 0 : password.hashCode());
-        result = prime * result + ((username == null) ? 0 : username.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
 
@@ -95,11 +110,11 @@ public class Account {
         } else if (!password.equals(other.password)) {
             return false;
         }
-        if (username == null) {
-            if (other.username != null) {
+        if (name == null) {
+            if (other.name != null) {
                 return false;
             }
-        } else if (!username.equals(other.username)) {
+        } else if (!name.equals(other.name)) {
             return false;
         }
         return true;

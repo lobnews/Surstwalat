@@ -18,5 +18,5 @@ public interface UserManagement {
 
     public void logout() throws Exception;
 
-    public void register(String accountName, String password) throws Exception;
+    public void register(String accountName, String email, String password) throws Exception;
 }

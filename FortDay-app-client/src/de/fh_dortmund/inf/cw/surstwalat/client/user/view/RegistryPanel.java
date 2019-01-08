@@ -124,10 +124,11 @@ public class RegistryPanel extends JPanel {
         bt_registry = new JButton("Registrieren");
         bt_registry.addActionListener((ActionEvent e) -> {
             String accoutName = tf_username.getText();
+            String email = tf_email.getText();
             String password = String.valueOf(pf_password.getPassword());
             
             try {
-                userManager.register(accoutName, password);
+                userManager.register(accoutName, email, password);
             } catch (Exception ex) {
                 Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler", JOptionPane.ERROR_MESSAGE);

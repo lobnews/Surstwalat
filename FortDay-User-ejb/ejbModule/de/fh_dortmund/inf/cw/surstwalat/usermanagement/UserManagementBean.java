@@ -21,7 +21,7 @@ import java.security.NoSuchAlgorithmException;
             @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic")
         },
         mappedName = "java:global/jms/UserMessageTopic")
-public class UserManagementBean implements MessageListener, UserManagementLocal, UserManagementRemote {
+public class UserManagementBean implements MessageListener {
 
     private final ArrayList<Account> userList = new ArrayList<>();
 
@@ -30,40 +30,33 @@ public class UserManagementBean implements MessageListener, UserManagementLocal,
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
     public void delete(String username) throws Exception {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
     public void changePassword(String password, String newPassword) throws Exception {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
     public void disconnect() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-
-    @Override
+    
     public String getUserName() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
     public void login(String accountName, String password) throws Exception {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
     public void logout() throws Exception {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    @Override
-    public void register(String accountName, String password) throws Exception {
+    public void register(String accountName, String email, String password) throws Exception {
         Account account = new Account();
-        account.setUsername(accountName);
+        account.setName(accountName);
         account.setPassword(generateHash(password));
 
         userList.add(account);
