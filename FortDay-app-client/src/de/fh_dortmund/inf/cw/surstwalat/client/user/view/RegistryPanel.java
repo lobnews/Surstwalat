@@ -1,12 +1,15 @@
 package de.fh_dortmund.inf.cw.surstwalat.client.user.view;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -38,11 +41,15 @@ public class RegistryPanel extends JPanel {
     private JButton bt_registry;
     private JButton bt_abort;
 
+    private UserManagementHandler userManager;
+
     /**
      * Default Constructor
      */
     public RegistryPanel() {
         initComponent();
+
+        userManager = UserManagementHandler.getInstance();
     }
 
     /**
@@ -52,7 +59,7 @@ public class RegistryPanel extends JPanel {
         GridBagLayout gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);
         setMinimumSize(new java.awt.Dimension(600, 400));
-        
+
         GridBagConstraints gridBag = new GridBagConstraints();
         gridBag.fill = GridBagConstraints.HORIZONTAL;
         gridBag.insets = new Insets(5, 5, 5, 5);
@@ -116,12 +123,22 @@ public class RegistryPanel extends JPanel {
         // Registry Button
         bt_registry = new JButton("Registrieren");
         bt_registry.addActionListener((ActionEvent e) -> {
-            // TODO Registry
-    
+            String accoutName = tf_username.getText();
+            String password = String.valueOf(pf_password.getPassword());
+            
+            try {
+                userManager.register(accoutName, password);
+            } catch (Exception ex) {
+                Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler", JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
+            }
+
+            // TODO unterscheidung / feedback
             JOptionPane.showMessageDialog(RegistryPanel.this,
                     "Hallo " + getUsername() + "! You have successfully registry you.", "Registry success",
                     JOptionPane.INFORMATION_MESSAGE);
-            
+
             MainFrame.getInstance().setFrame(new LoginPanel());
         });
         gridBag.gridx = 0;

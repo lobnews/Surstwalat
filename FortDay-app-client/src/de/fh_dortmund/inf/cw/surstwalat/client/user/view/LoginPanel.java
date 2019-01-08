@@ -1,18 +1,14 @@
 package de.fh_dortmund.inf.cw.surstwalat.client.user.view;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
-import de.fh_dortmund.inf.cw.surstwalat.client.game.view.GamePanel;
-import de.fh_dortmund.inf.cw.surstwalat.client.game.view.MainPanel;
 import java.awt.Color;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -34,6 +30,7 @@ public class LoginPanel extends JPanel {
     private JLabel lb_password;
     private JPasswordField pf_password;
     private JButton bt_login;
+    private JButton bt_registry;
     private JButton bt_close;
     private boolean succeeded;
 
@@ -95,6 +92,16 @@ public class LoginPanel extends JPanel {
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 3;
         this.add(bt_login, gridBag);
+
+        // Registry button
+        bt_registry = new JButton("Registrieren");
+        bt_registry.addActionListener((ActionEvent e) -> {         
+            MainFrame.getInstance().setFrame(new RegistryPanel());
+        });
+        gridBag.gridx = 0;
+        gridBag.gridy = ++gridRow;
+        gridBag.gridwidth = 3;
+        this.add(bt_registry, gridBag);
 
         // Close button
         bt_close = new JButton("Beenden");

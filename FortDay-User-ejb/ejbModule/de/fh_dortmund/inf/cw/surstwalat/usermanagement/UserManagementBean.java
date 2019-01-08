@@ -1,9 +1,16 @@
 package de.fh_dortmund.inf.cw.surstwalat.usermanagement;
 
+import de.fh_dortmund.inf.cw.surstwalat.common.usermanagement.Account;
+import de.fh_dortmund.inf.cw.surstwalat.common.usermanagement.beans.interfaces.UserManagementLocal;
+import de.fh_dortmund.inf.cw.surstwalat.common.usermanagement.beans.interfaces.UserManagementRemote;
+import java.util.ArrayList;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 /**
  * @author Stephan Klimek
@@ -15,19 +22,15 @@ import javax.jms.MessageListener;
                     propertyName = "destinationType", propertyValue = "javax.jms.Topic")
         },
         mappedName = "java:global/jms/UserMessageTopic")
-public class UserManagementBean implements MessageListener {
+public class UserManagementBean implements MessageListener, UserManagementLocal, UserManagementRemote {
+
+    private final ArrayList<Account> userList = new ArrayList<>();
 
     @Override
     public void onMessage(Message message) {
         // TODO Auto-generated method stub
     }
 
-//	@PersistenceContext(unitName = "ChatDB")
-//	private EntityManager manager;
-//
-//	@Resource(name = "hashAlgorithm")
-//	private String hashAlgorithm; 
-//
 //	public void delete(String username) throws Exception {
 //		UserInfo u = getUserInfo(username);
 //		u.setOnlineUser(false);
@@ -98,15 +101,6 @@ public class UserManagementBean implements MessageListener {
 //		return getUserInfo(username).isOnlineUser();
 //	}
 //
-//	public void register(String userName, String password) throws Exception {
-//		UserInfo info = new UserInfo();
-//		info.setUsername(userName);
-//		info.setPassword(generateHash(password));
-//		UserStatistic statistic = new UserStatistic();
-//		info.setUserStatistic(statistic);
-//		manager.persist(statistic);
-//		manager.persist(info);
-//	}
 //
 //	public boolean checkPassword(String username, String password) {
 //		return checkPassword(getUserInfo(username), password);
@@ -117,14 +111,51 @@ public class UserManagementBean implements MessageListener {
 //	}
 //
 //
-//	public String generateHash(String plaintext) {
-//		String hash;
-//		try {
-//			MessageDigest encoder = MessageDigest.getInstance(hashAlgorithm);
-//			hash = String.format("%040x", new BigInteger(1, encoder.digest(plaintext.getBytes())));
-//		} catch (NoSuchAlgorithmException e) {
-//			hash = null;
-//		}
-//		return hash;
-//	}
+    @Override
+    public void changePassword(String password, String newPassword) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void delete(String password) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void disconnect() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public String getUserName() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void login(String accountName, String password) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void logout() throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void register(String accountName, String password) throws Exception {
+        Account account = new Account();
+        account.setUsername(accountName);
+        account.setPassword(generateHash(password));
+    }
+
+    public String generateHash(String plaintext) {
+        String hash;
+        try {
+            MessageDigest encoder = MessageDigest.getInstance("SHA-1");
+            hash = String.format("%040x", new BigInteger(1, encoder.digest(plaintext.getBytes())));
+        } catch (NoSuchAlgorithmException e) {
+            hash = null;
+        }
+        return hash;
+    }
 }
