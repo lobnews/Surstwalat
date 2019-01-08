@@ -10,11 +10,11 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 
-import de.fh_dortmund.cw.surstwalat.common.Item;
 import de.fh_dortmund.cw.surstwalat.common.MessageType;
+import de.fh_dortmund.inf.cw.surstwalat.itemmanagement.Item;
 
 @MessageDriven(activationConfig = {
-        @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic") }, mappedName = "java:global/jms/ItemmanagementMessageTopic")
+        @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic") }, mappedName = "java:global/jms/FortDayEventTopic")
 public class ItemmanagementMessageBean implements MessageListener {
 
 	private static final int dichte = 50;

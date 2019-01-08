@@ -7,13 +7,8 @@
     <ejb>FortDay-Health-ejb.jar</ejb>
   </module>
   <jms-destination>
-    <name>java:global/jms/HealthMessageTopic</name>
+    <name>java:global/jms/FortDayEventTopic</name>
     <interface-name>javax.jms.Topic</interface-name>
-    <destination-name>HealthMessageTopic</destination-name>
-  </jms-destination>
-  <jms-destination>
-    <name>java:global/jms/ItemmanagementMessageTopic</name>
-    <interface-name>javax.jms.Topic</interface-name>
-    <destination-name>ItemmanagementTopic</destination-name>
+    <destination-name>FortDayEventTopic</destination-name>
   </jms-destination>
 </application>

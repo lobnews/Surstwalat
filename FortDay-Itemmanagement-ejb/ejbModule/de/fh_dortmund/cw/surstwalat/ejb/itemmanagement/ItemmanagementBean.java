@@ -8,7 +8,6 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.jms.Destination;
 import javax.jms.JMSContext;
@@ -18,12 +17,12 @@ import javax.jms.Topic;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import de.fh_dortmund.cw.surstwalat.common.HealthItem;
-import de.fh_dortmund.cw.surstwalat.common.HealthItem.Level;
-import de.fh_dortmund.cw.surstwalat.common.Item;
 import de.fh_dortmund.cw.surstwalat.common.MessageType;
-import de.fh_dortmund.cw.surstwalat.common.User;
-import de.fh_dortmund.cw.surstwalat.common.Wuerfel;
+import de.fh_dortmund.inf.cw.surstwalat.common.Player;
+import de.fh_dortmund.inf.cw.surstwalat.itemmanagement.HealthItem;
+import de.fh_dortmund.inf.cw.surstwalat.itemmanagement.Item;
+import de.fh_dortmund.inf.cw.surstwalat.itemmanagement.Wuerfel;
+import de.fh_dortmund.inf.cw.surstwalat.itemmanagement.HealthItem.Level;
 
 @Startup
 @Singleton
@@ -35,10 +34,10 @@ public class ItemmanagementBean {
 	@PersistenceContext
 	private EntityManager entitymanager;
 	
-	@Resource(lookup="java:global/jms/ItemmanagementMessageTopic")
+	@Resource(lookup="java:global/jms/FortDayEventTopic")
 	private Topic topic;
 	
-	@Resource(lookup="java:global/jms/ItemmanagementMessageTopic")
+	@Resource(lookup="java:global/jms/FortDayEventTopic")
 	private Topic locationManagementDestination;
 	
 	private List<Item> defaultItems;
@@ -104,7 +103,7 @@ public class ItemmanagementBean {
 	}
 	
 	public void addItemToUser(String UserID, Item item) {
-		User user = entitymanager.find(User.class, UserID);
+		Player user = entitymanager.find(Player.class, UserID);
 		if(user != null) {
 			user.addInventar(item);
 			entitymanager.merge(user);
@@ -112,7 +111,7 @@ public class ItemmanagementBean {
 	}
 	
 	public void sendUserInventar(String UserID, Destination dest) {
-		User user = entitymanager.find(User.class, UserID);
+		Player user = entitymanager.find(Player.class, UserID);
 		Message msg = jmsContext.createMessage();
 		
 		try {
