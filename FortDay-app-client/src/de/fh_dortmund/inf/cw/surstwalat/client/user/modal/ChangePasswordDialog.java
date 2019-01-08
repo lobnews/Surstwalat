@@ -6,7 +6,6 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -36,6 +35,7 @@ public class ChangePasswordDialog extends JDialog {
 
     /**
      * Default Constructor
+     *
      * @param parent
      */
     public ChangePasswordDialog(Component parent) {
@@ -80,17 +80,13 @@ public class ChangePasswordDialog extends JDialog {
 
         bt_update = new JButton("Speichern");
 
-        bt_update.addActionListener(new ActionListener() {
+        bt_update.addActionListener((ActionEvent e) -> {
+            // TODO Login check
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO Login check
-
-                JOptionPane.showMessageDialog(ChangePasswordDialog.this,
-                        "Das Passwort wurde erfolgreich geändert", "Passwort geändert",
-                        JOptionPane.INFORMATION_MESSAGE);
-                dispose();
-            }
+            JOptionPane.showMessageDialog(ChangePasswordDialog.this,
+                    "Das Passwort wurde erfolgreich geändert", "Passwort geändert",
+                    JOptionPane.INFORMATION_MESSAGE);
+            dispose();
         });
 
         bt_cancel = new JButton("Cancel");
