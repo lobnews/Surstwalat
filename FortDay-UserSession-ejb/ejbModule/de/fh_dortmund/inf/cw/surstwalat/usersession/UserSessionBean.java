@@ -75,7 +75,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	}
 	
 	
-	
+
 	// administrative methods below //
 	
 	/* Creates an Object message with the gameId and message Type */
