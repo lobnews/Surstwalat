@@ -6,6 +6,7 @@ import javax.ejb.Stateless;
 
 /**
  * Session Bean implementation class GameRepositoryBean
+ * @author Johannes Heiderich
  */
 @Stateless
 public class GameRepositoryBean extends DispatcherRepository<Game, Long> implements GameRepositoryLocal {
