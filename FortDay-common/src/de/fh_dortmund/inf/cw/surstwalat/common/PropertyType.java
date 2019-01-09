@@ -8,4 +8,5 @@ public interface PropertyType {
 	public static final String USER_ID = "USER_ID";
 	public static final String USER_IDS = "USER_IDS";
 	public static final String LOBBY_NAME = "LOBBY_NAME";
+	public static final String GAME_FIELDSIZE = "GAME_FIELDSIZE";
 }

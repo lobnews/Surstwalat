@@ -41,11 +41,54 @@ public class LobbyManagementMessageReceiver implements MessageListener {
 			e.printStackTrace();
 		}
     	switch(messageType) {
-    	
+    	case MessageType.USER_CONNECTED: 
     	}
     	
     }
     
+    public void userConnected(Message message) {
+    	try {
+        	int userid = message.getIntProperty(PropertyType.USER_ID);
+    		lobbyManagement.userLoggedIn(userid);
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    }
     
-
+    public void userDisconnected(Message message) {
+    	try {
+        	int userid = message.getIntProperty(PropertyType.USER_ID);
+    		lobbyManagement.userDisconnected(userid);
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    public void userTimedOut(Message message) {
+    	try {
+        	int userid = message.getIntProperty(PropertyType.USER_ID);
+    		lobbyManagement.userTimedOut(userid);
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    public void userCreatesLobby(Message message) {
+    	try {
+        	int userid = message.getIntProperty(PropertyType.USER_ID);
+    		lobbyManagement.userCreatesGame(userid);
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    }
+    
+    public void userJoinsLobby(Message message) {
+    	try {
+        	int userid = message.getIntProperty(PropertyType.USER_ID);
+        	int gameid = message.getIntProperty(PropertyType.GAME_ID);
+    		lobbyManagement.userJoinsGame(userid,gameid);
+    	}catch(Exception e) {
+    		e.printStackTrace();
+    	}
+    }
 }
