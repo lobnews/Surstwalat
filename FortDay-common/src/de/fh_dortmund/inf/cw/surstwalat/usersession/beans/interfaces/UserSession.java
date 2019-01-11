@@ -6,11 +6,11 @@ package de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces;
  */
 public interface UserSession{
 
-	public void login();
+	public void login(String username, String password) throws Exception;
 	
 	public void logout();
 	
-	public void register();
+	public void register(String username, String password, String email);
 	
 	public void disconnect();
 	
