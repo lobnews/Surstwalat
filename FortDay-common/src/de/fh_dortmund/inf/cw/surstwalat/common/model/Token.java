@@ -1,6 +1,8 @@
 package de.fh_dortmund.inf.cw.surstwalat.common.model;
 
-public class Token {
+import java.io.Serializable;
+
+public class Token  implements Serializable{
 	private int player_id;
 	private int nr;
 	private int health;

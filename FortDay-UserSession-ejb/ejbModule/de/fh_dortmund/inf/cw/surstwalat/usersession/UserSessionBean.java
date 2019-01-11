@@ -13,6 +13,7 @@ import javax.jms.Topic;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionLocal;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
 
@@ -28,31 +29,43 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	
 	@Resource(lookup = "java:global/jms/FortDayEventTopic")
 	private Topic eventTopic;
+		
+	private Account user;
 	
 	@Override
-	public void login() 
+	public void login(String username, String password) throws Exception 
 	{
-		ObjectMessage msg = createObjectMessage(2, MessageType.USER_LOGIN);
-//		trySetIntProperty(msg, PropertyType.MESSAGE_TYPE, messageType);
-//		trySetIntProperty(msg, PropertyType.GAME_ID, gameId);
-		sendMessage(msg);
+		try {
+			if (username.equals(user.getUsername()) && password.equals(user.getPassword()))
+			{
+				ObjectMessage msg = createObjectMessage(2, MessageType.USER_REGISTER);
+				trySetObject(msg, user);
+				sendMessage(msg);
+			}
+			else {
+				throw new Exception("Incorrect credentials");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
 	public void logout() 
 	{
 		ObjectMessage msg = createObjectMessage(2, MessageType.USER_LOGOUT);
-//		trySetIntProperty(msg, PropertyType.MESSAGE_TYPE, messageType);
-//		trySetIntProperty(msg, PropertyType.GAME_ID, gameId);
+		trySetObject(msg, user);
 		sendMessage(msg);
 	}
 	
 	@Override
-	public void register() 
+	public void register(String username, String password, String email) 
 	{
+		user.setUsername(username);
+		user.setPassword(password);
+		user.setEmail(email);
 		ObjectMessage msg = createObjectMessage(2, MessageType.USER_REGISTER);
-//		trySetIntProperty(msg, PropertyType.MESSAGE_TYPE, messageType);
-//		trySetIntProperty(msg, PropertyType.GAME_ID, gameId);
+		trySetObject(msg, user);
 		sendMessage(msg);
 	}
 	
@@ -60,8 +73,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	public void disconnect() 
 	{
 		ObjectMessage msg = createObjectMessage(2, MessageType.USER_DISCONNECT);
-//		trySetIntProperty(msg, PropertyType.MESSAGE_TYPE, messageType);
-//		trySetIntProperty(msg, PropertyType.GAME_ID, gameId);
+		trySetObject(msg, user);
 		sendMessage(msg);
 	}
 	
@@ -69,8 +81,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	public void timeout() 
 	{
 		ObjectMessage msg = createObjectMessage(2, MessageType.USER_TIMEOUT);
-//		trySetIntProperty(msg, PropertyType.MESSAGE_TYPE, messageType);
-//		trySetIntProperty(msg, PropertyType.GAME_ID, gameId);
+		trySetObject(msg, user);
 		sendMessage(msg);
 	}
 	
