@@ -1,6 +1,8 @@
 package de.fh_dortmund.inf.cw.surstwalat.common.model;
 
-public class Item {
+import java.io.Serializable;
+
+public class Item  implements Serializable{
 	private int id;
 
 	public int getId() {
