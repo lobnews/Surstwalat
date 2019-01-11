@@ -1,6 +1,6 @@
 package de.fh_dortmund.inf.cw.surstwalat.usermanagement;
 
-import de.fh_dortmund.inf.cw.surstwalat.common.usermanagement.Account;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import java.util.ArrayList;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;

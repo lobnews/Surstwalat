@@ -5,7 +5,7 @@
  */
 package de.fh_dortmund.inf.cw.surstwalat.client.user;
 
-import de.fh_dortmund.inf.cw.surstwalat.common.usermanagement.beans.interfaces.UserManagementRemote;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces.UserManagementRemote;
 import javax.jms.ConnectionFactory;
 import javax.jms.ExceptionListener;
 import javax.jms.JMSContext;

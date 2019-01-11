@@ -1,4 +1,4 @@
-package de.fh_dortmund.inf.cw.surstwalat.common.usermanagement.beans.interfaces;
+package de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces;
 
 import javax.ejb.Local;
 

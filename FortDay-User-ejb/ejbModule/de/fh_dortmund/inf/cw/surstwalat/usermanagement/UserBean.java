@@ -1,8 +1,8 @@
 package de.fh_dortmund.inf.cw.surstwalat.usermanagement;
 
-import de.fh_dortmund.inf.cw.surstwalat.common.usermanagement.Account;
-import de.fh_dortmund.inf.cw.surstwalat.common.usermanagement.beans.interfaces.UserManagementLocal;
-import de.fh_dortmund.inf.cw.surstwalat.common.usermanagement.beans.interfaces.UserManagementRemote;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces.UserManagementLocal;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces.UserManagementRemote;
 import java.util.ArrayList;
 import javax.annotation.Resource;
 import javax.ejb.EJB;

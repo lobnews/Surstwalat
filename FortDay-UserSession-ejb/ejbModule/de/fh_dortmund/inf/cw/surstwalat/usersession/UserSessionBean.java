@@ -36,7 +36,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	public void login(String username, String password) throws Exception 
 	{
 		try {
-			if (username.equals(user.getUsername()) && password.equals(user.getPassword()))
+			if (username.equals(user.getName()) && password.equals(user.getPassword()))
 			{
 				ObjectMessage msg = createObjectMessage(2, MessageType.USER_REGISTER);
 				trySetObject(msg, user);
@@ -61,7 +61,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	@Override
 	public void register(String username, String password, String email) 
 	{
-		user.setUsername(username);
+		user.setName(username);
 		user.setPassword(password);
 		user.setEmail(email);
 		ObjectMessage msg = createObjectMessage(2, MessageType.USER_REGISTER);

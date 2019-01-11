@@ -1,11 +1,14 @@
-package de.fh_dortmund.inf.cw.surstwalat.common.usermanagement;
+package de.fh_dortmund.inf.cw.surstwalat.common.model;
+
+import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * @author Stephan Klimek
  *
  * User account
  */
-public class Account {
+public class Account implements Serializable {
 
     private int id;
     private String name;
@@ -80,12 +83,13 @@ public class Account {
      */
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((password == null) ? 0 : password.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        return result;
+        int hash = 5;
+        hash = 17 * hash + this.id;
+        hash = 17 * hash + Objects.hashCode(this.name);
+        hash = 17 * hash + Objects.hashCode(this.password);
+        return hash;
     }
+
 
     /*
 	 * (non-Javadoc)
@@ -102,19 +106,14 @@ public class Account {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Account other = (Account) obj;
-        if (password == null) {
-            if (other.password != null) {
-                return false;
-            }
-        } else if (!password.equals(other.password)) {
+        final Account other = (Account) obj;
+        if (this.id != other.id) {
             return false;
         }
-        if (name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!name.equals(other.name)) {
+        if (!Objects.equals(this.name, other.name)) {
+            return false;
+        }
+        if (!Objects.equals(this.password, other.password)) {
             return false;
         }
         return true;
