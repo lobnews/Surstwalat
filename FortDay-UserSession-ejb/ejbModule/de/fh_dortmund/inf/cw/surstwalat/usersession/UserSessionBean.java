@@ -13,6 +13,7 @@ import javax.jms.Topic;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
+import de.fh_dortmund.inf.cw.surstwalat.common.exceptions.UserNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionLocal;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
@@ -31,9 +32,9 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	private Topic eventTopic;
 		
 	private Account user;
-	
+
 	@Override
-	public void login(String username, String password) throws Exception 
+	public void login(String username, String password) throws UserNotFoundException 
 	{
 		try {
 			if (username.equals(user.getUsername()) && password.equals(user.getPassword()))
@@ -43,13 +44,13 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 				sendMessage(msg);
 			}
 			else {
-				throw new Exception("Incorrect credentials");
+				throw new UserNotFoundException();
 			}
-		} catch (Exception e) {
+		} catch (UserNotFoundException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void logout() 
 	{
@@ -57,7 +58,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 		trySetObject(msg, user);
 		sendMessage(msg);
 	}
-	
+
 	@Override
 	public void register(String username, String password, String email) 
 	{
@@ -68,7 +69,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 		trySetObject(msg, user);
 		sendMessage(msg);
 	}
-	
+
 	@Override
 	public void disconnect() 
 	{
@@ -76,7 +77,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 		trySetObject(msg, user);
 		sendMessage(msg);
 	}
-	
+
 	@Override
 	public void timeout() 
 	{
@@ -87,7 +88,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	
 	
 
-	// administrative methods below //
+	// General methods for generating and sending messages below //
 	
 	/* Creates an Object message with the gameId and message Type */
 	private ObjectMessage createObjectMessage(Integer gameId, int messageType) {
@@ -105,7 +106,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 			System.out.println("Failed to set" + propertyType.toString() + "to " + value);
 		}
 	}
-	
+
 	/* Tries to set a String Property; JMSException when failed */
 	private void trySetStringProperty(Message msg, String propertyType, String value) {
 		try {
