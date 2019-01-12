@@ -33,3 +33,4 @@
     <interface-name>javax.jms.Topic</interface-name>
     <destination-name>FortDayEventTopic</destination-name>
   </jms-destination>
+</application>

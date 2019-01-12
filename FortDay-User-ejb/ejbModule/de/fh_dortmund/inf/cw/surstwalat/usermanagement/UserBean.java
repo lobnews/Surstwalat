@@ -1,8 +1,8 @@
 package de.fh_dortmund.inf.cw.surstwalat.usermanagement;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
-import de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces.UserManagementLocal;
-import de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces.UserManagementRemote;
+import de.fh_dortmund.inf.cw.surstwalat.common.interfaces.UserManagementLocal;
+import de.fh_dortmund.inf.cw.surstwalat.common.interfaces.UserManagementRemote;
 import java.util.ArrayList;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -17,14 +17,14 @@ import javax.jms.Topic;
 @Stateless
 public class UserBean implements UserManagementLocal, UserManagementRemote {
     
-    @Inject
-    private JMSContext jmsContext;
+//    @Inject
+//    private JMSContext jmsContext;
 
 //    @Resource(lookup = "java:global/jms/MessageTopic")
 //    private Topic UserMessageTopic;
 
-    @EJB
-    private UserManagementBean userManagement;
+//    @EJB
+//    private UserManagementBean userManagement;
 
     private final ArrayList<Account> accountList = new ArrayList<>();
 

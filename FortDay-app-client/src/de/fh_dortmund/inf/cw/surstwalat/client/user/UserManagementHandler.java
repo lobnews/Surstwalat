@@ -5,7 +5,7 @@
  */
 package de.fh_dortmund.inf.cw.surstwalat.client.user;
 
-import de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces.UserManagementRemote;
+import de.fh_dortmund.inf.cw.surstwalat.common.interfaces.UserManagementRemote;
 import javax.jms.ConnectionFactory;
 import javax.jms.ExceptionListener;
 import javax.jms.JMSContext;
@@ -31,7 +31,7 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
 
     public UserManagementHandler() {
         String userManagementLookUp
-                = "java:global/FortDay-ear/FortDay-User-ejb/UserBean!de.fh_dortmund.inf.cw.surstwalat.common.usermanagement.beans.interfaces.UserManagementRemote";
+                = "java:global/FortDay-ear/FortDay-User-ejb/UserBean!de.fh_dortmund.inf.cw.surstwalat.common.interfaces.UserManagementRemote";
 
         try {
             ctx = new InitialContext();

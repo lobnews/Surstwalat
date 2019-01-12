@@ -1,4 +1,4 @@
-package de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces;
+package de.fh_dortmund.inf.cw.surstwalat.common.interfaces;
 
 /**
  * @author Stephan Klimek
