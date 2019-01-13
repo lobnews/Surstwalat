@@ -41,7 +41,12 @@ public class LobbyManagementMessageReceiver implements MessageListener {
 			e.printStackTrace();
 		}
     	switch(messageType) {
-    	case MessageType.USER_CONNECTED: 
+    	case MessageType.USER_CONNECTED: userConnected(message);break;
+    	case MessageType.USER_DISCONNECTED:
+    	case MessageType.USER_DISCONNECT: userDisconnected(message);break;
+    	case MessageType.USER_TIMEOUT: userTimedOut(message);break;
+    	case MessageType.USER_CREATEGAME: userCreatesLobby(message);break;
+    	case MessageType.USER_JOINGAME: userJoinsLobby(message);break;
     	}
     	
     }

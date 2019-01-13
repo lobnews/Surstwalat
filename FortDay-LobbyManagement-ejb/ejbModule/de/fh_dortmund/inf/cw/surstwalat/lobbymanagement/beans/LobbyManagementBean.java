@@ -20,6 +20,7 @@ import javax.jms.ObjectMessage;
 import javax.jms.Topic;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
@@ -41,69 +42,67 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	private JMSContext jmsContext;
 	@Resource(lookup = "java:global/jms/FortDayEventTopic")
 	private Topic eventTopic;
-	private Set<Account> userInLobby;
-	private Map<Game,List<Account>> openGames; //mapping -> Game -> List of user
 	@PersistenceContext(unitName = "FortDayDB")
 	private EntityManager em;
 	
 	@PostConstruct
 	public void init() {
-		userInLobby = new HashSet<Account>();
-		openGames = new HashMap<Game,List<Account>>();
 		System.out.println("@@@FortDayLobbyManagementBean started");
-		//runTest();
+		runTests();
 	}
 	
-	private void runTest() {
-		Game g = new Game();
-		em.persist(g);
-	}
+
 	
 	@Override
 	public void userLoggedIn(int userID) {
 		Account user = getAccountByUserID(userID);
-		if(!userInLobby.contains(user)) {
-			userInLobby.add(user);
-		}
+		user.setInLobby(true);
+		em.persist(user);
 	}
 	
 	@Override
 	public void userDisconnected(int userID) {
 		Account user = getAccountByUserID(userID);
-		if(userInLobby.contains(user)) {
-			userInLobby.remove(user);
-		}
+		user.setInLobby(false);
+		em.persist(user);
+		removeHumanPlayerFromGames(userID);
 	}
 	
 	@Override
 	public void userTimedOut(int userID) {
 		Account user = getAccountByUserID(userID);
-		if(userInLobby.contains(user)) {
-			userInLobby.remove(user);
-		}
+		user.setInLobby(false);
+		em.persist(user);
+		removeHumanPlayerFromGames(userID);
 	}
 	
 	@Override
 	public void userCreatesGame(int userID) {
 		Account user = getAccountByUserID(userID);
 		Game game = createNewGame();
-		openGames.put(game, new ArrayList<Account>());
+		game.addHumanUserToOpenGame(user);
+		user.setInLobby(false);
+		em.persist(game);
+		em.persist(user);
+		
+		sendGameCreatedMessage(game.getId(), user.getId());
 	}
 	
 	@Override
 	public void userJoinsGame(int userID, int gameID) throws GameIsFullException{
 		Account user = getAccountByUserID(userID);
 		Game game = getGameByGameID(gameID);
-		List<Account> currentUserInGame = openGames.get(game);
-		if(currentUserInGame.size() >= maxNumberOfPlayersInLobby) {
+		if(game.getHumanUsersInGame().size() >= maxNumberOfPlayersInLobby) {
 			throw new GameIsFullException();
 		}else {
-			currentUserInGame.add(user);
-			openGames.put(game, currentUserInGame);
+			game.addHumanUserToOpenGame(user);
+			user.setInLobby(false);
+			em.persist(game);
+			em.persist(user);
 		}
 	}
 	
-	private void sendGameCreatedMessage(int gameId, int userId, String username) {
+	private void sendGameCreatedMessage(int gameId, int userId) {
 		ObjectMessage msg = jmsContext.createObjectMessage();
 		try {
 			msg.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.GAME_CREATED);
@@ -116,14 +115,46 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		}
 	}
 	
+	public void startGame(int gameId, int fieldsize) {
+		try {
+			Game g = getGameByGameID(gameId);
+			g.setGameStarted(true);
+			em.persist(g);
+
+			sendGameStartedMessage(g.getId(), g.getHumanUsersInGame(), fieldsize);
+		}catch (NullPointerException e) {
+			
+		}
+
+	}
+	
 	private void sendGameStartedMessage(int gameId, List<Account> users, int fieldsize) {
 		ObjectMessage msg = jmsContext.createObjectMessage();
 		try {
+			if(users.size() > 0) {
+				msg.setIntProperty(PropertyType.USER1_ID, users.get(0).getId());
+			}else {
+				msg.setIntProperty(PropertyType.USER1_ID, -1);
+			}
+			if(users.size() > 1) {
+				msg.setIntProperty(PropertyType.USER2_ID, users.get(1).getId());
+			}else {
+				msg.setIntProperty(PropertyType.USER2_ID, -1);
+			}			
+			if(users.size() > 2) {
+				msg.setIntProperty(PropertyType.USER3_ID, users.get(2).getId());
+			}else {
+				msg.setIntProperty(PropertyType.USER3_ID, -1);
+			}			
+			if(users.size() > 3) {
+				msg.setIntProperty(PropertyType.USER4_ID, users.get(3).getId());
+			}else {
+				msg.setIntProperty(PropertyType.USER4_ID, -1);
+			}
 			msg.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.GAME_STARTED);
 			msg.setIntProperty(PropertyType.GAME_ID, gameId);
-			msg.setObjectProperty(PropertyType.USER_IDS, users);
-			msg.setObjectProperty(PropertyType.GAME_FIELDSIZE, fieldsize);
-			msg.setStringProperty(PropertyType.DISPLAY_MESSAGE, "Game startet!");
+			msg.setIntProperty(PropertyType.GAME_FIELDSIZE, fieldsize);
+			msg.setStringProperty(PropertyType.DISPLAY_MESSAGE, "Das Spiel wurde gestartet!");
 			jmsContext.createProducer().send(eventTopic, msg);
 		}
 		catch (Exception e) {
@@ -131,26 +162,87 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		}
 	}
 	
-	public Set<Account> getUserInLobby(){
-		return userInLobby;
+	public List<Account> getUserInLobby(){
+		TypedQuery<Account> query = em.createNamedQuery("Account.getInLobby",Account.class);
+		return query.getResultList();
 	}
 	
-	public Map<Game,List<Account>> getOpenGames(){
-		return openGames;
+	public List<Game> getOpenGames(){
+		TypedQuery<Game> query = em.createNamedQuery("Game.getOpen",Game.class);
+		return query.getResultList();
 	}
 	
-	//temp to create game
+	//create new game in db and return it (with correct id)
 	private Game createNewGame() {
-		return new Game();
+		Game g = new Game();
+		em.persist(g);
+		em.flush();
+		return g;
 	}
 	
-	//temp to load user
-	private Account getAccountByUserID(int userid) {
-		return new Account();
-	}
-
-	//temp to load game
 	private Game getGameByGameID(int gameid) {
-		return new Game();
+		TypedQuery<Game> query = em.createNamedQuery("Game.getById",Game.class);
+		query.setParameter("id", gameid);
+		return query.getSingleResult();
+	}
+	
+	private List<Game> getAllGames(){
+		TypedQuery<Game> query = em.createNamedQuery("Game.getAll",Game.class);
+		return query.getResultList();
+	}
+	
+	private Account getAccountByUserID(int userid) {
+		TypedQuery<Account> query = em.createNamedQuery("Account.getById",Account.class);
+		query.setParameter("id", userid);
+		return query.getSingleResult();
+	}
+	
+	//removes the account with the given id from all games and closes the ones without other
+	//human players, if not started yet
+	private void removeHumanPlayerFromGames(int userid) {
+		List<Game> allGames = getAllGames();
+		Account account = getAccountByUserID(userid);
+		for(Game game:allGames) {
+			if(!game.isGameStarted() && game.getHumanUsersInGame().contains(account)) {
+				game.removeHumanUserFromOpenGame(account);
+				if(game.getHumanUsersInGame().size() == 0) {
+					em.remove(game);
+				}
+			}
+		}
+	}
+	
+	private void runTests() {
+		//test create game
+		Game g = createNewGame();
+		System.out.println("@1 Gameid: "+g);
+		
+		//test number of open games
+		List<Game> open = getOpenGames();
+		System.out.println("@2 opengamesCount: "+open.size());
+		System.out.println("@2.1 opengamesFirst: "+open.get(0).getId());
+		
+		//create game in name of player
+		Account a = new Account();
+		em.persist(a);
+		System.out.println("@3 userinlobby(0): " + getUserInLobby().size());
+		userLoggedIn(a.getId());
+		System.out.println("@4 userinlobby(1): " + getUserInLobby().size());
+		userDisconnected(a.getId());
+		System.out.println("@5 userinlobby(0): " + getUserInLobby().size());
+		userLoggedIn(a.getId());
+		userCreatesGame(a.getId());
+		System.out.println("@6 userinlobby(0): " + getUserInLobby().size());
+		System.out.println("@7 opengamesCount(2): "+ getOpenGames().size());
+		startGame(g.getId(), 2);
+		System.out.println("@8 opengamesCount(1): "+ getOpenGames().size());
+
+		Account a2 = new Account();
+		em.persist(a2);
+		userLoggedIn(a2.getId());
+		userCreatesGame(a2.getId());
+		System.out.println("@9 opengamesCount(2): "+ getOpenGames().size());
+		userDisconnected(a2.getId());
+		System.out.println("@10 opengamesCount(1): "+ getOpenGames().size());
 	}
 }
