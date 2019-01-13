@@ -13,4 +13,5 @@ public interface LobbyManagement {
 	public void userTimedOut(int userID);
 	public void userCreatesGame(int userID);
 	public void userJoinsGame(int userID, int gameID) throws GameIsFullException;
+	
 }
