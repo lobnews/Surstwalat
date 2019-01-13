@@ -24,7 +24,7 @@ public class GlobalEventManagementBean implements GlobalEventManagementLocal{
 
 	@Inject
 	private JMSContext jmsContext;
-	@Resource(lookup = "java:global/jms/FortDayGlobalEventTopic")
+	@Resource(lookup = "java:global/jms/FortDayEventTopic")
 	private Topic eventTopic;
 
 	@Override
