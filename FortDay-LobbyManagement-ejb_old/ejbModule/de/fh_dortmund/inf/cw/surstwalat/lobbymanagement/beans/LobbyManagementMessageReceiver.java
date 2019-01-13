@@ -10,9 +10,7 @@ import javax.jms.ObjectMessage;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
-import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
-import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
-import de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces.LobbyManagementLocal;
+
 
 /**
  * Cares about all messages that are coming in for the LobbyManagement. Parses them and passes
@@ -20,6 +18,7 @@ import de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces.LobbyMan
  * @author Niklas Sprenger
  *
  */
+
 @MessageDriven(
 		activationConfig = { 
 			@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic"),
@@ -28,7 +27,7 @@ import de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces.LobbyMan
 public class LobbyManagementMessageReceiver implements MessageListener {
 
 	@EJB
-	private LobbyManagementLocal lobbyManagement;
+	private LobbyManagementBean lobbyManagement;
 	
     public void onMessage(Message message) {
     	ObjectMessage o = (ObjectMessage) message;
@@ -41,12 +40,7 @@ public class LobbyManagementMessageReceiver implements MessageListener {
 			e.printStackTrace();
 		}
     	switch(messageType) {
-    	case MessageType.USER_CONNECTED: userConnected(message);break;
-    	case MessageType.USER_DISCONNECTED:
-    	case MessageType.USER_DISCONNECT: userDisconnected(message);break;
-    	case MessageType.USER_TIMEOUT: userTimedOut(message);break;
-    	case MessageType.USER_CREATEGAME: userCreatesLobby(message);break;
-    	case MessageType.USER_JOINGAME: userJoinsLobby(message);break;
+    	case MessageType.USER_CONNECTED: 
     	}
     	
     }
@@ -96,4 +90,5 @@ public class LobbyManagementMessageReceiver implements MessageListener {
     		e.printStackTrace();
     	}
     }
+    
 }
