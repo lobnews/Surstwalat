@@ -19,5 +19,9 @@ public interface MessageType {
 	public static final int USER_TIMEOUT = 22;
 	public static final int USER_CREATEGAME = 23;
 	public static final int USER_JOINGAME = 24;
+	public static final int USER_LOGIN = 25;
+	public static final int USER_REGISTER = 26;
+	public static final int USER_LOGOUT = 27;
+	public static final int USER_DISCONNECT = 28;
 	
 }

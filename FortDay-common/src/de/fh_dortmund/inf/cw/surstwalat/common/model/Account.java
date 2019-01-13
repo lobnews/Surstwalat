@@ -1,11 +1,13 @@
 package de.fh_dortmund.inf.cw.surstwalat.common.model;
 
+import java.io.Serializable;
+
 /**
  * @author Stephan Klimek
  *
  * User account
  */
-public class Account {
+public class Account implements Serializable{
 
 	private int id;
     private String username;

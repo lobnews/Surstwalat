@@ -15,6 +15,9 @@
   <module>
     <ejb>FortDay-LobbyManagement-ejb.jar</ejb>
   </module>
+    <module>
+    <ejb>FortDay-UserSession-ejb.jar</ejb>
+  </module>
   <jms-destination>
     <name>java:global/jms/HealthMessageTopic</name>
     <interface-name>javax.jms.Topic</interface-name>

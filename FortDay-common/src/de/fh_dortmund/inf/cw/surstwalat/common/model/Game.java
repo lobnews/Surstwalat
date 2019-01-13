@@ -1,8 +1,9 @@
 package de.fh_dortmund.inf.cw.surstwalat.common.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Game {
+public class Game  implements Serializable{
 	private int id;
 	private List<Player> players;
 	
