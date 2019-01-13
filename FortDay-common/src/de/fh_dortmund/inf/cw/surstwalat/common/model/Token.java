@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Entity
 public class Token  implements Serializable{
 
-	//temp, später zusammengesetzten key nutzen ?
+	//temp, spaeter zusammengesetzten key nutzen ?
 	@Id
 	@GeneratedValue
 	@Column(name="id")

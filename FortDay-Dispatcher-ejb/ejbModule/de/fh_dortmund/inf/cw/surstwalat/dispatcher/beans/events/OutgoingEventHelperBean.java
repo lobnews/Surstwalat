@@ -53,7 +53,7 @@ public class OutgoingEventHelperBean implements EventHelperLocal {
 	public void triggerPlayerRollEvent(Integer gameId, Integer playerNo, Integer value) {
 		ObjectMessage message = createObjectMessage(gameId, MessageType.PLAYER_ROLL);
 		trySetIntProperty(message, PropertyType.PLAYER_NO, value);
-		trySetStringProperty(message, PropertyType.DISPLAY_MESSAGE, "Spieler " + playerNo + " würfelt eine " + value);
+		trySetStringProperty(message, PropertyType.DISPLAY_MESSAGE, "Spieler " + playerNo + " wÃ¼rfelt eine " + value);
 		trySetObject(message, value);
 		sendMessage(message);
 	}
