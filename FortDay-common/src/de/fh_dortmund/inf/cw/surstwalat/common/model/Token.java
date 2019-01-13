@@ -2,7 +2,22 @@ package de.fh_dortmund.inf.cw.surstwalat.common.model;
 
 import java.io.Serializable;
 
+import javax.annotation.Generated;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+/**
+ * @author Niklas Sprenger
+ *
+ */
+@Entity
 public class Token  implements Serializable{
+
+	//temp, später zusammengesetzten key nutzen ?
+	@Id
+	@GeneratedValue
+	private int id;
 	private int player_id;
 	private int nr;
 	private int health;

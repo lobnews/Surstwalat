@@ -1,13 +1,29 @@
 package de.fh_dortmund.inf.cw.surstwalat.common.model;
 
 import java.io.Serializable;
+
 import java.util.List;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+/**
+ * @author Niklas Sprenger
+ *
+ */
+@Entity
 public class Player  implements Serializable{
+	
+
+	@Id
+	@GeneratedValue
 	private int id;
 	private List<Item> items;
 	private int account_id;
 	private boolean isHuman;
+	
+	
 	public int getId() {
 		return id;
 	}

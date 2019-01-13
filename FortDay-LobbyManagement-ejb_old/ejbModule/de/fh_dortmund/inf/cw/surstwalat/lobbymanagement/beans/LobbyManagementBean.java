@@ -10,7 +10,6 @@ import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.ejb.Stateful;
 import javax.ejb.Stateless;
@@ -28,14 +27,19 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Game;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces.LobbyManagementLocal;
 
+
+
+
 /**
  * Implementation of the given interfaces (Local/Remote). Implements the logic for the Game-Lobbies (until Game-start)
  * @author Niklas Sprenger
  *
  */
-@Startup
-@Singleton
+@Stateless
 public class LobbyManagementBean implements LobbyManagementLocal{
+	@PersistenceContext(unitName = "ChatDB")
+	private EntityManager em;
+	
 	private static int maxNumberOfPlayersInLobby = 4;
 	@Inject
 	private JMSContext jmsContext;
@@ -43,23 +47,14 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	private Topic eventTopic;
 	private Set<Account> userInLobby;
 	private Map<Game,List<Account>> openGames; //mapping -> Game -> List of user
-	@PersistenceContext(unitName = "FortDayDB")
-	private EntityManager em;
+	
 	
 	@PostConstruct
 	public void init() {
 		userInLobby = new HashSet<Account>();
 		openGames = new HashMap<Game,List<Account>>();
-		System.out.println("@@@FortDayLobbyManagementBean started");
-		//runTest();
 	}
 	
-	private void runTest() {
-		Game g = new Game();
-		em.persist(g);
-	}
-	
-	@Override
 	public void userLoggedIn(int userID) {
 		Account user = getAccountByUserID(userID);
 		if(!userInLobby.contains(user)) {
@@ -67,7 +62,6 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		}
 	}
 	
-	@Override
 	public void userDisconnected(int userID) {
 		Account user = getAccountByUserID(userID);
 		if(userInLobby.contains(user)) {
@@ -75,7 +69,6 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		}
 	}
 	
-	@Override
 	public void userTimedOut(int userID) {
 		Account user = getAccountByUserID(userID);
 		if(userInLobby.contains(user)) {
@@ -83,14 +76,12 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		}
 	}
 	
-	@Override
 	public void userCreatesGame(int userID) {
 		Account user = getAccountByUserID(userID);
 		Game game = createNewGame();
 		openGames.put(game, new ArrayList<Account>());
 	}
 	
-	@Override
 	public void userJoinsGame(int userID, int gameID) throws GameIsFullException{
 		Account user = getAccountByUserID(userID);
 		Game game = getGameByGameID(gameID);
@@ -109,7 +100,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 			msg.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.GAME_CREATED);
 			msg.setIntProperty(PropertyType.GAME_ID, gameId);
 			msg.setIntProperty(PropertyType.USER_ID, userId);
-			jmsContext.createProducer().send(eventTopic, msg);
+			//jmsContext.createProducer().send(eventTopic, msg);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -124,7 +115,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 			msg.setObjectProperty(PropertyType.USER_IDS, users);
 			msg.setObjectProperty(PropertyType.GAME_FIELDSIZE, fieldsize);
 			msg.setStringProperty(PropertyType.DISPLAY_MESSAGE, "Game startet!");
-			jmsContext.createProducer().send(eventTopic, msg);
+			//jmsContext.createProducer().send(eventTopic, msg);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -153,4 +144,5 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	private Game getGameByGameID(int gameid) {
 		return new Game();
 	}
+	
 }

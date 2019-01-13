@@ -2,13 +2,21 @@ package de.fh_dortmund.inf.cw.surstwalat.common.model;
 
 import java.io.Serializable;
 
+import javax.annotation.Generated;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 /**
  * @author Stephan Klimek
  *
  * User account
  */
+@Entity
 public class Account implements Serializable{
 
+	@Id
+	@GeneratedValue
 	private int id;
     private String username;
     private String email;
