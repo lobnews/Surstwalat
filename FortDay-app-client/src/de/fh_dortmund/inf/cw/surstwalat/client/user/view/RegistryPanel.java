@@ -1,8 +1,11 @@
 package de.fh_dortmund.inf.cw.surstwalat.client.user.view;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.Designer;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.Validator;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -14,6 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
+import javax.swing.BorderFactory;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -34,6 +38,7 @@ public class RegistryPanel extends JPanel {
      */
     private static final long serialVersionUID = 1563209170882467417L;
 
+    private JLabel lb_errorMsg;
     private JLabel lb_username;
     private JTextField tf_username;
     private JLabel lb_email;
@@ -46,8 +51,6 @@ public class RegistryPanel extends JPanel {
     private JButton bt_abort;
 
     private final UserManagementHandler userManager;
-    private static final int MINIMALINPUTLENGTH = 5;
-    private static final int MAXIMALINPUTLENGTH = 30;
 
     /**
      * Default Constructor
@@ -59,12 +62,12 @@ public class RegistryPanel extends JPanel {
     }
 
     /**
-     * Initiates ui components
+     * Initialize ui components
      */
     private void initComponent() {
         GridBagLayout gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);
-        setMinimumSize(new java.awt.Dimension(600, 400));
+        setPreferredSize(new Dimension(600, 400));
 
         GridBagConstraints gridBag = new GridBagConstraints();
         gridBag.fill = GridBagConstraints.HORIZONTAL;
@@ -72,14 +75,23 @@ public class RegistryPanel extends JPanel {
 
         int gridRow = 0;
 
+        // Error label
+        lb_errorMsg = new JLabel();
+        lb_errorMsg.setForeground(Color.RED);             
+        gridBag.gridx = 0;
+        gridBag.gridy = gridRow;
+        gridBag.gridwidth = 2;
+        this.add(lb_errorMsg, gridBag);
+        
         // Username
         lb_username = new JLabel("Benutzername: ");
         gridBag.gridx = 0;
-        gridBag.gridy = gridRow;
+        gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
         this.add(lb_username, gridBag);
 
         tf_username = new JTextField(20);
+        tf_username.requestFocus();
         gridBag.gridx = 1;
         gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
@@ -129,7 +141,7 @@ public class RegistryPanel extends JPanel {
         // Registry Button
         bt_registry = new JButton("Registrieren");
         bt_registry.addActionListener((ActionEvent e) -> {
-            registry();
+            register();
         });
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
@@ -139,7 +151,7 @@ public class RegistryPanel extends JPanel {
         // Back Button
         bt_abort = new JButton("Abbrechen");
         bt_abort.addActionListener((ActionEvent e) -> {
-            MainFrame.getInstance().setFrame(new LoginPanel());
+            back();
         });
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
@@ -150,7 +162,7 @@ public class RegistryPanel extends JPanel {
     /**
      * Registration
      */
-    private void registry() {
+    private void register() {
         String accoutName = tf_username.getText();
         String password = String.valueOf(pf_password.getPassword());
         String password_repeat = String.valueOf(pf_password_repeat.getPassword());
@@ -163,7 +175,7 @@ public class RegistryPanel extends JPanel {
         inputMap.put("email", email);
 
         // Validation check
-        if (!checkInput(inputMap)) {
+        if (!checkRegistration(inputMap)) {
             return;
         }
 
@@ -181,7 +193,7 @@ public class RegistryPanel extends JPanel {
                 RegistryPanel.this,
                 "Hallo, " + accoutName + ". Du hast dich erfolgreich bei FortDay registriert.", "Registrierung erfolgreich!",
                 JOptionPane.INFORMATION_MESSAGE);
-        MainFrame.getInstance().setFrame(new LoginPanel());
+        back();
     }
 
     /**
@@ -190,27 +202,26 @@ public class RegistryPanel extends JPanel {
      * @param inputMap
      * @return
      */
-    public static boolean checkInput(Map<String, String> inputMap) {
+    private boolean checkRegistration(Map<String, String> inputMap) {
         LinkedList<String> errorMsgList = new LinkedList<>();
 
         // Input validation checking
-        if (!checkStringLength(inputMap.get("name"))) {
-            errorMsgList.add("Der Benutzername muss zwischen " + MINIMALINPUTLENGTH + " und " + MAXIMALINPUTLENGTH + " Zeichen lang sein.");
+        if (!Validator.checkStringLength(inputMap.get("name"))) {
+            errorMsgList.add("Der Benutzername muss zwischen " + Validator.MINIMALINPUTLENGTH + " und " + Validator.MAXIMALINPUTLENGTH + " Zeichen lang sein.");
         }
-        if (!checkStringLength(inputMap.get("password"))) {
-            errorMsgList.add("Das Passwort muss zwischen " + MINIMALINPUTLENGTH + " und " + MAXIMALINPUTLENGTH + " Zeichen lang sein.");
+        if (!Validator.checkStringLength(inputMap.get("password"))) {
+            errorMsgList.add("Das Passwort muss zwischen " + Validator.MINIMALINPUTLENGTH + " und " + Validator.MAXIMALINPUTLENGTH + " Zeichen lang sein.");
         } else if (!inputMap.get("password").equals(inputMap.get("password_repeat"))) {
             errorMsgList.add("Die Passwörter stimmen nicht über ein.");
         }
-        if (!checkEmailAddress(inputMap.get("email"))) {
+        if (!Validator.checkEmailAddress(inputMap.get("email"))) {
             errorMsgList.add("Die E-Mail-Adresse ist nicht korrekt.");
         }
 
         // Error dialog
         if (errorMsgList.size() > 0) {
-            String errorMsg = String.join("\n", errorMsgList);
-            Logger.getLogger(RegistryPanel.class.getSimpleName()).log(Level.FINER, null, errorMsg);
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), errorMsg, "Eingabefehler!", JOptionPane.WARNING_MESSAGE);
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.FINER, null, errorMsgList.toString());
+            lb_errorMsg.setText(Designer.errorBox(errorMsgList));
             errorMsgList.clear();
             return false;
         }
@@ -218,28 +229,9 @@ public class RegistryPanel extends JPanel {
     }
 
     /**
-     * Check valid email address
-     *
-     * @param email
-     * @return
+     * Get a site back
      */
-    public static boolean checkEmailAddress(String email) {
-        try {
-            InternetAddress emailAddr = new InternetAddress(email);
-            emailAddr.validate();
-        } catch (AddressException ex) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Check input string lenght
-     *
-     * @param input
-     * @return
-     */
-    public static boolean checkStringLength(String input) {
-        return (input.length() >= MINIMALINPUTLENGTH && input.length() <= MAXIMALINPUTLENGTH);
+    private void back() {
+        MainFrame.getInstance().setFrame(new LoginPanel());
     }
 }
