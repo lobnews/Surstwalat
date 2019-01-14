@@ -1,4 +1,4 @@
-package de.fh_dortmund.inf.cw.surstwalat.usersession;
+package de.fh_dortmund.inf.cw.surstwalat.usersession.beans;
 
 import java.io.Serializable;
 

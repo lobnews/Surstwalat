@@ -12,10 +12,10 @@
   <module>
     <java>FortDay-common.jar</java>
   </module>
-  <module>
+  <!-- module>
     <ejb>FortDay-LobbyManagement-ejb.jar</ejb>
-  </module>
-    <module>
+  </module-->
+  <module>
     <ejb>FortDay-UserSession-ejb.jar</ejb>
   </module>
   <jms-destination>
@@ -33,3 +33,4 @@
     <interface-name>javax.jms.Topic</interface-name>
     <destination-name>FortDayEventTopic</destination-name>
   </jms-destination>
+</application>
