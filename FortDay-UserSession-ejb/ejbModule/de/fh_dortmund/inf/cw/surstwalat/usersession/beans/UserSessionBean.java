@@ -58,6 +58,31 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 		trySetObject(msg, user);
 		sendMessage(msg);
 	}
+	
+	@Override
+	public void changePassword(String oldPassword, String newPassword, String newPassword2) {
+		if (user.getPassword().contentEquals(oldPassword))
+		{
+			if (newPassword.equals(newPassword2))
+			{
+				ObjectMessage msg = createObjectMessage(2, MessageType.USER_CHANGE_PASSWORD);
+				user.setPassword(newPassword);
+				trySetObject(msg, user);
+				sendMessage(msg);
+			} else {
+				try {
+					throw new Exception("The new password isn´t equal");
+				} catch (Exception e) {
+				}
+			}
+		} else {
+			try {
+				throw new Exception("Wrong password");
+			} catch (Exception e) {
+			}
+		}
+		
+	}
 
 	@Override
 	public void register(String username, String password, String email) 
@@ -129,5 +154,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	private void sendMessage(ObjectMessage msg) {
 		jmsContext.createProducer().send(eventTopic, msg);
 	}
+
+
 
 }
