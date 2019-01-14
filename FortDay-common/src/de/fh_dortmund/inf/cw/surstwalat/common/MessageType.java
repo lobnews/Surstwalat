@@ -23,6 +23,7 @@ public interface MessageType {
 	public static final int USER_REGISTER = 26;
 	public static final int USER_LOGOUT = 27;
 	public static final int USER_DISCONNECT = 28;
+	public static final int USER_CHANGE_PASSWORD = 29;
 	//GLOBAL EVENT MANAGEMENT
 	public static final int UPDATE_ZONE = 30;
 	public static final int TRIGGER_AIRDROP = 31;

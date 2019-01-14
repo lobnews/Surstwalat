@@ -8,7 +8,7 @@
 						  datasource-classname="com.mysql.jdbc.jdbc2.optional.MysqlDataSource">
 		<property name="serverName" value="localhost" />
 		<property name="port" value="3306" />
-		<property name="databaseName" value="fortday" />
+		<property name="databaseName" value="fortdaydb" />
 		<property name="user" value="root" />
 		<property name="password" value="root" />
 	</jdbc-connection-pool>
