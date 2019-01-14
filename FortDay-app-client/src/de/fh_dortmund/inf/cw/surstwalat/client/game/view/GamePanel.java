@@ -50,6 +50,7 @@ public class GamePanel extends javax.swing.JPanel implements Observer {
         backgroundLabel = new javax.swing.JLabel();
         gamePanel = new javax.swing.JPanel();
 
+        setMinimumSize(new java.awt.Dimension(200, 200));
         setLayout(new java.awt.BorderLayout());
 
         jLayeredPane1.setLayout(new java.awt.BorderLayout());
