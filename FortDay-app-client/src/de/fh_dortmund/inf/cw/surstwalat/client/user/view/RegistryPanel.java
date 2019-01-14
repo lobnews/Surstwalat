@@ -7,9 +7,13 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -41,7 +45,9 @@ public class RegistryPanel extends JPanel {
     private JButton bt_registry;
     private JButton bt_abort;
 
-    private UserManagementHandler userManager;
+    private final UserManagementHandler userManager;
+    private static final int MINIMALINPUTLENGTH = 5;
+    private static final int MAXIMALINPUTLENGTH = 30;
 
     /**
      * Default Constructor
@@ -123,24 +129,7 @@ public class RegistryPanel extends JPanel {
         // Registry Button
         bt_registry = new JButton("Registrieren");
         bt_registry.addActionListener((ActionEvent e) -> {
-            String accoutName = tf_username.getText();
-            String email = tf_email.getText();
-            String password = String.valueOf(pf_password.getPassword());
-            
-            try {
-                userManager.register(accoutName, email, password);
-            } catch (Exception ex) {
-                Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, null, ex);
-                JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler", JOptionPane.ERROR_MESSAGE);
-                System.exit(1);
-            }
-
-            // TODO unterscheidung / feedback
-            JOptionPane.showMessageDialog(RegistryPanel.this,
-                    "Hallo " + getUsername() + "! You have successfully registry you.", "Registry success",
-                    JOptionPane.INFORMATION_MESSAGE);
-
-            MainFrame.getInstance().setFrame(new LoginPanel());
+            registry();
         });
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
@@ -159,20 +148,98 @@ public class RegistryPanel extends JPanel {
     }
 
     /**
-     * Get Username
-     *
-     * @return username
+     * Registration
      */
-    public String getUsername() {
-        return tf_username.getText().trim();
+    private void registry() {
+        String accoutName = tf_username.getText();
+        String password = String.valueOf(pf_password.getPassword());
+        String password_repeat = String.valueOf(pf_password_repeat.getPassword());
+        String email = tf_email.getText();
+
+        Map<String, String> inputMap = new HashMap<>();
+        inputMap.put("name", accoutName);
+        inputMap.put("password", password);
+        inputMap.put("password_repeat", password_repeat);
+        inputMap.put("email", email);
+
+        // Validation check
+        if (!checkInput(inputMap)) {
+            return;
+        }
+
+        // Registration call
+        try {
+            userManager.register(accoutName, email, password);
+        } catch (Exception ex) {
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        }
+
+        // Success dialog
+        JOptionPane.showMessageDialog(
+                RegistryPanel.this,
+                "Hallo, " + accoutName + ". Du hast dich erfolgreich bei FortDay registriert.", "Registrierung erfolgreich!",
+                JOptionPane.INFORMATION_MESSAGE);
+        MainFrame.getInstance().setFrame(new LoginPanel());
     }
 
     /**
-     * Get Password
+     * Input validation
      *
-     * @return password
+     * @param inputMap
+     * @return
      */
-    public String getPassword() {
-        return new String(pf_password.getPassword());
+    public static boolean checkInput(Map<String, String> inputMap) {
+        LinkedList<String> errorMsgList = new LinkedList<>();
+
+        // Input validation checking
+        if (!checkStringLength(inputMap.get("name"))) {
+            errorMsgList.add("Der Benutzername muss zwischen " + MINIMALINPUTLENGTH + " und " + MAXIMALINPUTLENGTH + " Zeichen lang sein.");
+        }
+        if (!checkStringLength(inputMap.get("password"))) {
+            errorMsgList.add("Das Passwort muss zwischen " + MINIMALINPUTLENGTH + " und " + MAXIMALINPUTLENGTH + " Zeichen lang sein.");
+        } else if (!inputMap.get("password").equals(inputMap.get("password_repeat"))) {
+            errorMsgList.add("Die Passwörter stimmen nicht über ein.");
+        }
+        if (!checkEmailAddress(inputMap.get("email"))) {
+            errorMsgList.add("Die E-Mail-Adresse ist nicht korrekt.");
+        }
+
+        // Error dialog
+        if (errorMsgList.size() > 0) {
+            String errorMsg = String.join("\n", errorMsgList);
+            Logger.getLogger(RegistryPanel.class.getSimpleName()).log(Level.FINER, null, errorMsg);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), errorMsg, "Eingabefehler!", JOptionPane.WARNING_MESSAGE);
+            errorMsgList.clear();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Check valid email address
+     *
+     * @param email
+     * @return
+     */
+    public static boolean checkEmailAddress(String email) {
+        try {
+            InternetAddress emailAddr = new InternetAddress(email);
+            emailAddr.validate();
+        } catch (AddressException ex) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Check input string lenght
+     *
+     * @param input
+     * @return
+     */
+    public static boolean checkStringLength(String input) {
+        return (input.length() >= MINIMALINPUTLENGTH && input.length() <= MAXIMALINPUTLENGTH);
     }
 }
