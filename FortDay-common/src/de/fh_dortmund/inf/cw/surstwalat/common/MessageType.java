@@ -23,5 +23,9 @@ public interface MessageType {
 	public static final int USER_REGISTER = 26;
 	public static final int USER_LOGOUT = 27;
 	public static final int USER_DISCONNECT = 28;
-	
+	//GLOBAL EVENT MANAGEMENT
+	public static final int UPDATE_ZONE = 30;
+	public static final int TRIGGER_AIRDROP = 31;
+	public static final int TRIGGER_STARTING_ITEMS = 32;
+	public static final int TRIGGER_DAMAGE = 33;
 }

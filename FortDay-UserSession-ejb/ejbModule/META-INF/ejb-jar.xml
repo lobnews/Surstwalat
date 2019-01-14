@@ -5,5 +5,5 @@
       <ejb-name>UserSessionBean</ejb-name>
     </message-driven>
   </enterprise-beans>
-  <ejb-client-jar>FortDay-UserSession-ejbClient.jar</ejb-client-jar>
+  <ejb-client-jar>FortDay-common.jar</ejb-client-jar>
 </ejb-jar>
