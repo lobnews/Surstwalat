@@ -18,6 +18,8 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
 /**
+ * Handler for UserManagement
+ *
  * @author Stephan Klimek
  */
 public class UserManagementHandler implements MessageListener, ExceptionListener {
@@ -29,6 +31,9 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
     private Topic userMessageTopic;
     private JMSContext jmsContext;
 
+    /**
+     * Handler for UserManagement
+     */
     public UserManagementHandler() {
         String userManagementLookUp
                 = "java:global/FortDay-ear/FortDay-User-ejb/UserBean!de.fh_dortmund.inf.cw.surstwalat.common.interfaces.UserManagementRemote";
@@ -45,6 +50,9 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
         }
     }
 
+    /**
+     * Initialize JMS connection
+     */
     private void initJMSConnection() {
         try {
             // ConnectionFactory
@@ -62,10 +70,11 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
         }
     }
 
-    public void register(String accountName, String email, String password) throws Exception {
-        userManagementRemote.register(accountName, email, password);
-    }
-
+    /**
+     * Get instance UserManagementHandler
+     *
+     * @return
+     */
     public static UserManagementHandler getInstance() {
         if (instance == null) {
             instance = new UserManagementHandler();
@@ -73,19 +82,77 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
         return instance;
     }
 
+    /**
+     * Get new instance UserManagementHandler
+     *
+     * @return
+     */
     public static UserManagementHandler getNewInstance() {
         return new UserManagementHandler();
     }
 
+    /**
+     * On Message
+     *
+     * @param message
+     */
     @Override
     public void onMessage(Message message) {
-        System.out.println("Call onMessage");
-
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    /**
+     * On Exception
+     *
+     * @param exception
+     */
     @Override
     public void onException(JMSException exception) {
         System.err.println(exception.getMessage());
+    }
+
+    /**
+     * Register
+     *
+     * @param accountName
+     * @param email
+     * @param password
+     * @throws Exception
+     */
+    public void register(String accountName, String email, String password) throws Exception {
+        userManagementRemote.register(accountName, email, password);
+    }
+
+    /**
+     * Delete account
+     */
+    public void deleteAccount() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /**
+     * Login user
+     */
+    public void login() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /**
+     * Change password
+     *
+     * @param oldPassword
+     * @param newPassword
+     */
+    public void changePassword(String oldPassword, String newPassword) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    /**
+     * Update email address
+     *
+     * @param email
+     */
+    public void updateEmailAddress(String email) {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
