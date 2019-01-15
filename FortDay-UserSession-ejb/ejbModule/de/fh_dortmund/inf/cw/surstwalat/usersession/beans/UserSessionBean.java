@@ -59,29 +59,19 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 		sendMessage(msg);
 	}
 	
-	@Override
-	public void changePassword(String oldPassword, String newPassword, String newPassword2) {
-		if (user.getPassword().contentEquals(oldPassword))
-		{
-			if (newPassword.equals(newPassword2))
-			{
-				ObjectMessage msg = createObjectMessage(2, MessageType.USER_CHANGE_PASSWORD);
-				user.setPassword(newPassword);
-				trySetObject(msg, user);
-				sendMessage(msg);
-			} else {
-				try {
-					throw new Exception("The new password isn't equal");
-				} catch (Exception e) {
-				}
-			}
+        @Override
+	public void changePassword(String oldPassword, String newPassword) {
+		if (user.getPassword().contentEquals(oldPassword)) {
+                        ObjectMessage msg = createObjectMessage(2, MessageType.USER_CHANGE_PASSWORD);
+                        user.setPassword(newPassword);
+                        trySetObject(msg, user);
+                        sendMessage(msg);
 		} else {
 			try {
 				throw new Exception("Wrong password");
 			} catch (Exception e) {
 			}
 		}
-		
 	}
 
 	@Override
@@ -111,7 +101,21 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 		sendMessage(msg);
 	}
 	
+	@Override
+	public void updateEmailAddress(String email) {
+		user.setEmail(email);
+		ObjectMessage msg = createObjectMessage(2, MessageType.USER_UPDATE_EMAIL);
+		trySetObject(msg, user);
+		sendMessage(msg);
+	}
 	
+	@Override
+	public void deleteAccount() 
+	{
+		ObjectMessage msg = createObjectMessage(2, MessageType.USER_DELETE);
+		trySetObject(msg, user);
+		sendMessage(msg);
+	}
 
 	// General methods for generating and sending messages below //
 	
@@ -154,7 +158,5 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	private void sendMessage(ObjectMessage msg) {
 		jmsContext.createProducer().send(eventTopic, msg);
 	}
-
-
 
 }

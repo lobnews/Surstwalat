@@ -1,18 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.fh_dortmund.inf.cw.surstwalat.client.user;
 
-import de.fh_dortmund.inf.cw.surstwalat.common.interfaces.UserManagementRemote;
-import javax.jms.ConnectionFactory;
+import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
 import javax.jms.ExceptionListener;
-import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import javax.jms.Topic;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -27,44 +19,18 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
     private static UserManagementHandler instance;
 
     private Context ctx;
-    private UserManagementRemote userManagementRemote;
-    private Topic userMessageTopic;
-    private JMSContext jmsContext;
+    private UserSessionRemote userSessionRemote;
 
     /**
-     * Handler for UserManagement
+     * Handler constructor for UserManagement
      */
     public UserManagementHandler() {
-        String userManagementLookUp
-                = "java:global/FortDay-ear/FortDay-User-ejb/UserBean!de.fh_dortmund.inf.cw.surstwalat.common.interfaces.UserManagementRemote";
-
+        // LookUp to UserSessionRemote
         try {
             ctx = new InitialContext();
-
-            // ChatRemote
-            userManagementRemote = (UserManagementRemote) ctx.lookup(userManagementLookUp);
-
-            // initJMSConnection();
-        } catch (NamingException ex) {
-            System.err.println(ex.getMessage());
-        }
-    }
-
-    /**
-     * Initialize JMS connection
-     */
-    private void initJMSConnection() {
-        try {
-            // ConnectionFactory
-            ConnectionFactory connectionFactory
-                    = (ConnectionFactory) ctx.lookup("java:comp/DefaultJMSConnectionFactory");
-            jmsContext = connectionFactory.createContext();
-            jmsContext.setExceptionListener(this);
-
-            // userMessageTopic
-            userMessageTopic = (Topic) ctx.lookup("java:global/jms/UserMessageTopic");
-            jmsContext.createConsumer(userMessageTopic).setMessageListener(this);
-
+            String lookUpString
+                    = "java:global/FortDay-ear/FortDay-UserSession-ejb/UserSessionBean!de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote";
+            userSessionRemote = (UserSessionRemote) ctx.lookup(lookUpString);
         } catch (NamingException ex) {
             System.err.println(ex.getMessage());
         }
@@ -120,21 +86,25 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
      * @throws Exception
      */
     public void register(String accountName, String email, String password) throws Exception {
-        userManagementRemote.register(accountName, email, password);
+        userSessionRemote.register(accountName, email, password);
     }
 
     /**
      * Delete account
      */
     public void deleteAccount() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        userSessionRemote.deleteAccount();
     }
 
     /**
      * Login user
+     *
+     * @param username
+     * @param password
+     * @throws java.lang.Exception
      */
-    public void login() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void login(String username, String password) throws Exception {
+        userSessionRemote.login(username, password);
     }
 
     /**
@@ -144,7 +114,7 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
      * @param newPassword
      */
     public void changePassword(String oldPassword, String newPassword) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        userSessionRemote.changePassword(oldPassword, newPassword);
     }
 
     /**
@@ -153,6 +123,6 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
      * @param email
      */
     public void updateEmailAddress(String email) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        userSessionRemote.updateEmailAddress(email);
     }
 }

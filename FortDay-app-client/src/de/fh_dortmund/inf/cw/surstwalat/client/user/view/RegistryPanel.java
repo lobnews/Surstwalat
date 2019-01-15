@@ -1,9 +1,9 @@
 package de.fh_dortmund.inf.cw.surstwalat.client.user.view;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
-import de.fh_dortmund.inf.cw.surstwalat.client.user.Designer;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Designer;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
-import de.fh_dortmund.inf.cw.surstwalat.client.user.Validator;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Validator;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -15,9 +15,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.swing.BorderFactory;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
