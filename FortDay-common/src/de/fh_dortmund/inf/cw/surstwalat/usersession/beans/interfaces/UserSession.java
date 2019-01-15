@@ -10,11 +10,15 @@ public interface UserSession{
 	
 	public void logout();
 	
-	public void changePassword(String oldPassword, String oldPassword2, String newPassword);
+	public void changePassword(String newPassword);
 	
 	public void register(String username, String password, String email);
 	
 	public void disconnect();
 	
 	public void timeout();
+	
+	public void updateEmailAddress(String email);
+	
+	public void deleteAccount();
 }
