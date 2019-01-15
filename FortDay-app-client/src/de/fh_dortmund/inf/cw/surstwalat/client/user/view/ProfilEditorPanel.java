@@ -1,10 +1,9 @@
 package de.fh_dortmund.inf.cw.surstwalat.client.user.view;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
-import de.fh_dortmund.inf.cw.surstwalat.client.user.Designer;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Designer;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
-import de.fh_dortmund.inf.cw.surstwalat.client.user.Validator;
-import static de.fh_dortmund.inf.cw.surstwalat.client.user.Validator.checkEmailAddress;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Validator;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -18,7 +17,6 @@ import javax.swing.JTextField;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.modal.ChangePasswordDialog;
 import java.awt.Dimension;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;

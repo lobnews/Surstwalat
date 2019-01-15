@@ -1,4 +1,4 @@
-package de.fh_dortmund.inf.cw.surstwalat.client.user;
+package de.fh_dortmund.inf.cw.surstwalat.client.user.util;
 
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
