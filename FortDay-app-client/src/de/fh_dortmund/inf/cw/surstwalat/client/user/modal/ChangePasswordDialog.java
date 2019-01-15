@@ -1,9 +1,9 @@
 package de.fh_dortmund.inf.cw.surstwalat.client.user.modal;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
-import de.fh_dortmund.inf.cw.surstwalat.client.user.Designer;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Designer;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
-import de.fh_dortmund.inf.cw.surstwalat.client.user.Validator;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Validator;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.view.RegistryPanel;
 import java.awt.BorderLayout;
 import java.awt.Color;
