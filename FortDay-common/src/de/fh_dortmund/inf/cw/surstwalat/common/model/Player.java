@@ -61,6 +61,10 @@ public class Player  implements Serializable{
 	public void setHuman(boolean isHuman) {
 		this.isHuman = isHuman;
 	}
-
+	public void addItem(Item...items) {
+		for (Item item : items) {
+			this.items.add(item);
+		}
+	}
 
 }
