@@ -59,13 +59,19 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 		sendMessage(msg);
 	}
 	
-	@Override
-	public void changePassword(String newPassword) {
-
-		ObjectMessage msg = createObjectMessage(2, MessageType.USER_CHANGE_PASSWORD);
-		user.setPassword(newPassword);
-		trySetObject(msg, user);
-		sendMessage(msg);
+        @Override
+	public void changePassword(String oldPassword, String newPassword) {
+		if (user.getPassword().contentEquals(oldPassword)) {
+                        ObjectMessage msg = createObjectMessage(2, MessageType.USER_CHANGE_PASSWORD);
+                        user.setPassword(newPassword);
+                        trySetObject(msg, user);
+                        sendMessage(msg);
+		} else {
+			try {
+				throw new Exception("Wrong password");
+			} catch (Exception e) {
+			}
+		}
 	}
 
 	@Override

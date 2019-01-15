@@ -9,6 +9,19 @@ import java.util.LinkedList;
  */
 public class Designer {
 
+    private static final String BOXHTML_BEGIN
+            = "<html><head><style>"
+            + "html, body { "
+            + "width: 235px;"
+            + "}"
+            + "</style></head><body style=\""
+            + "padding: 10px;"
+            + "margin: 0 0 10px 0;"
+            + "border-style: solid;"
+            + "border-width: 1px";
+    private static final String BOXHTML_MIDDLE = "\">";
+    private static final String BOXHTML_END = "</body></html>";
+
     /**
      * Makes a list of error messages to red error message box
      *
@@ -16,14 +29,12 @@ public class Designer {
      * @return
      */
     public static String errorBox(LinkedList<String> msgList) {
-        return "<html><body style=\""
-                + "padding: 10px;"
-                + "border: 1px solid red;"
-                + "margin: 0 0 10px 0;"
+        return BOXHTML_BEGIN
+                + "border-color: red;"
                 + "color: red"
-                + "\">"
+                + BOXHTML_MIDDLE
                 + String.join("<br/>", msgList)
-                + "</body></html>";
+                + BOXHTML_END;
     }
 
     /**
@@ -33,13 +44,11 @@ public class Designer {
      * @return
      */
     public static String successBox(LinkedList<String> msgList) {
-        return "<html><body style=\""
-                + "padding: 10px;"
-                + "border: 1px solid green;"
-                + "margin: 0 0 10px 0;"
+        return BOXHTML_BEGIN
+                + "border-color: green;"
                 + "color: green"
-                + "\">"
+                + BOXHTML_MIDDLE
                 + String.join("<br/>", msgList)
-                + "</body></html>";
+                + BOXHTML_END;
     }
 }

@@ -29,7 +29,7 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
         try {
             ctx = new InitialContext();
             String lookUpString
-                    = "java:global/FortDay-ear/FortDay-UserSession-ejb/UserSessionBean!de.fh_dortmund.inf.cw.surstwalat.common.interfaces.UserSessionRemote";
+                    = "java:global/FortDay-ear/FortDay-UserSession-ejb/UserSessionBean!de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote";
             userSessionRemote = (UserSessionRemote) ctx.lookup(lookUpString);
         } catch (NamingException ex) {
             System.err.println(ex.getMessage());
@@ -93,8 +93,7 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
      * Delete account
      */
     public void deleteAccount() {
-//        userSessionRemote.deleteAccount();
-        throw new UnsupportedOperationException("Not supported yet.");
+        userSessionRemote.deleteAccount();
     }
 
     /**
@@ -115,7 +114,7 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
      * @param newPassword
      */
     public void changePassword(String oldPassword, String newPassword) {
-        userSessionRemote.changePassword(oldPassword, newPassword, newPassword);
+        userSessionRemote.changePassword(oldPassword, newPassword);
     }
 
     /**
@@ -124,7 +123,6 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
      * @param email
      */
     public void updateEmailAddress(String email) {
-//        userSessionRemote.updateEmailAddress(email);
-        throw new UnsupportedOperationException("Not supported yet.");
+        userSessionRemote.updateEmailAddress(email);
     }
 }
