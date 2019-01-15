@@ -71,7 +71,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 				sendMessage(msg);
 			} else {
 				try {
-					throw new Exception("The new password isn´t equal");
+					throw new Exception("The new password isn't equal");
 				} catch (Exception e) {
 				}
 			}
