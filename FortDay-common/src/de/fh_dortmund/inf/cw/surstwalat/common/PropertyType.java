@@ -12,4 +12,14 @@ public interface PropertyType {
 	public static final String USER4_ID = "USER4_ID";
 	public static final String LOBBY_NAME = "LOBBY_NAME";
 	public static final String GAME_FIELDSIZE = "GAME_FIELDSIZE";
+	public static final String CURRENT_ZONE_BEGIN = "CURRENT_ZONE_BEGIN";
+	public static final String CURRENT_ZONE_END = "CURRENT_ZONE_END";
+	public static final String NEXT_ZONE_BEGIN = "NEXT_ZONE_BEGIN";
+	public static final String NEXT_ZONE_END = "NEXT_ZONE_END";
+	public static final String DAMAGE = "DAMAGE";
+	public static final String CHARACTER_ID = "CHARACTER_ID";
+    public static final String FIELD_ID = "FIELD_ID";
+    public static final String ENEMY_CHARACTER_ID = "ENEMY_CHARACTER_ID";
+    public static final String ENEMY_PLAYER_ID = "ENEMY_PLAYER_ID";
+    public static final String ITEM_ID = "ITEM_ID";;
 }

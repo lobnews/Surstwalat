@@ -23,5 +23,25 @@ public interface MessageType {
 	public static final int USER_REGISTER = 26;
 	public static final int USER_LOGOUT = 27;
 	public static final int USER_DISCONNECT = 28;
-	
+	public static final int USER_CHANGE_PASSWORD = 29;
+	public static final int USER_UPDATE_EMAIL = 34;
+	public static final int USER_DELETE = 35;
+	//GLOBAL EVENT MANAGEMENT
+	public static final int UPDATE_ZONE = 30;
+	public static final int TRIGGER_AIRDROP = 31;
+	public static final int TRIGGER_STARTING_ITEMS = 32;
+	public static final int TRIGGER_DAMAGE = 33;
+	//Item MANAGEMENT 100 - 110
+	public static final int ITEM_SPAWN = 100;
+	public static final int ITEM_ADD_TO_USER = 101;
+	public static final int ITEM_INVENTAR = 102;
+	public static final int ITEM = 103;
+	//LocationManagement
+    public static final int NO_COLLISION = 111;
+    public static final int PLAYER_ON_FIELD = 112;
+    public static final int COLLISION_WITH_PLAYER = 113;
+    public static final int COLLISION_WITH_ITEM = 114;
+    public static final int CHARACTERS_IN_TOXIC = 115;
+    public static final int COLLISION_WITH_OWN_CHARACTER = 116;
+    public static final int TOXIC_CHANGE = 117;
 }

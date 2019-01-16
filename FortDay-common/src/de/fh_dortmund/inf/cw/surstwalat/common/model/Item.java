@@ -20,7 +20,7 @@ import javax.persistence.Table;
 	@NamedQuery(name="Item.getById", query="SELECT i FROM Item i WHERE i.id = :id")
 })
 public class Item  implements Serializable{
-	
+
 	@Id
 	@GeneratedValue
 	@Column(name="id")
@@ -33,6 +33,6 @@ public class Item  implements Serializable{
 	public void setId(int id) {
 		this.id = id;
 	}
-	
-	
+
+
 }

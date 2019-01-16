@@ -23,7 +23,7 @@ import javax.persistence.Table;
 	@NamedQuery(name="Player.getById", query="SELECT p FROM Player p WHERE p.id = :id")
 })
 public class Player  implements Serializable{
-	
+
 
 	@Id
 	@GeneratedValue
@@ -35,8 +35,8 @@ public class Player  implements Serializable{
 	private int account_id;
 	@Column(name="isHuman")
 	private boolean isHuman;
-	
-	
+
+
 	public int getId() {
 		return id;
 	}
@@ -61,6 +61,10 @@ public class Player  implements Serializable{
 	public void setHuman(boolean isHuman) {
 		this.isHuman = isHuman;
 	}
-	
-	
+	public void addItem(Item...items) {
+		for (Item item : items) {
+			this.items.add(item);
+		}
+	}
+
 }

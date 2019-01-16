@@ -1,6 +1,7 @@
 package de.fh_dortmund.inf.cw.surstwalat.common.model;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.annotation.Generated;
 import javax.persistence.Column;
@@ -16,46 +17,60 @@ import javax.persistence.Table;
  *
  * User account
  */
-@Table(name="Account")
+@Table(name = "Account")
 @Entity
 @NamedQueries({
-	@NamedQuery(name="Account.getById", query="SELECT a FROM Account a WHERE a.id = :id"),
-	@NamedQuery(name="Account.getInLobby", query="SELECT a FROM Account a WHERE a.inLobby = true"),
+        @NamedQuery(name = "Account.getById", query = "SELECT a FROM Account a WHERE a.id = :id"),
+        @NamedQuery(name = "Account.getInLobby", query = "SELECT a FROM Account a WHERE a.inLobby = true")
 })
-public class Account implements Serializable{
+public class Account implements Serializable {
 
-	@Id
-	@GeneratedValue
-	@Column(name="id")
-	private int id;
-	@Column(name="username")
-    private String username;
-	@Column(name="email")
+    @Id
+    @GeneratedValue
+    @Column(name = "id")
+    private int id;
+    @Column(name = "name")
+    private String name;
+    @Column(name = "email")
     private String email;
-	@Column(name="password")
+    @Column(name = "password")
     private String password;
-	@Column(name="inLobby")
+    @Column(name = "inLobby")
     private boolean inLobby;
 
     /**
-     * Default Constructor
+     * Default constructor
      */
     public Account() {
-    	inLobby = false;
+        inLobby = false;
     }
 
     /**
-     * @return the username
+     * @return the id
      */
-    public String getUsername() {
-        return username;
+    public int getId() {
+        return id;
     }
 
     /**
-     * @param username the username to set
+     * @param id the id to set
      */
-    public void setUsername(String username) {
-        this.username = username;
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
@@ -86,63 +101,65 @@ public class Account implements Serializable{
         this.password = password;
     }
 
-    @Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + id;
-		result = prime * result + (inLobby ? 1231 : 1237);
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
-		result = prime * result + ((username == null) ? 0 : username.hashCode());
-		return result;
-	}
+    public boolean isInLobby() {
+        return inLobby;
+    }
+
+    public void setInLobby(boolean inLobby) {
+        this.inLobby = inLobby;
+    }
 
     @Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Account other = (Account) obj;
-		if (email == null) {
-			if (other.email != null)
-				return false;
-		} else if (!email.equals(other.email))
-			return false;
-		if (id != other.id)
-			return false;
-		if (inLobby != other.inLobby)
-			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
-			return false;
-		if (username == null) {
-			if (other.username != null)
-				return false;
-		} else if (!username.equals(other.username))
-			return false;
-		return true;
-	}
+    public int hashCode() {
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((email == null) ? 0 : email.hashCode());
+        result = prime * result + id;
+        result = prime * result + (inLobby ? 1231 : 1237);
+        result = prime * result + ((password == null) ? 0 : password.hashCode());
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        return result;
+    }
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public boolean isInLobby() {
-		return inLobby;
-	}
-
-	public void setInLobby(boolean inLobby) {
-		this.inLobby = inLobby;
-	}
-	
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Account other = (Account) obj;
+        if (email == null) {
+            if (other.email != null) {
+                return false;
+            }
+        } else if (!email.equals(other.email)) {
+            return false;
+        }
+        if (id != other.id) {
+            return false;
+        }
+        if (inLobby != other.inLobby) {
+            return false;
+        }
+        if (password == null) {
+            if (other.password != null) {
+                return false;
+            }
+        } else if (!password.equals(other.password)) {
+            return false;
+        }
+        if (name == null) {
+            if (other.name != null) {
+                return false;
+            }
+        } else if (!name.equals(other.name)) {
+            return false;
+        }
+        return true;
+    }
 }
