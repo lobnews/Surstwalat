@@ -2,7 +2,7 @@
 <ejb-jar xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/ejb-jar_3_2.xsd" version="3.2">
   <enterprise-beans>
     <message-driven>
-      <ejb-name>UserSessionBean</ejb-name>
+      <ejb-name>LobbyManagementMessageReceiver</ejb-name>
     </message-driven>
   </enterprise-beans>
   <ejb-client-jar>FortDay-common.jar</ejb-client-jar>

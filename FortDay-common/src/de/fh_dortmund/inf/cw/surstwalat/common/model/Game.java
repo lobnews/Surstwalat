@@ -25,7 +25,7 @@ import javax.persistence.Table;
 	@NamedQuery(name="Game.getOpen", query="SELECT g FROM Game g WHERE g.gameStarted = false"),
 })
 public class Game implements Serializable{
-	
+
 	@Id
 	@GeneratedValue
 	@Column(name="id")
@@ -35,11 +35,11 @@ public class Game implements Serializable{
 	private List<Player> players;
 	@Column(name="gameStarted")
 	private boolean gameStarted;
-	
+
 	public Game() {
 		gameStarted = false;
 	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -58,7 +58,7 @@ public class Game implements Serializable{
 	public void setGameStarted(boolean gameStarted) {
 		this.gameStarted = gameStarted;
 	}
-	
+
 	public List<Account> getHumanUsersInGame() {
 		return humanUsersInGame;
 	}
@@ -70,7 +70,7 @@ public class Game implements Serializable{
 	public void addHumanUserToOpenGame(Account user) {
 		humanUsersInGame.add(user);
 	}
-	
+
 	public void removeHumanUserFromOpenGame(Account user) {
 		humanUsersInGame.remove(user);
 	}
@@ -111,6 +111,6 @@ public class Game implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
+
+
 }

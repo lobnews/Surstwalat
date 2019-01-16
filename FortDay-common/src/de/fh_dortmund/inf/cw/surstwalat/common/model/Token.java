@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Entity
 public class Token  implements Serializable{
 
-	//temp, später zusammengesetzten key nutzen ?
+	//temp, spaeter zusammengesetzten key nutzen ?
 	@Id
 	@GeneratedValue
 	@Column(name="id")
@@ -30,7 +30,7 @@ public class Token  implements Serializable{
 	private int health;
 	@Column(name="maxHealth")
 	private int maxHealth;
-	
+
 	public int getPlayer_id() {
 		return player_id;
 	}
