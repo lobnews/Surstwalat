@@ -42,39 +42,12 @@ public class DispatcherBean implements DispatcherLocal {
     }
 
 	@Override
-	public void addGame(int gameId, int kiCount, int... userIds) {
-		Game game = new Game();
-		game.setId(new Long(gameId));
-		List<Player> players = game.getPlayers() != null ? game.getPlayers() : new ArrayList<>();
-		for(int uId : userIds) {
-			Player player = new Player();
-			player.setUserId(uId);
-			players.add(player);
-		}
-		for (int i = 0; i < kiCount; i++) {
-			Player player = new Player();
-			player.setUserId(-1);
-			players.add(player);
-		}
-		game.setPlayers(players);
-		gameRepository.save(game);
+	public void assignPlayer(int gameId, int playerId) {
+		// TODO Auto-generated method stub
+		
 	}
-
-	@Override
-	public void addPlayer(int gameId, int playerNo) {
-		Game game = gameRepository.findById(new Long(gameId));
-		Player player = null;
-		for(Player p : game.getPlayers()) {
-			if(p.getPlayerNo() == null) {
-				player = p;
-				break;
-			}
-		}
-		if(player != null) {
-			player.setPlayerNo(playerNo);
-			playerRepository.save(player);
-			eventHelper.triggerAssignPlayerEvent(gameId, player.getUserId(), player.getPlayerNo());
-		}
-	}
+    
+    
+    
 
 }

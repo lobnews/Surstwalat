@@ -18,7 +18,7 @@ import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.DispatcherLocal;
 		activationConfig = { 
 				@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic"),
 				@ActivationConfigProperty(propertyName = "messageSelector", 
-				  propertyValue = PropertyType.MESSAGE_TYPE + " = " + MessageType.START_ROUND)
+				  propertyValue = PropertyType.MESSAGE_TYPE + " = " + MessageType.GAME_STARTED)
 		}, 
 		mappedName = "java:global/jms/FortDayEventTopic")
 public class GameStartedEventHandlerBean implements MessageListener {
@@ -31,7 +31,7 @@ public class GameStartedEventHandlerBean implements MessageListener {
      */
     public void onMessage(Message message) {
         // TODO Extract attributes from Message
-        // dispatcher.addGame(gameId, kiCount, userIds);
+        dispatcher.addGame(gameId, kiCount, userIds);
     }
 
 }

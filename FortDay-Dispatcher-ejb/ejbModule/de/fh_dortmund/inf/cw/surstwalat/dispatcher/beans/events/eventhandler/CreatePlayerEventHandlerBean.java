@@ -16,7 +16,7 @@ import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
 		activationConfig = { 
 				@ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic"),
 				@ActivationConfigProperty(propertyName = "messageSelector", 
-				  propertyValue = PropertyType.MESSAGE_TYPE + " = " + MessageType.START_ROUND)
+				  propertyValue = PropertyType.MESSAGE_TYPE + " = " + MessageType.ASSIGN_ACTIVE_PLAYER)
 		}, 
 		mappedName = "java:global/jms/FortDayEventTopic")
 public class CreatePlayerEventHandlerBean implements MessageListener {

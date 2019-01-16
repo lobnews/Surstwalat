@@ -1,5 +1,10 @@
 package de.fh_dortmund.inf.cw.surstwalat.dispatcher.beans.repositories;
 
+import java.util.Set;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.IDispatcherRepository;
 
 /**
@@ -8,8 +13,8 @@ import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.IDispatcherReposit
  */
 public abstract class DispatcherRepository<T, K> implements IDispatcherRepository<T, K> {
 	
-//	@PersistenceContext(unitName = "ChatDB")
-//	protected EntityManager entityManager;
+	@PersistenceContext(unitName = "FortDayDB")
+	protected EntityManager entityManager;
 	
 	private Class<T> type;
 	
@@ -17,24 +22,25 @@ public abstract class DispatcherRepository<T, K> implements IDispatcherRepositor
 		this.type = type;
 	}
 	
+	
+	
 	@Override
 	public T findById(K id) {
-		// Mocked Method
-		try {
-			return type.newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
-			return null;
-		}
+		return entityManager.find(type, id);
 	}
 	
 	@Override
 	public T save(T entity) {
-		// Mocked Method
-		try {
-			return type.newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
-			return null;
-		}
+		return entityManager.merge(entity);
 	}
+
+
+
+	@Override
+	public Set<T> findAll() {
+		return null;
+	}
+	
+	
 
 }
