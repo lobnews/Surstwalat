@@ -5,13 +5,12 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Field;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Playground;
-import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.beans.events.OutgoingEventHelperBean;
 import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.beans.interfaces.LocationManagementLocal;
+import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.interfaces.EventHelperLocal;
 import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.interfaces.ItemRepositoryLocal;
 import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.interfaces.PlaygroundRepositoryLocal;
 
@@ -25,8 +24,8 @@ public class LocationManagementBean implements LocationManagementLocal
     @EJB
     private ItemRepositoryLocal itemRepository;
 
-    @Inject
-    private OutgoingEventHelperBean outgoingEvents;
+    @EJB
+    private EventHelperLocal outgoingEvents;
 
     public void addItemToPlayground(int gameId, int itemId)
     {

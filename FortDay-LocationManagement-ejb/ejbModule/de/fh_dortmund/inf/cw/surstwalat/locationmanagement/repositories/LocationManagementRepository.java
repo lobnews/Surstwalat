@@ -1,12 +1,14 @@
 package de.fh_dortmund.inf.cw.surstwalat.locationmanagement.repositories;
 
+import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+@Stateless
 public abstract class LocationManagementRepository<T, K>
 {
 
-    @PersistenceContext(unitName = "SurstwalatDB")
+    @PersistenceContext(unitName = "FortDayDB")
     protected EntityManager entityManager;
 
     private Class<T> type;
