@@ -158,10 +158,11 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 
 	@Override
 	public void addItemToPlayer(int gameID, int playerID, Item item) {
-//		ObjectMessage msg = createObjectMessage(0, MessageType.);
-//		trySetObject(msg, user);
+		ObjectMessage msg = createObjectMessage(gameID, MessageType.ADD_ITEM_TO_PLAYER);
+		trySetIntProperty(msg, PropertyType.PLAYER_NO, playerID);
+		trySetObject(msg, item);
 
-//		sendMessage(msg);		
+		sendMessage(msg);
 	}
 	
 	
