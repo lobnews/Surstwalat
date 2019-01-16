@@ -26,6 +26,7 @@ public interface MessageType {
 	public static final int USER_CHANGE_PASSWORD = 29;
 	public static final int USER_UPDATE_EMAIL = 34;
 	public static final int USER_DELETE = 35;
+	public static final int ADD_ITEM_TO_PLAYER = 36;
 	//GLOBAL EVENT MANAGEMENT
 	public static final int UPDATE_ZONE = 30;
 	public static final int TRIGGER_AIRDROP = 31;
