@@ -22,8 +22,8 @@ public class Token  implements Serializable{
 	@GeneratedValue
 	@Column(name="id")
 	private int id;
-	@Column(name="player_id")
-	private int player_id;
+	@Column(name="playerId")
+	private int playerId;
 	@Column(name="nr")
 	private int nr;
 	@Column(name="health")
@@ -31,11 +31,18 @@ public class Token  implements Serializable{
 	@Column(name="maxHealth")
 	private int maxHealth;
 
-	public int getPlayer_id() {
-		return player_id;
+
+	public int getId() {
+		return id;
 	}
-	public void setPlayer_id(int player_id) {
-		this.player_id = player_id;
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getPlayerId() {
+		return playerId;
+	}
+	public void setPlayerId(int playerId) {
+		this.playerId = playerId;
 	}
 	public int getNr() {
 		return nr;
