@@ -16,10 +16,10 @@ import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.beans.interfaces.Loca
   @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic"),
   @ActivationConfigProperty(
       propertyName = "messageSelector",
-      propertyValue = PropertyType.MESSAGE_TYPE + " = " + MessageType.SPAWN_ITEM)
+      propertyValue = PropertyType.MESSAGE_TYPE + " = " + MessageType.ITEM_ADD_TO_USER)
 }, mappedName = "java:global/jms/FortDayEventTopic")
 
-public class RemoveItemFromFieldEventHandlerBean implements MessageListener
+public class RemoveItemHandlerBean implements MessageListener
 {
 
     @EJB
@@ -31,7 +31,7 @@ public class RemoveItemFromFieldEventHandlerBean implements MessageListener
         try
         {
             locationManagement
-                .addItemToPlayground(
+                .removeItemFromPlayground(
                     message.getIntProperty(PropertyType.GAME_ID),
                     message.getIntProperty(PropertyType.ITEM_ID));
         }

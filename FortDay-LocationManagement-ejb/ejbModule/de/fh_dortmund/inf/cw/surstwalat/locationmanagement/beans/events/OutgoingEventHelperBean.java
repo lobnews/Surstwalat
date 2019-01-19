@@ -40,7 +40,7 @@ public class OutgoingEventHelperBean implements EventHelperLocal
     }
 
     @Override
-    public void trigerPlayerOnFieldMessage(Integer gameId, Integer playerId, Integer characterId, Integer fieldId)
+    public void triggerPlayerOnFieldMessage(Integer gameId, Integer playerId, Integer characterId, Integer fieldId)
     {
         ObjectMessage message = createObjectMessage(gameId, MessageType.PLAYER_ON_FIELD);
         trySetIntProperty(message, PropertyType.PLAYER_NO, playerId);

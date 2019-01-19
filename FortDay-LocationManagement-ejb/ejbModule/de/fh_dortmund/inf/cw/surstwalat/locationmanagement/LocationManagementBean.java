@@ -7,13 +7,17 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Field;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Game;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Playground;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Token;
 import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.beans.interfaces.LocationManagementLocal;
 import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.interfaces.EventHelperLocal;
+import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.interfaces.FieldRepositoryLocal;
+import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.interfaces.GameRepositoryLocal;
 import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.interfaces.ItemRepositoryLocal;
 import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.interfaces.PlaygroundRepositoryLocal;
+import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.interfaces.TokenRepositoryLocal;
 
 @Stateless
 public class LocationManagementBean implements LocationManagementLocal
@@ -26,27 +30,38 @@ public class LocationManagementBean implements LocationManagementLocal
     private ItemRepositoryLocal itemRepository;
 
     @EJB
+    private GameRepositoryLocal gameRepository;
+
+    @EJB
+    private TokenRepositoryLocal tokenRepository;
+
+    @EJB
+    private FieldRepositoryLocal fieldRepository;
+
+    @EJB
     private EventHelperLocal outgoingEvents;
 
     public void addItemToPlayground(int gameId, int itemId)
     {
         Playground p = playgroundRepository.getByGameId(gameId);
         int field = (int)(Math.random() * p.getFields().size());
-        while (p.getFields().get(field).getItem() != null)
+        while (p.getField(field).getItem() != null)
         {
             field = (int)(Math.random() * p.getFields().size());
         }
         Item i = itemRepository.findById(itemId);
 
-        p.getFields().get(field).setItem(i);
+        p.getField(field).setItem(i);
 
         playgroundRepository.save(p);
+
     }
 
     public void createPlayground(int gameId, int fieldSize)
     {
         Playground playground = new Playground();
-        playground.setGameId(gameId);
+        Game game = gameRepository.findById(gameId);
+        playground.setGameId(game);
 
         List<Field> fields = new ArrayList<>();
 
@@ -88,7 +103,7 @@ public class LocationManagementBean implements LocationManagementLocal
             }
         });
 
-        outgoingEvents.triggerCharactersInToxicMessage(playground.getGameId(), tokens);
+        outgoingEvents.triggerCharactersInToxicMessage(playground.getGame().getId(), tokens);
 
     }
 
@@ -98,9 +113,20 @@ public class LocationManagementBean implements LocationManagementLocal
         Token token;
         for (int i = 0; i < playground.getFields().size(); i++)
         {
-            if (playground.getFields().get(i).getToken().getId() == tokenId)
+            if (playground.getField(i).getToken().getId() == tokenId)
             {
                 token = playground.getFields().get(i).getToken();
+                if (checkForCollisionWithPlayer(playground, token, i, count))
+                {
+                    return;
+                }
+
+                checkForCollisionWithItem(playground, token, i, count);
+
+                playground.getField(i + count).setToken(token);
+                playground.getField(i).setToken(null);
+
+                playgroundRepository.save(playground);
 
             }
         }
@@ -108,27 +134,81 @@ public class LocationManagementBean implements LocationManagementLocal
 
     private boolean checkForCollisionWithPlayer(Playground playground, Token token, int pos, int count)
     {
-        if (playground.getFields().get(pos + count).getToken() != null)
+        if (playground.getField(pos + count).getToken() != null)
         {
-            Token enemy = playground.getFields().get(pos + count).getToken();
-            if (token.getPlayer_id() == enemy.getPlayer_id())
+            Token enemy = playground.getField(pos + count).getToken();
+            if (token.getPlayerId() == enemy.getPlayerId())
+            {
                 outgoingEvents
                     .triggerCollisionWithOwnCharacterMessage(
-                        playground.getGameId(),
-                        token.getPlayer_id(),
+                        playground.getGame().getId(),
+                        token.getPlayerId(),
                         token.getNr());
+                return true;
+
+            }
             else
+            {
                 outgoingEvents
                     .triggerCollisionWithPlayerMessage(
-                        playground.getGameId(),
-                        token.getPlayer_id(),
+                        playground.getGame().getId(),
+                        token.getPlayerId(),
                         token.getNr(),
-                        enemy.getPlayer_id(),
+                        enemy.getPlayerId(),
                         enemy.getNr());
-            return true;
+                return false;
+            }
         }
 
         return false;
+    }
+
+    private boolean checkForCollisionWithItem(Playground playground, Token token, int pos, int count)
+    {
+        if (playground.getField(pos + count).getItem() != null)
+        {
+            outgoingEvents
+                .triggerCollisionWithItemMessage(
+                    playground.getGame().getId(),
+                    token.getPlayerId(),
+                    token.getNr(),
+                    playground.getField(pos + count).getItem().getId());
+
+            return true;
+        }
+        return false;
+    }
+
+    public void addTokenToPlayground(int gameId, int playerId, int tokenNumber)
+    {
+        Playground playground = playgroundRepository.getByGameId(gameId);
+
+        int field = (int)(Math.random() * playground.getFields().size());
+
+        while (playground.getField(field).getToken() != null)
+        {
+            field = (int)(Math.random() * playground.getFields().size());
+        }
+        Token token = tokenRepository.findByPlayerIdAndTokenNr(playerId, tokenNumber);
+
+        playground.getField(field).setToken(token);
+
+        playgroundRepository.save(playground);
+        outgoingEvents.triggerPlayerOnFieldMessage(gameId, playerId, tokenNumber, field);
+
+    }
+
+    public void removeItemFromPlayground(int gameId, int itemId)
+    {
+        if (itemId != -1)
+        {
+            Field field = fieldRepository.findFieldByItemId(itemId);
+            field.setItem(null);
+            fieldRepository.save(field);
+        }
+
+        outgoingEvents.triggerNoCollisionMessage(gameId);
+
     }
 
 }

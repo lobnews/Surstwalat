@@ -16,7 +16,7 @@ import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.beans.interfaces.Loca
     activationConfig = { 
         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic"),
         @ActivationConfigProperty(propertyName = "messageSelector", 
-                                  propertyValue = PropertyType.MESSAGE_TYPE + " = " + MessageType.PLAYER_ROLL)
+                                  propertyValue = PropertyType.MESSAGE_TYPE + " = " + MessageType.PLAYER_ROLL) //TODO: Anderes Event
     }, 
     mappedName = "java:global/jms/FortDayEventTopic")
 

@@ -13,7 +13,7 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Token;
 @Local
 public interface EventHelperLocal {
 	void triggerNoCollisionMessage(Integer gameId);
-	void trigerPlayerOnFieldMessage(Integer gameId, Integer playerId, Integer characterId, Integer fieldId);
+	void triggerPlayerOnFieldMessage(Integer gameId, Integer playerId, Integer characterId, Integer fieldId);
 	void triggerCollisionWithPlayerMessage(Integer gameId, Integer playerId, Integer characterId, Integer enemyPlayerId, Integer enemyCharacterId);
 	void triggerCollisionWithItemMessage(Integer gameId, Integer playerId, Integer characterId, Integer itemId);
 	void triggerCollisionWithOwnCharacterMessage(Integer gameId, Integer playerId, Integer characterId);

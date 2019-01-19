@@ -7,5 +7,7 @@
 		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Item</class>
 		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Player</class>
 		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Token</class>
+		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Playground</class>
+		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Field</class>
 	</persistence-unit>
 </persistence>
