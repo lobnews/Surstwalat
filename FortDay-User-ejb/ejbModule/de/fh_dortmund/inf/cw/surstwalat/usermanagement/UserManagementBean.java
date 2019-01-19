@@ -1,5 +1,7 @@
 package de.fh_dortmund.inf.cw.surstwalat.usermanagement;
 
+import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
+import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import java.util.ArrayList;
 import javax.ejb.ActivationConfigProperty;
@@ -9,6 +11,8 @@ import javax.jms.MessageListener;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import javax.jms.JMSException;
+import javax.jms.ObjectMessage;
 
 /**
  * @author Stephan Klimek
@@ -17,7 +21,7 @@ import java.security.NoSuchAlgorithmException;
 @MessageDriven(
         activationConfig = {
             @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic")},
-        mappedName = "java:global/jms/UserMessageTopic")
+        mappedName = "java:global/jms/FortDayEventTopic")
 public class UserManagementBean implements MessageListener {
 
     private final ArrayList<Account> accountList = new ArrayList<>();
@@ -28,7 +32,20 @@ public class UserManagementBean implements MessageListener {
      */
     @Override
     public void onMessage(Message message) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        ObjectMessage o = (ObjectMessage) message;
+        int messageType = -1;
+
+        try {
+            messageType = o.getIntProperty(PropertyType.MESSAGE_TYPE);
+        } catch (JMSException e) {
+            // TODO no message type
+        }
+
+        switch (messageType) {
+            case MessageType.USER_LOGIN:
+                login(message);
+                break;
+        }
     }
 
     /**
@@ -55,8 +72,15 @@ public class UserManagementBean implements MessageListener {
      * @param password
      * @throws java.lang.Exception
      */
-    public void login(String username, String password) throws Exception {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void login(Object message) {
+
+//        for (Account a : accountList) {
+//            if (a.getName().equals(username)) {
+//                if (a.getPassword().equals(generateHash(password))) {
+//                    System.out.println(a.getEmail());
+//                }
+//            }
+//        }
     }
 
     /**
