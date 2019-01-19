@@ -40,6 +40,8 @@ public class Game implements Serializable{
 	private List<Player> players;
 	@Column(name="gameStarted")
 	private boolean gameStarted;
+	
+	private int aIPlayerCount;
 
 	public Game() {
 		gameStarted = false;
@@ -84,6 +86,16 @@ public class Game implements Serializable{
 
 	public void removeHumanUserFromOpenGame(Account user) {
 		humanUsersInGame.remove(user);
+	}
+	
+	
+
+	public int getAIPlayerCount() {
+		return aIPlayerCount;
+	}
+
+	public void setAIPlayerCount(int aIPlayerCount) {
+		this.aIPlayerCount = aIPlayerCount;
 	}
 
 	@Override

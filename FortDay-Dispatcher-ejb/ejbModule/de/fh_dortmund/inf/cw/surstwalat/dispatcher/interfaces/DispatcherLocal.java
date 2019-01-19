@@ -5,5 +5,5 @@ import javax.ejb.Local;
 
 @Local
 public interface DispatcherLocal {
-	void assignPlayer(int gameId, int playerId);
+	void createPlayers(int gameId);
 }

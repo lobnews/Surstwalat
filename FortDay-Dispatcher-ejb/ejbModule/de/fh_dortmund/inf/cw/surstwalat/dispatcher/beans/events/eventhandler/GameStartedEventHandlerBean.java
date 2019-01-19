@@ -3,6 +3,7 @@ package de.fh_dortmund.inf.cw.surstwalat.dispatcher.beans.events.eventhandler;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
+import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 
@@ -30,8 +31,13 @@ public class GameStartedEventHandlerBean implements MessageListener {
      * @see MessageListener#onMessage(Message)
      */
     public void onMessage(Message message) {
-        // TODO Extract attributes from Message
-        dispatcher.addGame(gameId, kiCount, userIds);
+        try {
+        	System.out.println("GAME_STARTED received");
+			dispatcher.createPlayers(message.getIntProperty(PropertyType.GAME_ID));
+		} catch (JMSException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 
 }

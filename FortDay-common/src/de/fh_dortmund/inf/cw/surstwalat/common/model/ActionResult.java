@@ -1,4 +1,4 @@
-package de.fh_dortmund.inf.cw.surstwalat.dispatcher.domain;
+package de.fh_dortmund.inf.cw.surstwalat.common.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

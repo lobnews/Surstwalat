@@ -4,7 +4,6 @@ import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.DispatcherTestLoca
 import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.GameRepositoryLocal;
 
 import javax.ejb.EJB;
-import javax.ejb.LocalBean;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
@@ -27,7 +26,7 @@ public class DispatcherTestBean implements DispatcherTestLocal {
     }
     
     private void testGameRepo() {
-    	gameRepository.findById(1L);
+    	gameRepository.findById(1);
     }
 
 }

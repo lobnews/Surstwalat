@@ -6,8 +6,9 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import de.fh_dortmund.inf.cw.surstwalat.dispatcher.domain.Game;
-import de.fh_dortmund.inf.cw.surstwalat.dispatcher.domain.Player;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Game;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Player;
 import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.ActionRepositoryLocal;
 import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.ActionResultRepositoryLocal;
 import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.DispatcherLocal;
@@ -42,9 +43,29 @@ public class DispatcherBean implements DispatcherLocal {
     }
 
 	@Override
-	public void assignPlayer(int gameId, int playerId) {
+	public void createPlayers(int gameId) {
 		// TODO Auto-generated method stub
+		Game game =  gameRepository.findById(gameId);
+		List<Player> players = new ArrayList<>();
 		
+		for(Account account : game.getHumanUsersInGame()) {
+			players.add(createPlayer(account.getId(), game, true));
+		}
+		for (int i = 0; i < game.getAIPlayerCount(); i++) {
+			players.add(createPlayer(-1, game, false));
+		}
+		int playerNumber = 1;
+		for(Player p : players) {
+			eventHelper.triggerAssignPlayerEvent(p.getGame().getId(), p.getAccountId(), playerNumber++);
+		}
+	}
+	
+	private Player createPlayer(int id, Game game, boolean isHuman) {
+		Player p = new Player();
+		p.setAccountId(id);
+		p.setHuman(isHuman);
+		p.setGame(game);
+		return playerRepository.save(p);
 	}
     
     
