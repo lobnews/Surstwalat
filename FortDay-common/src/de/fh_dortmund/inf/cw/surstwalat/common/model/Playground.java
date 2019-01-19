@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Table(name="Playground")
@@ -26,19 +27,19 @@ public class Playground implements Serializable
     @GeneratedValue
     @Column(name="id")
     private int id;
-    @JoinColumn
+    @OneToMany
     private List<Field> fields;
     
     @JoinColumn
-    private int gameId;
+    private Game game;
     
-    public int getGameId()
+    public Game getGame()
     {
-        return gameId;
+        return game;
     }
-    public void setGameId(int gameId)
+    public void setGameId(Game game)
     {
-        this.gameId = gameId;
+        this.game = gameId;
     }
     
     public List<Field> getFields()

@@ -28,8 +28,14 @@ public class Token  implements Serializable{
 	private int nr;
 	@Column(name="health")
 	private int health;
-	@Column(name="maxHealth")
+	
+    @Column(name="maxHealth")
 	private int maxHealth;
+    
+    public int getId()
+    {
+        return id;
+    }
 
 	public int getPlayer_id() {
 		return player_id;
