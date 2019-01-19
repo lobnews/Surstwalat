@@ -9,6 +9,7 @@ import javax.ejb.Stateless;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Field;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Playground;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Token;
 import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.beans.interfaces.LocationManagementLocal;
 import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.interfaces.EventHelperLocal;
 import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.interfaces.ItemRepositoryLocal;
@@ -73,22 +74,61 @@ public class LocationManagementBean implements LocationManagementLocal
         }
 
         playgroundRepository.save(playground);
+        checkForTokensInToxic(playground);
 
     }
 
     private void checkForTokensInToxic(Playground playground)
     {
-        Integer[][] tokens = new Integer[5][5];
+        List<Token> tokens = new ArrayList<Token>();
         playground.getFields().forEach(f -> {
             if (f.isToxic() || f.getToken() != null)
             {
-                tokens[f.getToken().getPlayer_id()][f.getToken().getNr()] = 1;
-
+                tokens.add(f.getToken());
             }
         });
 
         outgoingEvents.triggerCharactersInToxicMessage(playground.getGameId(), tokens);
 
+    }
+
+    public void moveToken(int gameId, int tokenId, int count)
+    {
+        Playground playground = playgroundRepository.getByGameId(gameId);
+        Token token;
+        for (int i = 0; i < playground.getFields().size(); i++)
+        {
+            if (playground.getFields().get(i).getToken().getId() == tokenId)
+            {
+                token = playground.getFields().get(i).getToken();
+
+            }
+        }
+    }
+
+    private boolean checkForCollisionWithPlayer(Playground playground, Token token, int pos, int count)
+    {
+        if (playground.getFields().get(pos + count).getToken() != null)
+        {
+            Token enemy = playground.getFields().get(pos + count).getToken();
+            if (token.getPlayer_id() == enemy.getPlayer_id())
+                outgoingEvents
+                    .triggerCollisionWithOwnCharacterMessage(
+                        playground.getGameId(),
+                        token.getPlayer_id(),
+                        token.getNr());
+            else
+                outgoingEvents
+                    .triggerCollisionWithPlayerMessage(
+                        playground.getGameId(),
+                        token.getPlayer_id(),
+                        token.getNr(),
+                        enemy.getPlayer_id(),
+                        enemy.getNr());
+            return true;
+        }
+
+        return false;
     }
 
 }

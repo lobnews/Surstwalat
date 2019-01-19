@@ -1,5 +1,6 @@
 package de.fh_dortmund.inf.cw.surstwalat.locationmanagement.beans.events;
 
+import java.io.Serializable;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -13,6 +14,7 @@ import javax.jms.Topic;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Token;
 import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.interfaces.EventHelperLocal;
 
 /**
@@ -70,10 +72,10 @@ public class OutgoingEventHelperBean implements EventHelperLocal
     }
 
     @Override
-    public void triggerCharactersInToxicMessage(Integer gameId, Integer[][] characters)
+    public void triggerCharactersInToxicMessage(Integer gameId, List<Token> characters)
     {
         ObjectMessage message = createObjectMessage(gameId, MessageType.CHARACTERS_IN_TOXIC);
-//TODO : Array versenden, als Object? 
+        trySetObject(message, (Serializable)characters);
         sendMessage(message);
     }
 
@@ -112,6 +114,19 @@ public class OutgoingEventHelperBean implements EventHelperLocal
             System.out.println("Failed to set" + propertyType.toString() + "to " + value);
         }
     }
+
+    private void trySetObject(ObjectMessage message, Serializable object)
+    {
+        try
+        {
+            message.setObject(object);
+        }
+        catch (JMSException e)
+        {
+            System.out.println("Failed to set object to" + object);
+        }
+    }
+
     private void sendMessage(ObjectMessage message)
     {
         jmsContext.createProducer().send(eventTopic, message);
