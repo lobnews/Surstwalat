@@ -45,7 +45,7 @@ public class DispatcherBean implements DispatcherLocal {
 	public void addGame(int gameId, int kiCount, int... userIds) {
 		Game game = new Game();
 		game.setId(new Long(gameId));
-		List<Player> players = game.getPlayers() != null ? game.getPlayers() : new ArrayList<>();
+		List<Player> players = (List<Player>) (game.getPlayers() != null ? game.getPlayers() : new ArrayList<>());
 		for(int uId : userIds) {
 			Player player = new Player();
 			player.setUserId(uId);

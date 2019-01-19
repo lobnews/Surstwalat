@@ -82,7 +82,7 @@ public class LocationManagementBean implements LocationManagementLocal
         playground.getFields().forEach(f -> {
             if (f.isToxic() || f.getToken() != null)
             {
-                tokens[f.getToken().getPlayer_id()][f.getToken().getNr()] = 1;
+                tokens[f.getToken().getPlayerId()][f.getToken().getNr()] = 1;
 
             }
         });
