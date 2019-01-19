@@ -2,11 +2,12 @@ package de.fh_dortmund.inf.cw.surstwalat.common.model;
 
 import java.io.Serializable;
 
-import javax.annotation.Generated;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
@@ -14,6 +15,12 @@ import javax.persistence.Table;
  *
  */
 @Table(name="Token")
+@NamedQueries(
+{
+  @NamedQuery(name = "Token.getById", query = "SELECT t FROM Token t WHERE t.id = :id"),
+  @NamedQuery(name = "Token.getByPlayerIdAndTokenNumber", query = "SELECT t FROM Token t WHERE t.playerId = :playerId AND t.nr=:nr")
+
+})
 @Entity
 public class Token  implements Serializable{
 
@@ -22,8 +29,8 @@ public class Token  implements Serializable{
 	@GeneratedValue
 	@Column(name="id")
 	private int id;
-	@Column(name="player_id")
-	private int player_id;
+	@Column(name="playerId")
+	private int playerId;
 	@Column(name="nr")
 	private int nr;
 	@Column(name="health")
@@ -31,17 +38,18 @@ public class Token  implements Serializable{
 	
     @Column(name="maxHealth")
 	private int maxHealth;
-    
-    public int getId()
-    {
-        return id;
-    }
 
-	public int getPlayer_id() {
-		return player_id;
+	public int getId() {
+		return id;
 	}
-	public void setPlayer_id(int player_id) {
-		this.player_id = player_id;
+	public void setId(int id) {
+		this.id = id;
+	}
+	public int getPlayerId() {
+		return playerId;
+	}
+	public void setPlayerId(int playerId) {
+		this.playerId = playerId;
 	}
 	public int getNr() {
 		return nr;

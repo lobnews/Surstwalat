@@ -1,11 +1,16 @@
 package de.fh_dortmund.inf.cw.surstwalat.common.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
+import javax.annotation.Generated;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -35,12 +40,17 @@ public class Account implements Serializable {
     private String password;
     @Column(name = "inLobby")
     private boolean inLobby;
+    @ManyToMany
+    private List<Game> games;
 
     /**
      * Default constructor
      */
     public Account() {
         inLobby = false;
+        if(games == null) {
+        	games = new ArrayList<Game>();
+        }
     }
 
     /**
@@ -160,4 +170,13 @@ public class Account implements Serializable {
         }
         return true;
     }
+
+	public List<Game> getGames() {
+		return games;
+	}
+
+	public void setGames(List<Game> games) {
+		this.games = games;
+	}
+    
 }

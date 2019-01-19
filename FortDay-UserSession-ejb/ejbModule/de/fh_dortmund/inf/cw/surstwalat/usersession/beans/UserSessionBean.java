@@ -15,6 +15,7 @@ import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
 import de.fh_dortmund.inf.cw.surstwalat.common.exceptions.UserNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionLocal;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
 
@@ -28,27 +29,33 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	@Inject
 	private JMSContext jmsContext;
 	
+
 	@Resource(lookup = "java:global/jms/FortDayEventTopic")
 	private Topic eventTopic;
-		
+
 	private Account user;
 
 	@Override
 	public void login(String username, String password) throws UserNotFoundException 
 	{
-		try {
-			if (username.equals(user.getName()) && password.equals(user.getPassword()))
-			{
-				ObjectMessage msg = createObjectMessage(2, MessageType.USER_REGISTER);
-				trySetObject(msg, user);
-				sendMessage(msg);
-			}
-			else {
-				throw new UserNotFoundException();
-			}
-		} catch (UserNotFoundException e) {
-			e.printStackTrace();
-		}
+            
+            ObjectMessage msg = createObjectMessage(2, MessageType.USER_LOGIN);
+            trySetObject(msg, user);
+            sendMessage(msg);
+            
+//		try {
+//			if (username.equals(user.getName()) && password.equals(user.getPassword()))
+//			{
+//				ObjectMessage msg = createObjectMessage(2, MessageType.USER_REGISTER);
+//				trySetObject(msg, user);
+//				sendMessage(msg);
+//			}
+//			else {
+//				throw new UserNotFoundException();
+//			}
+//		} catch (UserNotFoundException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	@Override
@@ -116,6 +123,59 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 		trySetObject(msg, user);
 		sendMessage(msg);
 	}
+	
+	@Override
+	public void playerRolls(int gameID, int playerID,  int value) {
+		ObjectMessage msg = createObjectMessage(gameID, MessageType.PLAYER_ROLL);
+		trySetIntProperty(msg, PropertyType.PLAYER_NO, playerID);
+		//trySetIntProperty(msg, PropertyType.???, value);
+
+		sendMessage(msg);		
+	}
+	
+	@Override
+	public void startRound(int gameID, int number) {
+		ObjectMessage msg = createObjectMessage(gameID, MessageType.START_ROUND);
+		//trySetIntProperty(msg, PropertyType.???, value);
+
+		sendMessage(msg);			
+	}
+	
+	@Override
+	public void userJoinedGame(int gameID) {
+		ObjectMessage msg = createObjectMessage(gameID, MessageType.USER_JOINGAME);
+		trySetObject(msg, user);
+
+		sendMessage(msg);		
+	}
+
+	@Override
+	public void userCreatedGame() {
+		ObjectMessage msg = createObjectMessage(0, MessageType.USER_CREATEGAME);
+		trySetObject(msg, user);
+
+		sendMessage(msg);			
+	}
+	
+	@Override
+	public void endRound(int gameID, int number) {
+		ObjectMessage msg = createObjectMessage(gameID, MessageType.END_ROUND);
+		trySetObject(msg, user);
+
+		sendMessage(msg);		
+	}
+
+	@Override
+	public void addItemToPlayer(int gameID, int playerID, Item item) {
+		ObjectMessage msg = createObjectMessage(gameID, MessageType.ADD_ITEM_TO_PLAYER);
+		trySetIntProperty(msg, PropertyType.PLAYER_NO, playerID);
+		trySetObject(msg, item);
+
+		sendMessage(msg);
+	}
+	
+	
+
 
 	// General methods for generating and sending messages below //
 	
@@ -158,5 +218,4 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	private void sendMessage(ObjectMessage msg) {
 		jmsContext.createProducer().send(eventTopic, msg);
 	}
-
 }
