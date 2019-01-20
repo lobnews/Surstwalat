@@ -10,21 +10,31 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+/**
+ * 
+ * @author Johannes Heiderich
+ *
+ */
 @Entity
 @Table(name="DispatcherAction")
 public class Action {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+	private int id;
 	
 	@ManyToOne
 	private Player player;
+	
+	private ActionType actionType;
+	
+	@OneToOne
+	private Item item;
 	
 	@OneToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="ACTION_RESULT_ID", unique=true)
 	private ActionResult result;
 
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
 
@@ -43,6 +53,24 @@ public class Action {
 	public void setResult(ActionResult result) {
 		this.result = result;
 	}
+
+	public ActionType getActionType() {
+		return actionType;
+	}
+
+	public void setActionType(ActionType actionType) {
+		this.actionType = actionType;
+	}
+
+	public Item getItem() {
+		return item;
+	}
+
+	public void setItem(Item item) {
+		this.item = item;
+	}
+	
+	
 	
 	
 	

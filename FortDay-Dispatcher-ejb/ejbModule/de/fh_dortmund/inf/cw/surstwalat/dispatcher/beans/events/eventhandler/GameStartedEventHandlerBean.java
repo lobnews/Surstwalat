@@ -9,7 +9,7 @@ import javax.jms.MessageListener;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
-import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.DispatcherLocal;
+import de.fh_dortmund.inf.cw.surstwalat.dispatcher.beans.interfaces.DispatcherLocal;
 
 /**
  * Message-Driven Bean implementation class for: GameStartedEventHandlerBean
@@ -32,8 +32,9 @@ public class GameStartedEventHandlerBean implements MessageListener {
      */
     public void onMessage(Message message) {
         try {
-        	System.out.println("GAME_STARTED received");
+        	System.out.println("[DISPATCHER] GAME_STARTED received");
 			dispatcher.createPlayers(message.getIntProperty(PropertyType.GAME_ID));
+			
 		} catch (JMSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

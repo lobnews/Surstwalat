@@ -10,8 +10,8 @@ import javax.ejb.Local;
 public interface EventHelperLocal {
 	void triggerAssignPlayerEvent(Integer gameId, Integer userId, Integer playerNo);
 	void triggerStartRoundEvent(Integer gameId, Integer roundNo);
-	void triggerAssignActivePlayerEvent(Integer gameId, Integer playerNo);
+	void triggerAssignActivePlayerEvent(Integer gameId, Integer playerId, Integer playerNo);
 	void triggerPlayerRollEvent(Integer gameId, Integer playerNo, Integer value);
-	void triggerEndRoundEvent(Integer gameId, Integer roundNo);
-	void triggerEliminatePlayerEvent(Integer gameId, Integer playerNo);
+//	void triggerEndRoundEvent(Integer gameId, Integer roundNo);
+	void triggerEliminatePlayerEvent(Integer gameId, Integer playerId, Integer playerNo);
 }

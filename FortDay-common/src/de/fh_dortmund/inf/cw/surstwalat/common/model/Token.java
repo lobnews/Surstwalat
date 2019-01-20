@@ -2,7 +2,6 @@ package de.fh_dortmund.inf.cw.surstwalat.common.model;
 
 import java.io.Serializable;
 
-import javax.annotation.Generated;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -37,7 +36,7 @@ public class Token  implements Serializable{
 	}
 	public void setId(int id) {
 		this.id = id;
-	}
+	}	
 	public int getPlayerId() {
 		return playerId;
 	}

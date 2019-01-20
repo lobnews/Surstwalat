@@ -34,12 +34,14 @@ public class Player  implements Serializable{
 	private int id;
 	@OneToMany
 	private List<Item> items;
-	@Column
 	private int accountId;
-	@Column(name="isHuman")
 	private boolean isHuman;
 	@ManyToOne
 	private Game game;
+	@OneToMany(mappedBy="player")
+	private List<Action> actions;
+	private int playerNo;
+	private boolean alive;
 
 
 	public int getId() {
@@ -77,5 +79,28 @@ public class Player  implements Serializable{
 	public void setAccountId(int accountId) {
 		this.accountId = accountId;
 	}
+	public int getPlayerNo() {
+		return playerNo;
+	}
+	public void setPlayerNo(int playerNo) {
+		this.playerNo = playerNo;
+	}
+	public boolean isAlive() {
+		return alive;
+	}
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
+	public List<Action> getActions() {
+		return actions;
+	}
+	public void setActions(List<Action> actions) {
+		this.actions = actions;
+	}
+	
+	
+	
+	
+	
 
 }
