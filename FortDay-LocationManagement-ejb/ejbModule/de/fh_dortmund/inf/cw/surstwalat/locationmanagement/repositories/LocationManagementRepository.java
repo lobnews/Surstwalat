@@ -1,6 +1,8 @@
 package de.fh_dortmund.inf.cw.surstwalat.locationmanagement.repositories;
 
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -18,28 +20,17 @@ public abstract class LocationManagementRepository<T, K>
         this.type = type;
     }
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public T findById(K id)
     {
-        try
-        {
-            return type.newInstance();
-        }
-        catch (InstantiationException | IllegalAccessException e)
-        {
-            return null;
-        }
+        return entityManager.find(type, id);
+
     }
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public T save(T entity)
     {
-        try
-        {
-            return type.newInstance();
-        }
-        catch (InstantiationException | IllegalAccessException e)
-        {
-            return null;
-        }
+        return entityManager.merge(entity);
 
     }
 
