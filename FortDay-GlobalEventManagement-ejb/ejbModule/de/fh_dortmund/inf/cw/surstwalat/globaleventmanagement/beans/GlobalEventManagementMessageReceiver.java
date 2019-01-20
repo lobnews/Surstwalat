@@ -63,10 +63,8 @@ public class GlobalEventManagementMessageReceiver implements MessageListener{
 			int gameId = message.getIntProperty(PropertyType.GAME_ID);
 			int roundNo = message.getBody(Integer.class);
 			
-			int damage = (int) Math.floor(roundNo/3);
-			
 			//TODO Methode/Methodenaufruf bearbeiten
-			globalEventManagement.updateZone(gameId, 0, 0, 0, 0, damage);
+			globalEventManagement.updateZone(gameId, roundNo);
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}

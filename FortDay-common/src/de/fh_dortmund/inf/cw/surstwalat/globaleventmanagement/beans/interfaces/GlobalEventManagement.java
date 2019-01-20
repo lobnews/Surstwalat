@@ -6,7 +6,7 @@ package de.fh_dortmund.inf.cw.surstwalat.globaleventmanagement.beans.interfaces;
  */
 
 public interface GlobalEventManagement {
-	public void updateZone(int gameId, int currentZoneBegin, int currentZoneEnd, int nextZoneBegin, int nextZoneEnd, int damage);
+	public void updateZone(int gameId, int damage);
 	public void triggerAirdrop(int gameId);
 	public void triggerStartingItems(int gameId);
 	public void triggerDamage(int gameId, int playerNo, int characterId, int damage);
