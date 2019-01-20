@@ -12,7 +12,7 @@ public interface UserSession{
 	
 	public void logout();
 	
-	public void changePassword(String newPassword);
+	public void changePassword(String oldPassword, String newPassword);
 	
 	public void register(String username, String password, String email);
 	

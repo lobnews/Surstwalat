@@ -9,8 +9,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -29,12 +32,16 @@ public class Player  implements Serializable{
 	@GeneratedValue
 	@Column(name="id")
 	private int id;
-	@JoinColumn
+	@OneToMany
 	private List<Item> items;
-	@JoinColumn
-	private int account_id;
-	@Column(name="isHuman")
+	private int accountId;
 	private boolean isHuman;
+	@ManyToOne
+	private Game game;
+	@OneToMany(mappedBy="player")
+	private List<Action> actions;
+	private int playerNo;
+	private boolean alive;
 
 
 	public int getId() {
@@ -49,18 +56,51 @@ public class Player  implements Serializable{
 	public void setItems(List<Item> items) {
 		this.items = items;
 	}
-	public int getAccount_id() {
-		return account_id;
-	}
-	public void setAccount_id(int account_id) {
-		this.account_id = account_id;
-	}
 	public boolean isHuman() {
 		return isHuman;
 	}
 	public void setHuman(boolean isHuman) {
 		this.isHuman = isHuman;
 	}
-
+	public void addItem(Item...items) {
+		for (Item item : items) {
+			this.items.add(item);
+		}
+	}
+	public Game getGame() {
+		return game;
+	}
+	public void setGame(Game game) {
+		this.game = game;
+	}
+	public int getAccountId() {
+		return accountId;
+	}
+	public void setAccountId(int accountId) {
+		this.accountId = accountId;
+	}
+	public int getPlayerNo() {
+		return playerNo;
+	}
+	public void setPlayerNo(int playerNo) {
+		this.playerNo = playerNo;
+	}
+	public boolean isAlive() {
+		return alive;
+	}
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
+	public List<Action> getActions() {
+		return actions;
+	}
+	public void setActions(List<Action> actions) {
+		this.actions = actions;
+	}
+	
+	
+	
+	
+	
 
 }

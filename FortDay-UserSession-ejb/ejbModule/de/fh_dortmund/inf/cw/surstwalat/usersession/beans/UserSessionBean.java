@@ -3,7 +3,6 @@ package de.fh_dortmund.inf.cw.surstwalat.usersession.beans;
 import java.io.Serializable;
 
 import javax.annotation.Resource;
-import javax.ejb.EJB;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
@@ -17,7 +16,6 @@ import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
 import de.fh_dortmund.inf.cw.surstwalat.common.exceptions.UserNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
-import de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces.LobbyManagementLocal;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionLocal;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
 
@@ -40,19 +38,24 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	@Override
 	public void login(String username, String password) throws UserNotFoundException 
 	{
-		try {
-			if (username.equals(user.getName()) && password.equals(user.getPassword()))
-			{
-				ObjectMessage msg = createObjectMessage(2, MessageType.USER_REGISTER);
-				trySetObject(msg, user);
-				sendMessage(msg);
-			}
-			else {
-				throw new UserNotFoundException();
-			}
-		} catch (UserNotFoundException e) {
-			e.printStackTrace();
-		}
+            
+            ObjectMessage msg = createObjectMessage(2, MessageType.USER_LOGIN);
+            trySetObject(msg, user);
+            sendMessage(msg);
+            
+//		try {
+//			if (username.equals(user.getName()) && password.equals(user.getPassword()))
+//			{
+//				ObjectMessage msg = createObjectMessage(2, MessageType.USER_REGISTER);
+//				trySetObject(msg, user);
+//				sendMessage(msg);
+//			}
+//			else {
+//				throw new UserNotFoundException();
+//			}
+//		} catch (UserNotFoundException e) {
+//			e.printStackTrace();
+//		}
 	}
 
 	@Override
@@ -63,13 +66,19 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 		sendMessage(msg);
 	}
 	
-	@Override
-	public void changePassword(String newPassword) {
-
-		ObjectMessage msg = createObjectMessage(2, MessageType.USER_CHANGE_PASSWORD);
-		user.setPassword(newPassword);
-		trySetObject(msg, user);
-		sendMessage(msg);
+        @Override
+	public void changePassword(String oldPassword, String newPassword) {
+		if (user.getPassword().contentEquals(oldPassword)) {
+                        ObjectMessage msg = createObjectMessage(2, MessageType.USER_CHANGE_PASSWORD);
+                        user.setPassword(newPassword);
+                        trySetObject(msg, user);
+                        sendMessage(msg);
+		} else {
+			try {
+				throw new Exception("Wrong password");
+			} catch (Exception e) {
+			}
+		}
 	}
 
 	@Override
