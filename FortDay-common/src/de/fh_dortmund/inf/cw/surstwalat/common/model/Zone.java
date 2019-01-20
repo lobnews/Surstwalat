@@ -22,7 +22,7 @@ import javax.persistence.Table;
 @Table(name="Zone")
 @Entity
 @NamedQueries({
-	@NamedQuery(name="Zone.getZoneByGameId", query="SELECT z FROM Zone z WHERE z.game_id = :id")
+	@NamedQuery(name="Zone.getByGameId", query="SELECT z FROM Zone z WHERE z.game_id = :id")
 })
 public class Zone implements Serializable{
 	@Id
@@ -39,7 +39,10 @@ public class Zone implements Serializable{
 	@Column(name="currentZoneSize")
 	private int currentZoneSize;
 	@Column(name="nextZoneBegin")
+	private int nextZoneBegin;
+	@Column(name="nextZoneSize")
 	private int nextZoneSize;
+	
 	public int getId() {
 		return id;
 	}
@@ -69,6 +72,12 @@ public class Zone implements Serializable{
 	}
 	public void setCurrentZoneSize(int currentZoneSize) {
 		this.currentZoneSize = currentZoneSize;
+	}
+	public int getNextZoneBegin() {
+		return nextZoneBegin;
+	}
+	public void setNextZoneBegin(int nextZoneBegin) {
+		this.nextZoneBegin = nextZoneBegin;
 	}
 	public int getNextZoneSize() {
 		return nextZoneSize;

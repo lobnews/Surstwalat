@@ -1,7 +1,7 @@
 package de.fh_dortmund.inf.cw.surstwalat.common;
 /**
  * 
- * @author Johannes Heiderich
+ * @author Johannes Heiderich, Rebekka Michel
  *
  */
 public interface PropertyType {
@@ -19,9 +19,9 @@ public interface PropertyType {
 	public static final String LOBBY_NAME = "LOBBY_NAME";
 	public static final String GAME_FIELDSIZE = "GAME_FIELDSIZE";
 	public static final String CURRENT_ZONE_BEGIN = "CURRENT_ZONE_BEGIN";
-	public static final String CURRENT_ZONE_END = "CURRENT_ZONE_SIZE";
+	public static final String CURRENT_ZONE_SIZE = "CURRENT_ZONE_SIZE";
 	public static final String NEXT_ZONE_BEGIN = "NEXT_ZONE_BEGIN";
-	public static final String NEXT_ZONE_END = "NEXT_ZONE_SIZE";
+	public static final String NEXT_ZONE_SIZE = "NEXT_ZONE_SIZE";
 	public static final String DAMAGE = "DAMAGE";
 	public static final String CHARACTER_ID = "CHARACTER_ID";
     public static final String FIELD_ID = "FIELD_ID";

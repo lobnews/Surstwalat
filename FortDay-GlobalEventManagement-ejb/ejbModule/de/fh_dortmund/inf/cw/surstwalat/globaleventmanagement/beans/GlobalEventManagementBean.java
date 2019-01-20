@@ -14,6 +14,7 @@ import javax.persistence.TypedQuery;
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Game;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Playground;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Zone;
 import de.fh_dortmund.inf.cw.surstwalat.globaleventmanagement.beans.interfaces.GlobalEventManagementLocal;
 
@@ -35,44 +36,49 @@ public class GlobalEventManagementBean implements GlobalEventManagementLocal{
 	@Override
 	public void updateZone(int gameId, int roundNo) {
 		Zone zone = getZoneByGameID(gameId);
-		int currentZoneBegin = 0;
-		int currentZoneSize = 0;
-		int nextZoneBegin = 0;
-		int nextZoneSize = 0;
-		int damage = 0;
 		if(roundNo == 0)
 		{
-			//TODO fieldsize ziehen
-			int fieldsize = 10;
+			Game game = getGameByGameID(gameId);
+			int fieldsize = getPlaygroundByGameID(gameId).getFields().size();
 			int randomStartingField = (int)(Math.random() * fieldsize); 
-			
-			currentZoneBegin = 0;
-			currentZoneSize = 0;
-			nextZoneBegin =	randomStartingField;
-			nextZoneSize = 3;
-			damage = 0;
+			int nextZoneBegin =	randomStartingField;
+			int nextZoneSize = 3;
 			
 			zone.setCurrentZoneBegin(0);
 			zone.setCurrentZoneSize(0);
+			zone.setDamage(0);
+			zone.setGame(game);
+			zone.setNextZoneBegin(nextZoneBegin);
+			zone.setNextZoneSize(nextZoneSize);
+			
+			em.persist(zone);
 		}
 		else if(roundNo%3 == 0)
 		{
+			int damage = zone.getDamage() + 1;
+			int currentZoneBegin = zone.getNextZoneBegin();
+			int currentZoneSize = zone.getNextZoneSize();
+			int nextZoneSize = currentZoneSize + damage;
+			int nextZoneBegin = currentZoneBegin + (int)(Math.random() * currentZoneSize) + 1;
 			
-		}
-		else
-		{
+			zone.setCurrentZoneBegin(currentZoneBegin);
+			zone.setCurrentZoneSize(currentZoneSize);
+			zone.setDamage(damage);
+			zone.setNextZoneBegin(nextZoneBegin);
+			zone.setNextZoneSize(nextZoneSize);
 			
+			em.merge(zone);
 		}
 		
 		ObjectMessage message = jmsContext.createObjectMessage();
 		try {
 			message.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.UPDATE_ZONE);
 			message.setIntProperty(PropertyType.GAME_ID, gameId);
-			message.setIntProperty(PropertyType.CURRENT_ZONE_BEGIN, currentZoneBegin);
-			message.setIntProperty(PropertyType.CURRENT_ZONE_END, currentZoneSize);
-			message.setIntProperty(PropertyType.NEXT_ZONE_BEGIN, nextZoneBegin);
-			message.setIntProperty(PropertyType.NEXT_ZONE_END, nextZoneSize);
-			message.setIntProperty(PropertyType.DAMAGE, damage);
+			message.setIntProperty(PropertyType.CURRENT_ZONE_BEGIN, zone.getCurrentZoneBegin());
+			message.setIntProperty(PropertyType.CURRENT_ZONE_SIZE, zone.getCurrentZoneSize());
+			message.setIntProperty(PropertyType.NEXT_ZONE_BEGIN, zone.getNextZoneBegin());
+			message.setIntProperty(PropertyType.NEXT_ZONE_SIZE, zone.getNextZoneSize());
+			message.setIntProperty(PropertyType.DAMAGE, zone.getDamage());
 			message.setStringProperty(PropertyType.DISPLAY_MESSAGE, "Die sichere Zone wurde aktualisiert!");
 			jmsContext.createProducer().send(eventTopic, message);
 		} catch (JMSException e) {
@@ -125,8 +131,14 @@ public class GlobalEventManagementBean implements GlobalEventManagementLocal{
 		return query.getSingleResult();
 	}
 	
+	private Playground getPlaygroundByGameID(int gameId) {
+		TypedQuery<Playground> query = em.createNamedQuery("Playground.getByGameId", Playground.class);
+		query.setParameter("id", gameId);
+		return query.getSingleResult();
+	}
+	
 	private Zone getZoneByGameID(int gameId) {
-		TypedQuery<Zone> query = em.createNamedQuery("Zone.getZoneByGameId", Zone.class);
+		TypedQuery<Zone> query = em.createNamedQuery("Zone.getByGameId", Zone.class);
 		query.setParameter("id", gameId);
 		return query.getSingleResult();
 	}
