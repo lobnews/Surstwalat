@@ -15,6 +15,8 @@ import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
 import de.fh_dortmund.inf.cw.surstwalat.common.exceptions.UserNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.ActionType;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionLocal;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
@@ -37,25 +39,10 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 
 	@Override
 	public void login(String username, String password) throws UserNotFoundException 
-	{
-            
+	{    
             ObjectMessage msg = createObjectMessage(2, MessageType.USER_LOGIN);
             trySetObject(msg, user);
             sendMessage(msg);
-            
-//		try {
-//			if (username.equals(user.getName()) && password.equals(user.getPassword()))
-//			{
-//				ObjectMessage msg = createObjectMessage(2, MessageType.USER_REGISTER);
-//				trySetObject(msg, user);
-//				sendMessage(msg);
-//			}
-//			else {
-//				throw new UserNotFoundException();
-//			}
-//		} catch (UserNotFoundException e) {
-//			e.printStackTrace();
-//		}
 	}
 
 	@Override
@@ -66,13 +53,13 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 		sendMessage(msg);
 	}
 	
-        @Override
+    @Override
 	public void changePassword(String oldPassword, String newPassword) {
 		if (user.getPassword().contentEquals(oldPassword)) {
-                        ObjectMessage msg = createObjectMessage(2, MessageType.USER_CHANGE_PASSWORD);
-                        user.setPassword(newPassword);
-                        trySetObject(msg, user);
-                        sendMessage(msg);
+                ObjectMessage msg = createObjectMessage(2, MessageType.USER_CHANGE_PASSWORD);
+                user.setPassword(newPassword);
+                trySetObject(msg, user);
+                sendMessage(msg);
 		} else {
 			try {
 				throw new Exception("Wrong password");
@@ -87,7 +74,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 		user.setName(username);
 		user.setPassword(password);
 		user.setEmail(email);
-		ObjectMessage msg = createObjectMessage(2, MessageType.USER_REGISTER);
+		ObjectMessage msg = createObjectMessage(-1, MessageType.USER_REGISTER);
 		trySetObject(msg, user);
 		sendMessage(msg);
 	}
@@ -95,7 +82,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	@Override
 	public void disconnect() 
 	{
-		ObjectMessage msg = createObjectMessage(2, MessageType.USER_DISCONNECT);
+		ObjectMessage msg = createObjectMessage(-1, MessageType.USER_DISCONNECT);
 		trySetObject(msg, user);
 		sendMessage(msg);
 	}
@@ -103,7 +90,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	@Override
 	public void timeout() 
 	{
-		ObjectMessage msg = createObjectMessage(2, MessageType.USER_TIMEOUT);
+		ObjectMessage msg = createObjectMessage(-1, MessageType.USER_TIMEOUT);
 		trySetObject(msg, user);
 		sendMessage(msg);
 	}
@@ -111,7 +98,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	@Override
 	public void updateEmailAddress(String email) {
 		user.setEmail(email);
-		ObjectMessage msg = createObjectMessage(2, MessageType.USER_UPDATE_EMAIL);
+		ObjectMessage msg = createObjectMessage(-1, MessageType.USER_UPDATE_EMAIL);
 		trySetObject(msg, user);
 		sendMessage(msg);
 	}
@@ -119,24 +106,24 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	@Override
 	public void deleteAccount() 
 	{
-		ObjectMessage msg = createObjectMessage(2, MessageType.USER_DELETE);
+		ObjectMessage msg = createObjectMessage(-1, MessageType.USER_DELETE);
 		trySetObject(msg, user);
 		sendMessage(msg);
 	}
 	
 	@Override
-	public void playerRolls(int gameID, int playerID,  int value) {
-		ObjectMessage msg = createObjectMessage(gameID, MessageType.PLAYER_ROLL);
+	public void playerRolls(int gameID, int playerID,  Dice dice) {
+		ObjectMessage msg = createObjectMessage(gameID, MessageType.PLAYER_ACTION);
+		trySetStringProperty(msg, PropertyType.ACTION_TYPE, ActionType.ROLL.toString());
 		trySetIntProperty(msg, PropertyType.PLAYER_NO, playerID);
-		//trySetIntProperty(msg, PropertyType.???, value);
+		trySetObject(msg, dice);
 
-		sendMessage(msg);		
+		sendMessage(msg);
 	}
 	
 	@Override
 	public void startRound(int gameID, int number) {
 		ObjectMessage msg = createObjectMessage(gameID, MessageType.START_ROUND);
-		//trySetIntProperty(msg, PropertyType.???, value);
 
 		sendMessage(msg);			
 	}

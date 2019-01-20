@@ -1,5 +1,6 @@
 package de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces;
 
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 
 /**
@@ -24,7 +25,7 @@ public interface UserSession{
 	
 	public void deleteAccount();
 	
-	public void playerRolls(int gameID, int playerID, int value);
+	public void playerRolls(int gameID, int playerID, Dice dice);
 	
 	public void startRound(int gameID, int number);
 	
