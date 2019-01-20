@@ -40,7 +40,7 @@ public class Account implements Serializable {
     private String password;
     @Column(name = "inLobby")
     private boolean inLobby;
-    @ManyToMany
+    @ManyToMany(mappedBy="humanUsersInGame")
     private List<Game> games;
 
     /**

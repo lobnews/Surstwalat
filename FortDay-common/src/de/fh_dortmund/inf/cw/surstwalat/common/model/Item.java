@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @NamedQueries({
 	@NamedQuery(name="Item.getById", query="SELECT i FROM Item i WHERE i.id = :id")
 })
-public class Item  implements Serializable{
+public class Item implements Serializable{
 
 	@Id
 	@GeneratedValue
