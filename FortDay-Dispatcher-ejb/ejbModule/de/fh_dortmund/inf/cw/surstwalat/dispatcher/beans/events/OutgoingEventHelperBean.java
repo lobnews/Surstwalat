@@ -34,6 +34,7 @@ public class OutgoingEventHelperBean implements EventHelperLocal {
 		trySetIntProperty(message, PropertyType.USER_ID, userId);
 		trySetObject(message, playerNo);
 		sendMessage(message);
+		System.out.println("[DISPATCHER] Assign Player " + playerNo + " to user with id " + userId);
 	}
 	@Override
 	public void triggerStartRoundEvent(Integer gameId, Integer roundNo) {
@@ -41,34 +42,40 @@ public class OutgoingEventHelperBean implements EventHelperLocal {
 		trySetStringProperty(message, PropertyType.DISPLAY_MESSAGE, "Runde " + roundNo);
 		trySetObject(message, roundNo);
 		sendMessage(message);
+		System.out.println("[DISPATCHER] : Runde " + roundNo);
 	}
 	@Override
-	public void triggerAssignActivePlayerEvent(Integer gameId, Integer playerNo) {
+	public void triggerAssignActivePlayerEvent(Integer gameId, Integer playerId, Integer playerNo) {
 		ObjectMessage message = createObjectMessage(gameId, MessageType.ASSIGN_ACTIVE_PLAYER);
 		trySetStringProperty(message, PropertyType.DISPLAY_MESSAGE, "Spieler " + playerNo + " ist an der Reihe");
+		trySetIntProperty(message, PropertyType.PLAYER_ID, playerId);
 		trySetObject(message, playerNo);
 		sendMessage(message);
+		System.out.println("[DISPATCHER] Spieler " + playerNo + " ist an der Reihe");
 	}
 	@Override
 	public void triggerPlayerRollEvent(Integer gameId, Integer playerNo, Integer value) {
 		ObjectMessage message = createObjectMessage(gameId, MessageType.PLAYER_ROLL);
 		trySetIntProperty(message, PropertyType.PLAYER_NO, value);
-		trySetStringProperty(message, PropertyType.DISPLAY_MESSAGE, "Spieler " + playerNo + " würfelt eine " + value);
+		trySetStringProperty(message, PropertyType.DISPLAY_MESSAGE, "Spieler " + playerNo + " wuerfelt eine " + value);
 		trySetObject(message, value);
 		sendMessage(message);
+		System.out.println("[DISPATCHER] Spieler " + playerNo + " wuerfelt eine " + value );
 	}
+//	@Override
+//	public void triggerEndRoundEvent(Integer gameId, Integer roundNo) {
+//		ObjectMessage message = createObjectMessage(gameId, MessageType.END_ROUND);
+//		trySetObject(message, roundNo);
+//		sendMessage(message);
+//	}
 	@Override
-	public void triggerEndRoundEvent(Integer gameId, Integer roundNo) {
-		ObjectMessage message = createObjectMessage(gameId, MessageType.END_ROUND);
-		trySetObject(message, roundNo);
-		sendMessage(message);
-	}
-	@Override
-	public void triggerEliminatePlayerEvent(Integer gameId, Integer playerNo) {
+	public void triggerEliminatePlayerEvent(Integer gameId, Integer playerId, Integer playerNo) {
 		ObjectMessage message = createObjectMessage(gameId, MessageType.ELIMINATE_PLAYER);
 		trySetStringProperty(message, PropertyType.DISPLAY_MESSAGE, "Spieler " + playerNo + " scheidet aus");
+		trySetIntProperty(message, PropertyType.PLAYER_ID, playerId);
 		trySetObject(message, playerNo);
 		sendMessage(message);
+		System.out.println("[DISPATCHER] Spieler " + playerNo + " scheidet aus" );
 	}
 	
 	private ObjectMessage createObjectMessage(Integer gameId, int messageType) {

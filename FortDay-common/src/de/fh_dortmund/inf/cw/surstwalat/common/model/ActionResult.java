@@ -1,24 +1,27 @@
-package de.fh_dortmund.inf.cw.surstwalat.dispatcher.domain;
+package de.fh_dortmund.inf.cw.surstwalat.common.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
+/**
+ * 
+ * @author Johannes Heiderich
+ *
+ */
 @Entity
-@Table(name="DispatcherActionResult")
 public class ActionResult {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+	private int id;
 	
 	@OneToOne(mappedBy="result")
 	private Action action;
 	
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
 

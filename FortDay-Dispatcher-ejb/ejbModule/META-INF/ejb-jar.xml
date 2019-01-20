@@ -1,5 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ejb-jar xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/ejb-jar_3_1.xsd" version="3.1">
   <display-name>FortDay-Dispatcher-ejb </display-name>
+<!--   <enterprise-beans>
+	  <message-driven>
+	      <ejb-name>GameStartedEventHandlerBean</ejb-name>
+	      <ejb-name>NoCollisionEventHandlerBean</ejb-name>
+	      <ejb-name>PlayerActionEventHandlerBean</ejb-name>
+	      <ejb-name>PlayerDeathEventHandlerBean</ejb-name>
+	      <ejb-name>DispatcherTestEventHandlerBean</ejb-name>
+      </message-driven>
+      <session>
+      	<ejb-name>OutgoingEventHelperBean</ejb-name>
+      	<ejb-name>ActionRepositoryBean</ejb-name>
+      	<ejb-name>GameRepositoryBean</ejb-name>
+      	<ejb-name>PlayerRepositoryBean</ejb-name>
+      	<ejb-name>DiceRollBean</ejb-name>
+      	<ejb-name>DispatcherBean</ejb-name>
+      	<ejb-name>DispatcherTestBean</ejb-name>
+      </session>
+  </enterprise-beans> -->
+   
   <ejb-client-jar>FortDay-common.jar</ejb-client-jar>
 </ejb-jar>
