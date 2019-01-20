@@ -44,7 +44,7 @@ public class Token  implements Serializable{
 	}
 	public void setId(int id) {
 		this.id = id;
-	}
+	}	
 	public int getPlayerId() {
 		return playerId;
 	}
