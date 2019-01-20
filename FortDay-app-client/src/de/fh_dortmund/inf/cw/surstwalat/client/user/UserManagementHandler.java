@@ -86,7 +86,7 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
      * @throws Exception
      */
     public void register(String accountName, String email, String password) throws Exception {
-        userSessionRemote.register(accountName, email, password);
+        userSessionRemote.register(accountName, password, email);
     }
 
     /**

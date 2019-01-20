@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<application xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/application_7.xsd" version="7">
+<application version="7" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/application_7.xsd">
   <module>
     <ejb>FortDay-Health-ejb.jar</ejb>
   </module>
@@ -25,11 +25,6 @@
     <name>java:global/jms/HealthMessageTopic</name>
     <interface-name>javax.jms.Topic</interface-name>
     <destination-name>HealthMessageTopic</destination-name>
-  </jms-destination>
-  <jms-destination>
-    <name>java:global/jms/UserMessageTopic</name>
-    <interface-name>javax.jms.Topic</interface-name>
-    <destination-name>UserMessageTopic</destination-name>
   </jms-destination>
   <jms-destination>
     <name>java:global/jms/FortDayEventTopic</name>

@@ -84,6 +84,8 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	@Override
 	public void register(String username, String password, String email) 
 	{
+                user = new Account();
+            
 		user.setName(username);
 		user.setPassword(password);
 		user.setEmail(email);

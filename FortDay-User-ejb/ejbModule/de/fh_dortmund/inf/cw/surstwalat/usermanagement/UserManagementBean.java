@@ -28,51 +28,64 @@ public class UserManagementBean implements MessageListener {
 
     /**
      *
-     * @param message
+     * @param message Incoming message
      */
     @Override
     public void onMessage(Message message) {
-        ObjectMessage o = (ObjectMessage) message;
         int messageType = -1;
 
         try {
-            messageType = o.getIntProperty(PropertyType.MESSAGE_TYPE);
+            messageType = message.getIntProperty(PropertyType.MESSAGE_TYPE);
         } catch (JMSException e) {
             // TODO no message type
         }
 
         switch (messageType) {
+            case MessageType.USER_REGISTER:
+                register(message);
+                break;
             case MessageType.USER_LOGIN:
                 login(message);
+                break;
+            case MessageType.USER_UPDATE_EMAIL:
+                updateEmailAddress(message);
+                break;
+            case MessageType.USER_DELETE:
+                deleteAccount(message);
+                break;
+            case MessageType.USER_CHANGE_PASSWORD:
+                changePassword(message);
                 break;
         }
     }
 
     /**
+     * Registered a new user
      *
-     * @param accountName
-     * @param email
-     * @param password
-     * @throws Exception
+     * @param message
      */
-    public void register(String accountName, String email, String password) throws Exception {
-        Account newAccount = new Account();
+    public void register(Message message) {
+        System.out.println("UserManagement: register!");
 
-        newAccount.setName(accountName);
-        newAccount.setEmail(email);
-        newAccount.setPassword(password);
-
-        accountList.add(newAccount);
+        ObjectMessage o = (ObjectMessage) message; 
+        
+        try {
+            Account newAccount = (Account) o.getObject();
+            
+//            accountList.add(newAccount);
+            System.out.println(newAccount.getEmail());
+        } catch (JMSException e) {
+            System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementBean.register(): ERROR - JSM EXCEPTION");
+        }
     }
 
     /**
      * Login user
      *
-     * @param username
-     * @param password
-     * @throws java.lang.Exception
+     * @param message
      */
-    public void login(Object message) {
+    public void login(Message message) {
+        throw new UnsupportedOperationException("login is not supported yet.");
 
 //        for (Account a : accountList) {
 //            if (a.getName().equals(username)) {
@@ -86,33 +99,34 @@ public class UserManagementBean implements MessageListener {
     /**
      * Update email address
      *
-     * @param email
+     * @param message
      */
-    public void updateEmailAddress(String email) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void updateEmailAddress(Message message) {
+        throw new UnsupportedOperationException("updateEmailAddress is not supported yet.");
     }
 
     /**
      * Change password
      *
-     * @param oldPassword
-     * @param newPassword
+     * @param message
      */
-    public void changePassword(String oldPassword, String newPassword) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void changePassword(Message message) {
+        throw new UnsupportedOperationException("changePassword is not supported yet.");
     }
 
     /**
      * Delete account
+     *
+     * @param message
      */
-    public void deleteAccount() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public void deleteAccount(Message message) {
+        throw new UnsupportedOperationException("deleteAccount is not supported yet.");
     }
 
     /**
      *
      * @param plaintext
-     * @return
+     * @return hashed text
      */
     public String generateHash(String plaintext) {
         String hash;
