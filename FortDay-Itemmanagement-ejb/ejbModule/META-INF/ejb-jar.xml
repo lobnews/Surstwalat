@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ejb-jar xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/ejb-jar_3_2.xsd" version="3.2">
+    <enterprise-beans>
+        <message-driven>
+            <ejb-name>ItemmanagementMessageBean</ejb-name>
+        </message-driven>
+    </enterprise-beans>
+    <ejb-client-jar>FortDay-common.jar</ejb-client-jar>
+</ejb-jar>

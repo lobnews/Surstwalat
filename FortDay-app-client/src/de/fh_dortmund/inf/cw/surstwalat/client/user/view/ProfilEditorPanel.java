@@ -1,11 +1,13 @@
 package de.fh_dortmund.inf.cw.surstwalat.client.user.view;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Designer;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Validator;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -13,6 +15,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.user.modal.ChangePasswordDialog;
+import java.awt.Dimension;
+import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  * @author Stephan Klimek
@@ -25,28 +32,34 @@ public class ProfilEditorPanel extends JPanel {
      */
     private static final long serialVersionUID = 1563209170882467417L;
 
+    private JLabel lb_errorMsg;
     private JLabel lb_username;
     private JTextField tf_username;
     private JLabel lb_email;
     private JTextField tf_email;
     private JButton bt_updateProfil;
-    private JButton bt_back;
     private JButton bt_changePassword;
+    private JButton bt_deleteProfil;
+    private JButton bt_back;
+
+    private final UserManagementHandler userManager;
 
     /**
      * Default Constructor
      */
     public ProfilEditorPanel() {
         initComponent();
+
+        userManager = UserManagementHandler.getInstance();
     }
 
     /**
-     * Initiates ui components
+     * Initialize ui components
      */
     private void initComponent() {
         GridBagLayout gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);
-        setMinimumSize(new java.awt.Dimension(600, 400));
+        setPreferredSize(new Dimension(600, 400));
 
         GridBagConstraints gridBag = new GridBagConstraints();
         gridBag.fill = GridBagConstraints.HORIZONTAL;
@@ -54,10 +67,17 @@ public class ProfilEditorPanel extends JPanel {
 
         int gridRow = 0;
 
+        // Error label
+        lb_errorMsg = new JLabel();
+        gridBag.gridx = 0;
+        gridBag.gridy = gridRow;
+        gridBag.gridwidth = 2;
+        this.add(lb_errorMsg, gridBag);
+
         // Username
         lb_username = new JLabel("Benutzername: ");
         gridBag.gridx = 0;
-        gridBag.gridy = gridRow;
+        gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
         this.add(lb_username, gridBag);
 
@@ -81,32 +101,40 @@ public class ProfilEditorPanel extends JPanel {
         gridBag.gridwidth = 2;
         this.add(tf_email, gridBag);
 
-        // Change password button
-        bt_changePassword = new JButton("Passwort ändern");
-        ProfilEditorPanel panel = this;
-        bt_changePassword.addActionListener((ActionEvent e) -> {
-            ChangePasswordDialog changePasswordDialog = new ChangePasswordDialog(panel);
-            changePasswordDialog.setVisible(true);
-        });
-        gridBag.gridx = 0;
-        gridBag.gridy = ++gridRow;
-        gridBag.gridwidth = 3;
-        this.add(bt_changePassword, gridBag);
-
         // Edit profil button
         bt_updateProfil = new JButton("Speichern");
         bt_updateProfil.addActionListener((ActionEvent e) -> {
-            // TODO update function
+            updateEmailAddress();
         });
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 3;
         this.add(bt_updateProfil, gridBag);
 
+        // Change password button
+        bt_changePassword = new JButton("Passwort ändern");
+        bt_changePassword.addActionListener((ActionEvent e) -> {
+            openChangePasswordDialog();
+        });
+        gridBag.gridx = 0;
+        gridBag.gridy = ++gridRow;
+        gridBag.gridwidth = 3;
+        this.add(bt_changePassword, gridBag);
+
+        // Delete profil button
+        bt_deleteProfil = new JButton("Löschen");
+        bt_deleteProfil.addActionListener((ActionEvent e) -> {
+            deleteAccount();
+        });
+        gridBag.gridx = 0;
+        gridBag.gridy = ++gridRow;
+        gridBag.gridwidth = 3;
+        this.add(bt_deleteProfil, gridBag);
+
         // Back button
         bt_back = new JButton("Zurück");
         bt_back.addActionListener((ActionEvent e) -> {
-            MainFrame.getInstance().setFrame(new StarterPanel());
+            back();
         });
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
@@ -115,11 +143,83 @@ public class ProfilEditorPanel extends JPanel {
     }
 
     /**
-     * Get email adress
-     *
-     * @return email
+     * Update email address
      */
-    public String getEMail() {
-        return tf_email.getText().trim();
+    private void updateEmailAddress() {
+        String email = tf_email.getText();
+
+        // Validation check
+        if (!checkEmailAddress(email)) {
+            return;
+        }
+
+        // Registration call
+        try {
+            userManager.updateEmailAddress(email);
+        } catch (Exception ex) {
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        }
+
+        // Success dialog
+        JOptionPane.showMessageDialog(
+                this,
+                "E-Mail-Adresse wurde erfolgreich geändert.",
+                "Erfolgreich!",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     * Input validation checking for change password
+     *
+     * @param inputMap
+     * @return
+     */
+    private boolean checkEmailAddress(String email) {
+        LinkedList<String> errorMsgList = new LinkedList<>();
+
+        // Check email address
+        if (!Validator.checkEmailAddress(email)) {
+            errorMsgList.add("Die E-Mail-Adresse ist nicht korrekt.");
+        }
+
+        // Error dialog
+        if (errorMsgList.size() > 0) {
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.FINER, null, errorMsgList.toString());
+            lb_errorMsg.setText(Designer.errorBox(errorMsgList));
+            errorMsgList.clear();
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Open modal change password dialog
+     */
+    private void openChangePasswordDialog() {
+        ChangePasswordDialog changePasswordDialog = new ChangePasswordDialog(this);
+        changePasswordDialog.setVisible(true);
+    }
+
+    /**
+     * Delete account
+     */
+    private void deleteAccount() {
+        int dialogResult = JOptionPane.showConfirmDialog(
+                MainFrame.getInstance(),
+                "Achtung! Willst du dein Profil wirklich löschen?",
+                "Warnung!",
+                JOptionPane.YES_NO_OPTION);
+        if (dialogResult == JOptionPane.YES_OPTION) {
+            userManager.deleteAccount();
+        }
+    }
+
+    /**
+     * Get a site back
+     */
+    private void back() {
+        MainFrame.getInstance().setFrame(new StarterPanel());
     }
 }

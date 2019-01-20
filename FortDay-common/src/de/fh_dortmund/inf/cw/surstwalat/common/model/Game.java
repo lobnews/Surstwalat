@@ -1,6 +1,7 @@
 package de.fh_dortmund.inf.cw.surstwalat.common.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -8,8 +9,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -31,13 +35,26 @@ public class Game implements Serializable{
 	@Column(name="id")
 	private int id;
 	//only necessary for lobby management
+	@ManyToMany
+	@JoinTable(name="game_account")
 	private List<Account> humanUsersInGame;
+	
+	@OneToMany(mappedBy="game")
 	private List<Player> players;
-	@Column(name="gameStarted")
 	private boolean gameStarted;
+	
+	private int aiPlayerCount;
+	
+	private int currentRound;
 
 	public Game() {
 		gameStarted = false;
+		if(players == null) {
+			players = new ArrayList<Player>();
+		}		
+		if(humanUsersInGame == null) {
+			humanUsersInGame = new ArrayList<Account>();
+		}
 	}
 
 	public int getId() {
@@ -73,6 +90,26 @@ public class Game implements Serializable{
 
 	public void removeHumanUserFromOpenGame(Account user) {
 		humanUsersInGame.remove(user);
+	}
+	
+	
+
+	public int getAiPlayerCount() {
+		return aiPlayerCount;
+	}
+
+	public void setAiPlayerCount(int aiPlayerCount) {
+		this.aiPlayerCount = aiPlayerCount;
+	}
+	
+	
+
+	public int getCurrentRound() {
+		return currentRound;
+	}
+
+	public void setCurrentRound(int currentRound) {
+		this.currentRound = currentRound;
 	}
 
 	@Override
