@@ -30,7 +30,6 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 
 	@Inject
 	private JMSContext jmsContext;
-	
 
 	@Resource(lookup = "java:global/jms/FortDayEventTopic")
 	private Topic eventTopic;
@@ -114,6 +113,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	@Override
 	public void playerRolls(int gameID, int playerID,  Dice dice) {
 		ObjectMessage msg = createObjectMessage(gameID, MessageType.PLAYER_ACTION);
+		// Not sure about this one
 		trySetStringProperty(msg, PropertyType.ACTION_TYPE, ActionType.ROLL.toString());
 		trySetIntProperty(msg, PropertyType.PLAYER_NO, playerID);
 		trySetObject(msg, dice);
@@ -124,7 +124,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	@Override
 	public void startRound(int gameID, int number) {
 		ObjectMessage msg = createObjectMessage(gameID, MessageType.START_ROUND);
-
+		trySetIntProperty(msg, PropertyType.ROUND_NO, number);
 		sendMessage(msg);			
 	}
 	
@@ -147,7 +147,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	@Override
 	public void endRound(int gameID, int number) {
 		ObjectMessage msg = createObjectMessage(gameID, MessageType.END_ROUND);
-		trySetObject(msg, user);
+		trySetIntProperty(msg, PropertyType.ROUND_NO, number);
 
 		sendMessage(msg);		
 	}
