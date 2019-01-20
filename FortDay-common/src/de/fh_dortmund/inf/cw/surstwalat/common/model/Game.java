@@ -41,10 +41,14 @@ public class Game implements Serializable{
 	
 	@OneToMany(mappedBy="game")
 	private List<Player> players;
+	
+	@Column(name="gameStarted")
 	private boolean gameStarted;
 	
+	@Column(name="aiPlayerCount")
 	private int aiPlayerCount;
 	
+	@Column(name="currentRound")
 	private int currentRound;
 
 	public Game() {

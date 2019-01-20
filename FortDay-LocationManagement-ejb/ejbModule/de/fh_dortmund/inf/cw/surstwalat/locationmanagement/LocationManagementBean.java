@@ -113,7 +113,7 @@ public class LocationManagementBean implements LocationManagementLocal
         Token token;
         for (int i = 0; i < playground.getFields().size(); i++)
         {
-            if (playground.getField(i).getToken().getId() == tokenId)
+            if (playground.getField(i).getToken() != null && playground.getField(i).getToken().getId() == tokenId)
             {
                 token = playground.getFields().get(i).getToken();
                 if (checkForCollisionWithPlayer(playground, token, i, count))

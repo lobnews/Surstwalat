@@ -19,35 +19,35 @@ public class TestBean
 {
     @EJB
     LocationManagementLocal locationManagement;
-    
+
     @EJB
     ItemRepositoryLocal itemRepository;
-    
+
     @PersistenceContext(unitName = "FortDayDB")
     protected EntityManager entityManager;
-    
+
     @PostConstruct
     public void init()
     {
         System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ LocationManagement !!!  started");
-        
+
         Item i = new Item();
-       itemRepository.save(i);
-        
-       Player p = new Player();
-       entityManager.persist(p);
-       
-       Token t = new Token();
-       t.setPlayerId(1);
-       t.setNr(1);
-       entityManager.persist(t);
-       
+        itemRepository.save(i);
+
+        Player p = new Player();
+        entityManager.persist(p);
+
+        Token t = new Token();
+        t.setPlayerId(1);
+        t.setNr(1);
+        entityManager.persist(t);
+
         locationManagement.createPlayground(1, 40);
-        locationManagement.addItemToPlayground(1, 1);
+        locationManagement.addItemToPlayground(1, 251);
         locationManagement.addTokenToPlayground(1, 1, 1);
         locationManagement.moveToken(1, 1, 2);
         locationManagement.removeItemFromPlayground(1, 1);
-       
+
     }
 
 }
