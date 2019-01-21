@@ -7,7 +7,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import javax.ejb.Singleton;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -24,30 +26,88 @@ public class UserManagementPersistBean implements UserManagementLocal {
 //    public void init() {
 //        System.out.println("UserManagement: started");
 //    }
-
+    /**
+     * Registed new account
+     *
+     * @param account
+     */
     @Override
     public void register(Account account) {
+        account.setPassword(generateHash(account.getPassword()));
         entityManager.persist(account);
     }
 
+    /**
+     * Log user in
+     *
+     * @param account
+     */
     @Override
     public void login(Account account) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        try {
+            Account dbAccount = getAccountByName(account.getName());
+            if (dbAccount.getPassword().equals(generateHash(account.getPassword()))) {
+                System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.login() success");
+            }
+        } catch (NoResultException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
+    /**
+     * Change user password
+     *
+     * @param account
+     */
     @Override
     public void changePassword(Account account) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        entityManager.merge(account);
     }
 
+    /**
+     * Update user email address
+     *
+     * @param account
+     */
     @Override
     public void updateEmailAddress(Account account) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        entityManager.merge(account);
     }
 
+    /**
+     * Remove account
+     *
+     * @param account
+     */
     @Override
     public void deleteAccount(Account account) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        entityManager.remove(account);
+    }
+
+    /**
+     * Get account data by account id
+     *
+     * @param id account id
+     * @return account
+     * @throws NoResultException
+     */
+    public Account getAccountById(int id) throws NoResultException {
+        TypedQuery<Account> accountQuery = entityManager.createNamedQuery("Account.getById", Account.class);
+        accountQuery.setParameter("id", id);
+        return accountQuery.getSingleResult();
+    }
+
+    /**
+     * Get account data by account name
+     *
+     * @param name
+     * @return account
+     * @throws NoResultException
+     */
+    public Account getAccountByName(String name) throws NoResultException {
+        TypedQuery<Account> accountQuery = entityManager.createNamedQuery("Account.getByName", Account.class);
+        accountQuery.setParameter("name", name);
+        return accountQuery.getSingleResult();
     }
 
     /**

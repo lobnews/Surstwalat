@@ -101,7 +101,7 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
      *
      * @param username
      * @param password
-     * @throws java.lang.Exception
+     * @throws Exception
      */
     public void login(String username, String password) throws Exception {
         userSessionRemote.login(username, password);

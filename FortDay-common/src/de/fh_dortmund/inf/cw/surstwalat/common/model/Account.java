@@ -4,8 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import javax.annotation.Generated;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,8 +21,9 @@ import javax.persistence.Table;
 @Table(name = "Account")
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "Account.getById", query = "SELECT a FROM Account a WHERE a.id = :id"),
-        @NamedQuery(name = "Account.getInLobby", query = "SELECT a FROM Account a WHERE a.inLobby = true")
+    @NamedQuery(name = "Account.getById", query = "SELECT a FROM Account a WHERE a.id = :id"),
+    @NamedQuery(name = "Account.getByName", query = "SELECT a FROM Account a WHERE a.name = :name"),
+    @NamedQuery(name = "Account.getInLobby", query = "SELECT a FROM Account a WHERE a.inLobby = true")
 })
 public class Account implements Serializable {
 
@@ -40,7 +39,7 @@ public class Account implements Serializable {
     private String password;
     @Column(name = "inLobby")
     private boolean inLobby;
-    @ManyToMany(mappedBy="humanUsersInGame")
+    @ManyToMany(mappedBy = "humanUsersInGame")
     private List<Game> games;
 
     /**
@@ -48,8 +47,8 @@ public class Account implements Serializable {
      */
     public Account() {
         inLobby = false;
-        if(games == null) {
-        	games = new ArrayList<Game>();
+        if (games == null) {
+            games = new ArrayList<>();
         }
     }
 
@@ -109,24 +108,42 @@ public class Account implements Serializable {
         this.password = password;
     }
 
+    /**
+     * @return Is user in lobby
+     */
     public boolean isInLobby() {
         return inLobby;
     }
 
+    /**
+     * @param inLobby
+     */
     public void setInLobby(boolean inLobby) {
         this.inLobby = inLobby;
     }
 
+    /**
+     * @return List of games
+     */
+    public List<Game> getGames() {
+        return games;
+    }
+
+    /**
+     * @param games List of Games
+     */
+    public void setGames(List<Game> games) {
+        this.games = games;
+    }
+
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((email == null) ? 0 : email.hashCode());
-        result = prime * result + id;
-        result = prime * result + (inLobby ? 1231 : 1237);
-        result = prime * result + ((password == null) ? 0 : password.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        return result;
+        int hash = 7;
+        hash = 19 * hash + this.id;
+        hash = 19 * hash + Objects.hashCode(this.name);
+        hash = 19 * hash + Objects.hashCode(this.email);
+        hash = 19 * hash + Objects.hashCode(this.password);
+        return hash;
     }
 
     @Override
@@ -140,43 +157,16 @@ public class Account implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        Account other = (Account) obj;
-        if (email == null) {
-            if (other.email != null) {
-                return false;
-            }
-        } else if (!email.equals(other.email)) {
+        final Account other = (Account) obj;
+        if (this.id != other.id) {
             return false;
         }
-        if (id != other.id) {
+        if (!Objects.equals(this.name, other.name)) {
             return false;
         }
-        if (inLobby != other.inLobby) {
+        if (!Objects.equals(this.email, other.email)) {
             return false;
         }
-        if (password == null) {
-            if (other.password != null) {
-                return false;
-            }
-        } else if (!password.equals(other.password)) {
-            return false;
-        }
-        if (name == null) {
-            if (other.name != null) {
-                return false;
-            }
-        } else if (!name.equals(other.name)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(this.password, other.password);
     }
-
-	public List<Game> getGames() {
-		return games;
-	}
-
-	public void setGames(List<Game> games) {
-		this.games = games;
-	}
-    
 }
