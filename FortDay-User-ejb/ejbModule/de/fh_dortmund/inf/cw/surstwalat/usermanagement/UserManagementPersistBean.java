@@ -36,10 +36,10 @@ public class UserManagementPersistBean implements UserManagementLocal {
         try {
             hashAccount(account);
             entityManager.persist(account);
-        } catch (NullPointerException ex) {
-            System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.register(): NoResultException");
+        } catch (NoResultException ex) {
+            System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.register(): NoResultException");
         } catch (IllegalStateException e) {
-            System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.register(): IllegalStateException");
+            System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.register(): IllegalStateException");
         }
     }
 
@@ -54,16 +54,16 @@ public class UserManagementPersistBean implements UserManagementLocal {
             hashAccount(account);
             Account dbAccount = getAccountByName(account.getName());
             if (dbAccount.getPassword().equals(generateHash(account.getPassword()))) {
-                System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.login() success");
+                System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.login() success");
             }
         } catch (NoResultException e) {
-            System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.login(): NoResultException");
+            System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.login(): NoResultException");
         } catch (NullPointerException e) {
-            System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.login(): NullPointerException");
+            System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.login(): NullPointerException");
         } catch (IllegalStateException e) {
-            System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.login(): IllegalStateException");
-        } catch (Exception ex) {
-            System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.login(): Exception");
+            System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.login(): IllegalStateException");
+        } catch (Exception e) {
+            System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.login(): Exception");
         }
     }
 

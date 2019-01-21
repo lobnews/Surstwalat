@@ -37,7 +37,7 @@ public class UserManagementMessageBean implements MessageListener {
         try {
             messageType = message.getIntProperty(PropertyType.MESSAGE_TYPE);
         } catch (JMSException e) {
-            System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementMessageBean.onMessage(): JMSException");
+            System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementMessageBean.onMessage(): JMSException");
         }
 
         switch (messageType) {
@@ -69,7 +69,7 @@ public class UserManagementMessageBean implements MessageListener {
             Account newAccount = (Account) message.getObject();
             userManagement.register(newAccount);
         } catch (JMSException e) {
-            System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementMessageBean.register(): JMSException");
+            System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementMessageBean.register(): JMSException");
         }
     }
 
@@ -83,7 +83,7 @@ public class UserManagementMessageBean implements MessageListener {
             Account newAccount = (Account) message.getObject();
             userManagement.login(newAccount);
         } catch (JMSException e) {
-            System.err.println(e.getMessage());
+            System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementMessageBean.login(): JMSException");
         }
     }
 
@@ -97,7 +97,7 @@ public class UserManagementMessageBean implements MessageListener {
             Account newAccount = (Account) message.getObject();
             userManagement.updateEmailAddress(newAccount);
         } catch (JMSException e) {
-            System.err.println(e.getMessage());
+            System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementMessageBean.updateEmailAddress(): JMSException");
         }
     }
 
@@ -111,7 +111,7 @@ public class UserManagementMessageBean implements MessageListener {
             Account newAccount = (Account) message.getObject();
             userManagement.changePassword(newAccount);
         } catch (JMSException e) {
-            System.err.println(e.getMessage());
+            System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementMessageBean.changePassword(): JMSException");
         }
     }
 
@@ -125,7 +125,7 @@ public class UserManagementMessageBean implements MessageListener {
             Account newAccount = (Account) message.getObject();
             userManagement.deleteAccount(newAccount);
         } catch (JMSException e) {
-            System.err.println(e.getMessage());
+            System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementMessageBean.deleteAccount(): JMSException");
         }
     }
 }

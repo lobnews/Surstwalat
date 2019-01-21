@@ -31,8 +31,8 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
             String lookUpString
                     = "java:global/FortDay-ear/FortDay-UserSession-ejb/UserSessionBean!de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote";
             userSessionRemote = (UserSessionRemote) ctx.lookup(lookUpString);
-        } catch (NamingException ex) {
-            System.err.println(ex.getMessage());
+        } catch (NamingException e) {
+            System.err.println(e.getMessage());
         }
     }
 
