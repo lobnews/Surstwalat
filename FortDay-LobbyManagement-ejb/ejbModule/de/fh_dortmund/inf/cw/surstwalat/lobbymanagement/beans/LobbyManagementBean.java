@@ -81,6 +81,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		Account user = getAccountByUserID(userID);
 		Game game = createNewGame();
 		game.addHumanUserToOpenGame(user);
+		game.setAiPlayerCount(4-game.getHumanUsersInGame().size());
 		user.setInLobby(false);
 		em.persist(game);
 		em.persist(user);
@@ -96,6 +97,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 			throw new GameIsFullException();
 		}else {
 			game.addHumanUserToOpenGame(user);
+			game.setAiPlayerCount(4-game.getHumanUsersInGame().size());
 			user.setInLobby(false);
 			em.persist(game);
 			em.persist(user);
@@ -131,26 +133,6 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	private void sendGameStartedMessage(int gameId, List<Account> users, int fieldsize) {
 		ObjectMessage msg = jmsContext.createObjectMessage();
 		try {
-			if(users.size() > 0) {
-				msg.setIntProperty(PropertyType.USER1_ID, users.get(0).getId());
-			}else {
-				msg.setIntProperty(PropertyType.USER1_ID, -1);
-			}
-			if(users.size() > 1) {
-				msg.setIntProperty(PropertyType.USER2_ID, users.get(1).getId());
-			}else {
-				msg.setIntProperty(PropertyType.USER2_ID, -1);
-			}			
-			if(users.size() > 2) {
-				msg.setIntProperty(PropertyType.USER3_ID, users.get(2).getId());
-			}else {
-				msg.setIntProperty(PropertyType.USER3_ID, -1);
-			}			
-			if(users.size() > 3) {
-				msg.setIntProperty(PropertyType.USER4_ID, users.get(3).getId());
-			}else {
-				msg.setIntProperty(PropertyType.USER4_ID, -1);
-			}
 			msg.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.GAME_STARTED);
 			msg.setIntProperty(PropertyType.GAME_ID, gameId);
 			msg.setIntProperty(PropertyType.GAME_FIELDSIZE, fieldsize);
@@ -205,6 +187,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		for(Game game:allGames) {
 			if(!game.isGameStarted() && game.getHumanUsersInGame().contains(account)) {
 				game.removeHumanUserFromOpenGame(account);
+				game.setAiPlayerCount(4-game.getHumanUsersInGame().size());
 				if(game.getHumanUsersInGame().size() == 0) {
 					em.remove(game);
 				}
