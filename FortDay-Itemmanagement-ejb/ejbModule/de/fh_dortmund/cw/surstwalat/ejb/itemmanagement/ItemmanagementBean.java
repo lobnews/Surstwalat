@@ -20,7 +20,7 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.HealthItem;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.HealthItem.Level;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Player;
-import de.fh_dortmund.inf.cw.surstwalat.common.model.Wuerfel;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
 
 @Startup
 @Singleton
@@ -55,20 +55,20 @@ public class ItemmanagementBean {
 		defaultItems.add(new HealthItem(Level.Stufe_2));
 		defaultItems.add(new HealthItem(Level.Stufe_3));
 		defaultItems.add(new HealthItem(Level.Stufe_3));
-		defaultItems.add(new Wuerfel(new int[]{1}, "1"));
-		defaultItems.add(new Wuerfel(new int[]{2}, "2"));
-		defaultItems.add(new Wuerfel(new int[]{3}, "3"));
-		defaultItems.add(new Wuerfel(new int[]{4}, "4"));
-		defaultItems.add(new Wuerfel(new int[]{5}, "5"));
-		defaultItems.add(new Wuerfel(new int[]{6}, "6"));
-		defaultItems.add(new Wuerfel(new int[]{7}, "7"));
-		defaultItems.add(new Wuerfel(new int[]{-1}, "-1"));
-		defaultItems.add(new Wuerfel(new int[]{-2}, "-2"));
-		defaultItems.add(new Wuerfel(new int[]{-3}, "-3"));
-		defaultItems.add(new Wuerfel(new int[]{-4}, "-4"));
-		defaultItems.add(new Wuerfel(new int[]{-5}, "-5"));
-		defaultItems.add(new Wuerfel(new int[]{-6}, "-6"));
-		defaultItems.add(new Wuerfel(new int[]{-7}, "-7"));
+		defaultItems.add(new Dice(new int[]{1}, "1"));
+		defaultItems.add(new Dice(new int[]{2}, "2"));
+		defaultItems.add(new Dice(new int[]{3}, "3"));
+		defaultItems.add(new Dice(new int[]{4}, "4"));
+		defaultItems.add(new Dice(new int[]{5}, "5"));
+		defaultItems.add(new Dice(new int[]{6}, "6"));
+		defaultItems.add(new Dice(new int[]{7}, "7"));
+		defaultItems.add(new Dice(new int[]{-1}, "-1"));
+		defaultItems.add(new Dice(new int[]{-2}, "-2"));
+		defaultItems.add(new Dice(new int[]{-3}, "-3"));
+		defaultItems.add(new Dice(new int[]{-4}, "-4"));
+		defaultItems.add(new Dice(new int[]{-5}, "-5"));
+		defaultItems.add(new Dice(new int[]{-6}, "-6"));
+		defaultItems.add(new Dice(new int[]{-7}, "-7"));
 	}
 
 	private void fillDefaultItems() {
@@ -79,26 +79,26 @@ public class ItemmanagementBean {
 		defaultItems.add(new HealthItem(Level.Stufe_2));
 		
 		//wuerfel
-		defaultItems.add(new Wuerfel(new int[]{1,2,3,4,5}, "1-5"));
-		defaultItems.add(new Wuerfel(new int[]{1,2,3,4}, "1-4"));
-		defaultItems.add(new Wuerfel(new int[]{1,2,3}, "1-3"));
-		defaultItems.add(new Wuerfel(new int[]{1,2}, "1-2"));
-		defaultItems.add(new Wuerfel(new int[]{2,3,4,5,6}, "2-6"));
-		defaultItems.add(new Wuerfel(new int[]{3,4,5,6}, "3-6"));
-		defaultItems.add(new Wuerfel(new int[]{2,3,4,5}, "2-5"));
-		defaultItems.add(new Wuerfel(new int[]{2,3,4}, "2-4"));
-		defaultItems.add(new Wuerfel(new int[]{1}, "1"));
-		defaultItems.add(new Wuerfel(new int[]{2}, "2"));
-		defaultItems.add(new Wuerfel(new int[]{3}, "3"));
-		defaultItems.add(new Wuerfel(new int[]{-1}, "-1"));
-		defaultItems.add(new Wuerfel(new int[]{-2}, "-2"));
-		defaultItems.add(new Wuerfel(new int[]{-3}, "-3"));
-		defaultItems.add(new Wuerfel(new int[]{-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6}, "-6-6"));
+		defaultItems.add(new Dice(new int[]{1,2,3,4,5}, "1-5"));
+		defaultItems.add(new Dice(new int[]{1,2,3,4}, "1-4"));
+		defaultItems.add(new Dice(new int[]{1,2,3}, "1-3"));
+		defaultItems.add(new Dice(new int[]{1,2}, "1-2"));
+		defaultItems.add(new Dice(new int[]{2,3,4,5,6}, "2-6"));
+		defaultItems.add(new Dice(new int[]{3,4,5,6}, "3-6"));
+		defaultItems.add(new Dice(new int[]{2,3,4,5}, "2-5"));
+		defaultItems.add(new Dice(new int[]{2,3,4}, "2-4"));
+		defaultItems.add(new Dice(new int[]{1}, "1"));
+		defaultItems.add(new Dice(new int[]{2}, "2"));
+		defaultItems.add(new Dice(new int[]{3}, "3"));
+		defaultItems.add(new Dice(new int[]{-1}, "-1"));
+		defaultItems.add(new Dice(new int[]{-2}, "-2"));
+		defaultItems.add(new Dice(new int[]{-3}, "-3"));
+		defaultItems.add(new Dice(new int[]{-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6}, "-6-6"));
 		
-		defaultItems.add(new Wuerfel(new int[]{6,1,1,1,1,1}, "1 zu 6"));
+		defaultItems.add(new Dice(new int[]{6,1,1,1,1,1}, "1 zu 6"));
 		
-		defaultItems.add(new Wuerfel(new int[]{1,3,5}, "Ungrade"));
-		defaultItems.add(new Wuerfel(new int[]{2,4,6}, "Grade"));
+		defaultItems.add(new Dice(new int[]{1,3,5}, "Ungrade"));
+		defaultItems.add(new Dice(new int[]{2,4,6}, "Grade"));
 	}
 	
 	public void addItemToUser(String UserID, Item item) {

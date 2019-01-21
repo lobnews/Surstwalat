@@ -12,7 +12,8 @@ import javax.persistence.Table;
 @Table(name="Field")
 @Entity
 @NamedQueries({
-    @NamedQuery(name="Field.getById", query="SELECT f FROM Field f WHERE f.id = :id")
+    @NamedQuery(name="Field.getById", query="SELECT f FROM Field f WHERE f.id = :id"),
+    @NamedQuery(name="Field.getByItemId", query="SELECT f FROM Field f WHERE f.item.id = :itemId")
 })
 public class Field
 {

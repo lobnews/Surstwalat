@@ -9,6 +9,8 @@ public interface MessageType {
 	public static final int PLAYER_ROLL = 4;
 	public static final int SPAWN_ITEM = 5;
 	public static final int START_ROUND = 6;
+	public static final int PLAYER_ELIMINATED = 8;
+	public static final int PLAYER_WINS = 9;
 	//LOBBY MANAGEMENT
 	public static final int GAME_CREATED = 10;
 	public static final int GAME_STARTED = 11;
@@ -26,6 +28,8 @@ public interface MessageType {
 	public static final int USER_CHANGE_PASSWORD = 29;
 	public static final int USER_UPDATE_EMAIL = 34;
 	public static final int USER_DELETE = 35;
+	public static final int ADD_ITEM_TO_PLAYER = 36;
+	public static final int PLAYER_ACTION = 37;
 	//GLOBAL EVENT MANAGEMENT
 	public static final int UPDATE_ZONE = 30;
 	public static final int TRIGGER_AIRDROP = 31;
@@ -44,4 +48,11 @@ public interface MessageType {
     public static final int CHARACTERS_IN_TOXIC = 115;
     public static final int COLLISION_WITH_OWN_CHARACTER = 116;
     public static final int TOXIC_CHANGE = 117;
+    
+    //HealthManagement
+    public static final int PLAYER_DEATH = 121;
+    public static final int TOKEN_CREATED = 122;
+    
+    //Richtige UserSession
+    public static final int MOVE_TOKEN=130;
 }

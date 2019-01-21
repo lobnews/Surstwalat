@@ -6,7 +6,6 @@ import javax.ejb.MessageDriven;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import javax.jms.ObjectMessage;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
@@ -17,10 +16,10 @@ import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.beans.interfaces.Loca
   @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic"),
   @ActivationConfigProperty(
       propertyName = "messageSelector",
-      propertyValue = PropertyType.MESSAGE_TYPE + " = " + MessageType.MOVE_TOKEN) //TODO: Anderes Event
+      propertyValue = PropertyType.MESSAGE_TYPE + " = " + MessageType.ITEM_ADD_TO_USER)
 }, mappedName = "java:global/jms/FortDayEventTopic")
 
-public class PlayerRollEventHandlerBean implements MessageListener
+public class RemoveItemHandlerBean implements MessageListener
 {
 
     @EJB
@@ -31,12 +30,10 @@ public class PlayerRollEventHandlerBean implements MessageListener
     {
         try
         {
-            ObjectMessage om = (ObjectMessage)message;
             locationManagement
-                .moveToken(
+                .removeItemFromPlayground(
                     message.getIntProperty(PropertyType.GAME_ID),
-                    message.getIntProperty(PropertyType.TOKEN_ID),
-                    (int)om.getObject());
+                    message.getIntProperty(PropertyType.ITEM_ID));
         }
         catch (JMSException e)
         {

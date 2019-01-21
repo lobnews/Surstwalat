@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -35,11 +36,20 @@ public class Game implements Serializable{
 	private int id;
 	//only necessary for lobby management
 	@ManyToMany
+	@JoinTable(name="game_account")
 	private List<Account> humanUsersInGame;
-	@OneToMany
+	
+	@OneToMany(mappedBy="game")
 	private List<Player> players;
+	
 	@Column(name="gameStarted")
 	private boolean gameStarted;
+	
+	@Column(name="aiPlayerCount")
+	private int aiPlayerCount;
+	
+	@Column(name="currentRound")
+	private int currentRound;
 
 	public Game() {
 		gameStarted = false;
@@ -84,6 +94,26 @@ public class Game implements Serializable{
 
 	public void removeHumanUserFromOpenGame(Account user) {
 		humanUsersInGame.remove(user);
+	}
+	
+	
+
+	public int getAiPlayerCount() {
+		return aiPlayerCount;
+	}
+
+	public void setAiPlayerCount(int aiPlayerCount) {
+		this.aiPlayerCount = aiPlayerCount;
+	}
+	
+	
+
+	public int getCurrentRound() {
+		return currentRound;
+	}
+
+	public void setCurrentRound(int currentRound) {
+		this.currentRound = currentRound;
 	}
 
 	@Override

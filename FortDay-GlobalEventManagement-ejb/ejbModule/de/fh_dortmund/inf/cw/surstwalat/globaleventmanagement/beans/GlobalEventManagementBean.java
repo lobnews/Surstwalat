@@ -1,5 +1,6 @@
 package de.fh_dortmund.inf.cw.surstwalat.globaleventmanagement.beans;
 
+
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -7,8 +8,6 @@ import javax.jms.JMSContext;
 import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
 import javax.jms.Topic;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
