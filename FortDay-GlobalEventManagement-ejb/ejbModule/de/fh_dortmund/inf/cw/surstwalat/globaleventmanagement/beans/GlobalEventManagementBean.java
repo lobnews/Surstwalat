@@ -22,7 +22,7 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Zone;
 import de.fh_dortmund.inf.cw.surstwalat.globaleventmanagement.beans.interfaces.GlobalEventManagementLocal;
 
 /**
- * 
+ *
  * @author Rebekka Michel
  */
 
@@ -43,17 +43,17 @@ public class GlobalEventManagementBean implements GlobalEventManagementLocal{
 		{
 			Game game = getGameByGameID(gameId);
 			int fieldsize = getPlaygroundByGameID(gameId).getFields().size();
-			int randomStartingField = (int)(Math.random() * fieldsize); 
+			int randomStartingField = (int)(Math.random() * fieldsize);
 			int nextZoneBegin =	randomStartingField;
 			int nextZoneSize = 3;
-			
+
 			zone.setCurrentZoneBegin(0);
 			zone.setCurrentZoneSize(0);
 			zone.setDamage(0);
 			zone.setGame(game);
 			zone.setNextZoneBegin(nextZoneBegin);
 			zone.setNextZoneSize(nextZoneSize);
-			
+
 			em.persist(zone);
 		}
 		else if(roundNo%3 == 0)
@@ -63,16 +63,16 @@ public class GlobalEventManagementBean implements GlobalEventManagementLocal{
 			int currentZoneSize = zone.getNextZoneSize();
 			int nextZoneSize = currentZoneSize + damage;
 			int nextZoneBegin = currentZoneBegin + (int)(Math.random() * currentZoneSize) + 1;
-			
+
 			zone.setCurrentZoneBegin(currentZoneBegin);
 			zone.setCurrentZoneSize(currentZoneSize);
 			zone.setDamage(damage);
 			zone.setNextZoneBegin(nextZoneBegin);
 			zone.setNextZoneSize(nextZoneSize);
-			
+
 			em.merge(zone);
 		}
-		
+
 		ObjectMessage message = jmsContext.createObjectMessage();
 		try {
 			message.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.UPDATE_ZONE);
@@ -129,19 +129,19 @@ public class GlobalEventManagementBean implements GlobalEventManagementLocal{
 			e.printStackTrace();
 		}
 	}
-	
+
 	private Game getGameByGameID(int gameId) {
 		TypedQuery<Game> query = em.createNamedQuery("Game.getById", Game.class);
 		query.setParameter("id", gameId);
 		return query.getSingleResult();
 	}
-	
+
 	private Playground getPlaygroundByGameID(int gameId) {
 		TypedQuery<Playground> query = em.createNamedQuery("Playground.getByGameId", Playground.class);
 		query.setParameter("id", gameId);
 		return query.getSingleResult();
 	}
-	
+
 	private Zone getZoneByGameID(int gameId) {
 		TypedQuery<Zone> query = em.createNamedQuery("Zone.getByGameId", Zone.class);
 		query.setParameter("id", gameId);

@@ -51,4 +51,8 @@ public interface MessageType {
     
     //HealthManagement
     public static final int PLAYER_DEATH = 121;
+    public static final int TOKEN_CREATED = 122;
+    
+    //Richtige UserSession
+    public static final int MOVE_TOKEN=130;
 }
