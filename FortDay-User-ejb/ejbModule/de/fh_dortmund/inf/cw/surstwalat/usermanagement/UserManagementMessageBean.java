@@ -3,16 +3,11 @@ package de.fh_dortmund.inf.cw.surstwalat.usermanagement;
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
-import de.fh_dortmund.inf.cw.surstwalat.lobbymanagement.beans.interfaces.LobbyManagementLocal;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces.UserManagementLocal;
-import java.util.ArrayList;
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import java.math.BigInteger;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import javax.ejb.EJB;
 import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
@@ -42,7 +37,7 @@ public class UserManagementMessageBean implements MessageListener {
         try {
             messageType = message.getIntProperty(PropertyType.MESSAGE_TYPE);
         } catch (JMSException e) {
-            // TODO no message type
+            System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementMessageBean.onMessage(): JMSException");
         }
 
         switch (messageType) {
@@ -74,7 +69,7 @@ public class UserManagementMessageBean implements MessageListener {
             Account newAccount = (Account) message.getObject();
             userManagement.register(newAccount);
         } catch (JMSException e) {
-            System.err.println(e.getMessage());
+            System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementMessageBean.register(): JMSException");
         }
     }
 

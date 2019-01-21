@@ -38,11 +38,14 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	@Override
 	public void login(String username, String password) throws UserNotFoundException 
 	{
-            
+            user = new Account();
+            user.setName(username);
+            user.setPassword(password);
+                    
             ObjectMessage msg = createObjectMessage(2, MessageType.USER_LOGIN);
             trySetObject(msg, user);
             sendMessage(msg);
-            
+           
 //		try {
 //			if (username.equals(user.getName()) && password.equals(user.getPassword()))
 //			{

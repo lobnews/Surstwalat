@@ -33,8 +33,14 @@ public class UserManagementPersistBean implements UserManagementLocal {
      */
     @Override
     public void register(Account account) {
-        account.setPassword(generateHash(account.getPassword()));
-        entityManager.persist(account);
+        try {
+            hashAccount(account);
+            entityManager.persist(account);
+        } catch (NullPointerException ex) {
+            System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.register(): NoResultException");
+        } catch (IllegalStateException e) {
+            System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.register(): IllegalStateException");
+        }
     }
 
     /**
@@ -45,12 +51,19 @@ public class UserManagementPersistBean implements UserManagementLocal {
     @Override
     public void login(Account account) {
         try {
+            hashAccount(account);
             Account dbAccount = getAccountByName(account.getName());
             if (dbAccount.getPassword().equals(generateHash(account.getPassword()))) {
                 System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.login() success");
             }
         } catch (NoResultException e) {
-            System.err.println(e.getMessage());
+            System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.login(): NoResultException");
+        } catch (NullPointerException e) {
+            System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.login(): NullPointerException");
+        } catch (IllegalStateException e) {
+            System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.login(): IllegalStateException");
+        } catch (Exception ex) {
+            System.out.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementPersistBean.login(): Exception");
         }
     }
 
@@ -102,9 +115,9 @@ public class UserManagementPersistBean implements UserManagementLocal {
      *
      * @param name
      * @return account
-     * @throws NoResultException
+     * @throws java.lang.Exception
      */
-    public Account getAccountByName(String name) throws NoResultException {
+    public Account getAccountByName(String name) throws Exception {
         TypedQuery<Account> accountQuery = entityManager.createNamedQuery("Account.getByName", Account.class);
         accountQuery.setParameter("name", name);
         return accountQuery.getSingleResult();
@@ -125,5 +138,17 @@ public class UserManagementPersistBean implements UserManagementLocal {
             hash = null;
         }
         return hash;
+    }
+
+    /**
+     * Hash account password
+     *
+     * @param account account without hashed password
+     * @return account with hashed password
+     * @throws NullPointerException if account param ist null
+     */
+    private Account hashAccount(Account account) throws NullPointerException {
+        account.setPassword(generateHash(account.getPassword()));
+        return account;
     }
 }
