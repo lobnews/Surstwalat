@@ -40,4 +40,5 @@ public interface PropertyType {
     public static final String ENEMY_CHARACTER_ID = "ENEMY_CHARACTER_ID";
     public static final String ENEMY_PLAYER_ID = "ENEMY_PLAYER_ID";
     public static final String ITEM_ID = "ITEM_ID";
+    public static final String TOKEN_ID = "TOKEN_ID";
 }

@@ -21,6 +21,9 @@
   <module>
     <ejb>FortDay-Itemmanagement-ejb.jar</ejb>
   </module>
+  <module>
+    <ejb>FortDay-LocationManagement-ejb.jar</ejb>
+  </module>
   <jms-destination>
     <name>java:global/jms/HealthMessageTopic</name>
     <interface-name>javax.jms.Topic</interface-name>
