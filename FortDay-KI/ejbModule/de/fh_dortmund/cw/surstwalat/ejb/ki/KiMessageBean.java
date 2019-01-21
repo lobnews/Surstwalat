@@ -1,6 +1,8 @@
 package de.fh_dortmund.cw.surstwalat.ejb.ki;
 
 
+import java.util.List;
+
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
@@ -11,6 +13,7 @@ import javax.jms.ObjectMessage;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 
 
 @MessageDriven(activationConfig = {
@@ -33,14 +36,27 @@ public class KiMessageBean implements MessageListener {
 		    	switch(messageType) {
 		    	case MessageType.GAME_STARTED: createKi(message);break;
 		    	case MessageType.ASSIGN_ACTIVE_PLAYER: makeTurn(message);break;
+		    	case MessageType.ITEM_INVENTAR: refreshInventory(message);break;
 		    	}
 		    	
 		    }
 
+			private void refreshInventory(Message message) {
+					try 
+					{
+						int userid = message.getIntProperty(PropertyType.PLAYER_NO);
+						List<Item> inventory = message.getBody(c)
+					}
+					catch(Exception e) {
+			    		e.printStackTrace();
+			    	}
+					
+				}
+
 			private void makeTurn(Message message) {
-				int userid = message.getIntProperty(PropertyType.USER1_ID);
-				kiBean.makeTurn(userid);
-			}
+						int userid = message.getIntProperty(PropertyType.USER1_ID);
+						kiBean.makeTurn(userid);
+					}
 
 			private void createKi(Message message) {
 				try {
