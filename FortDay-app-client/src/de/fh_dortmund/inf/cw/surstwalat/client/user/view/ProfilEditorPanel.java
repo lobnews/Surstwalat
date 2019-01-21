@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.user.modal.ChangePasswordDialog;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import java.awt.Dimension;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -156,7 +157,7 @@ public class ProfilEditorPanel extends JPanel {
         // Registration call
         try {
             userManager.updateEmailAddress(email);
-        } catch (Exception ex) {
+        } catch (GeneralServiceException ex) {
             Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, null, ex);
             JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
@@ -186,7 +187,7 @@ public class ProfilEditorPanel extends JPanel {
 
         // Error dialog
         if (errorMsgList.size() > 0) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.FINER, null, errorMsgList.toString());
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, null, errorMsgList.toString());
             lb_errorMsg.setText(Designer.errorBox(errorMsgList));
             errorMsgList.clear();
             return false;
@@ -212,7 +213,11 @@ public class ProfilEditorPanel extends JPanel {
                 "Warnung!",
                 JOptionPane.YES_NO_OPTION);
         if (dialogResult == JOptionPane.YES_OPTION) {
-            userManager.deleteAccount();
+            try {
+                userManager.deleteAccount();
+            } catch (GeneralServiceException e) {
+                Logger.getLogger(ProfilEditorPanel.class.getName()).log(Level.SEVERE, null, e);
+            }
         }
     }
 

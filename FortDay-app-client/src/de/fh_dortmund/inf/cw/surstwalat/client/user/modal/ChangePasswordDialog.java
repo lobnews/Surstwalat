@@ -5,6 +5,8 @@ import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Designer;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Validator;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.view.RegistryPanel;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -17,7 +19,6 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.BorderFactory;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -165,8 +166,10 @@ public class ChangePasswordDialog extends JDialog {
         // Registration call
         try {
             userManager.changePassword(oldPassword, newPassword);
-        } catch (Exception ex) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (WrongPasswordException e) {
+            Logger.getLogger(ChangePasswordDialog.class.getName()).log(Level.INFO, null, e);
+        } catch (GeneralServiceException e) {
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, null, e);
             JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
@@ -182,18 +185,18 @@ public class ChangePasswordDialog extends JDialog {
 
     /**
      * Input validation checking for change password
-     * 
+     *
      * @param inputMap
-     * @return 
+     * @return
      */
     private boolean checkNewPassword(Map<String, String> inputMap) {
-         LinkedList<String> errorMsgList = new LinkedList<>();
+        LinkedList<String> errorMsgList = new LinkedList<>();
 
         // Check old password
         if (!Validator.isEmptyString(inputMap.get("oldPassword"))) {
             errorMsgList.add("Kein gültiges Password.");
         }
-        
+
         // Password check
         if (!Validator.checkStringLength(inputMap.get("newPassword"))) {
             errorMsgList.add("Das Passwort muss zwischen " + Validator.MINIMALINPUTLENGTH + " und " + Validator.MAXIMALINPUTLENGTH + " Zeichen lang sein.");

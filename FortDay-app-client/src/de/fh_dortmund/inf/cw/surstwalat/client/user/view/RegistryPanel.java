@@ -4,6 +4,8 @@ import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Designer;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Validator;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -179,8 +181,10 @@ public class RegistryPanel extends JPanel {
         // Registration call
         try {
             userManager.register(accoutName, email, password);
-        } catch (Exception ex) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (AccountAlreadyExistException e) {
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, null, e);
+        } catch (GeneralServiceException e) {
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, null, e);
             JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
@@ -217,7 +221,7 @@ public class RegistryPanel extends JPanel {
 
         // Error dialog
         if (errorMsgList.size() > 0) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.FINER, null, errorMsgList.toString());
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, null, errorMsgList.toString());
             lb_errorMsg.setText(Designer.errorBox(errorMsgList));
             errorMsgList.clear();
             return false;

@@ -5,7 +5,7 @@ import de.fh_dortmund.inf.cw.surstwalat.client.game.view.MainPanel;
 
 /**
  * Start Hub
- * 
+ *
  * @author Stephan Klimek
  */
 public class StartHubPanel extends javax.swing.JPanel {

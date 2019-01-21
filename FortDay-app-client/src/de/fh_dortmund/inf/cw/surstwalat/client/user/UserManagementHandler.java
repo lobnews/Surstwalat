@@ -1,5 +1,8 @@
 package de.fh_dortmund.inf.cw.surstwalat.client.user;
 
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordException;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
 import javax.jms.ExceptionListener;
 import javax.jms.JMSException;
@@ -8,6 +11,8 @@ import javax.jms.MessageListener;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.persistence.NoResultException;
+import javax.security.auth.login.FailedLoginException;
 
 /**
  * Handler for UserManagement
@@ -78,51 +83,62 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
     }
 
     /**
-     * Register
+     * Register new account
      *
-     * @param accountName
-     * @param email
-     * @param password
-     * @throws Exception
+     * @param name account name
+     * @param email account email
+     * @param password accout password
+     * @throws AccountAlreadyExistException if the account already exists.
+     * @throws GeneralServiceException if there is a general service exception
      */
-    public void register(String accountName, String email, String password) throws Exception {
-        userSessionRemote.register(accountName, password, email);
-    }
-
-    /**
-     * Delete account
-     */
-    public void deleteAccount() {
-        userSessionRemote.deleteAccount();
+    public void register(String name, String email, String password)
+            throws AccountAlreadyExistException, GeneralServiceException {
+        userSessionRemote.register(name, password, email);
     }
 
     /**
      * Login user
      *
-     * @param username
-     * @param password
-     * @throws Exception
+     * @param name account name
+     * @param password account password
+     * @throws NoResultException if account not exist
+     * @throws FailedLoginException if input datas not match the account
+     * @throws GeneralServiceException if there is a general service exception
      */
-    public void login(String username, String password) throws Exception {
-        userSessionRemote.login(username, password);
+    public void login(String name, String password)
+            throws NoResultException, FailedLoginException, GeneralServiceException {
+        userSessionRemote.login(name, password);
     }
 
     /**
-     * Change password
+     * Update account password
      *
      * @param oldPassword
      * @param newPassword
+     * @throws WrongPasswordException if old password is wrong
+     * @throws GeneralServiceException if there is a general service exception
      */
-    public void changePassword(String oldPassword, String newPassword) {
+    public void changePassword(String oldPassword, String newPassword)
+            throws WrongPasswordException, GeneralServiceException {
         userSessionRemote.changePassword(oldPassword, newPassword);
     }
 
     /**
-     * Update email address
+     * Update account email address
      *
-     * @param email
+     * @param email new account email
+     * @throws GeneralServiceException if there is a general service exception
      */
-    public void updateEmailAddress(String email) {
+    public void updateEmailAddress(String email) throws GeneralServiceException {
         userSessionRemote.updateEmailAddress(email);
+    }
+
+    /**
+     * Delete account
+     *
+     * @throws GeneralServiceException if there is a general service exception
+     */
+    public void deleteAccount() throws GeneralServiceException {
+        userSessionRemote.deleteAccount();
     }
 }

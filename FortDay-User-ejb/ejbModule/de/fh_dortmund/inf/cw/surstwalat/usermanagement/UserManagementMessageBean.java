@@ -4,11 +4,13 @@ import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces.UserManagementLocal;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.ActivationConfigProperty;
-import javax.ejb.MessageDriven;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.ejb.EJB;
+import javax.ejb.MessageDriven;
 import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
 
@@ -26,36 +28,41 @@ public class UserManagementMessageBean implements MessageListener {
     private UserManagementLocal userManagement;
 
     /**
-     *
+     * Listens to messages
+     * 
      * @param incomingMessage Incoming message
      */
     @Override
     public void onMessage(Message incomingMessage) {
-        ObjectMessage message = (ObjectMessage) incomingMessage;
-        int messageType = -1;
-
         try {
-            messageType = message.getIntProperty(PropertyType.MESSAGE_TYPE);
-        } catch (JMSException e) {
-            System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementMessageBean.onMessage(): JMSException");
-        }
+            ObjectMessage message = (ObjectMessage) incomingMessage;
+            int messageType = -1;
 
-        switch (messageType) {
-            case MessageType.USER_REGISTER:
-                register(message);
-                break;
-            case MessageType.USER_LOGIN:
-                login(message);
-                break;
-            case MessageType.USER_UPDATE_EMAIL:
-                updateEmailAddress(message);
-                break;
-            case MessageType.USER_DELETE:
-                deleteAccount(message);
-                break;
-            case MessageType.USER_CHANGE_PASSWORD:
-                changePassword(message);
-                break;
+            try {
+                messageType = message.getIntProperty(PropertyType.MESSAGE_TYPE);
+            } catch (JMSException e) {
+                System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementMessageBean.onMessage(): JMSException");
+            }
+
+            switch (messageType) {
+                case MessageType.USER_REGISTER:
+                    register(message);
+                    break;
+                case MessageType.USER_LOGIN:
+                    login(message);
+                    break;
+                case MessageType.USER_UPDATE_EMAIL:
+                    updateEmailAddress(message);
+                    break;
+                case MessageType.USER_DELETE:
+                    deleteAccount(message);
+                    break;
+                case MessageType.USER_CHANGE_PASSWORD:
+                    changePassword(message);
+                    break;
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(UserManagementMessageBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -63,8 +70,9 @@ public class UserManagementMessageBean implements MessageListener {
      * Registered a new user
      *
      * @param message
+     * @throws Exception
      */
-    public void register(ObjectMessage message) {
+    public void register(ObjectMessage message) throws Exception {
         try {
             Account newAccount = (Account) message.getObject();
             userManagement.register(newAccount);
@@ -77,8 +85,9 @@ public class UserManagementMessageBean implements MessageListener {
      * Login user
      *
      * @param message
+     * @throws Exception
      */
-    public void login(ObjectMessage message) {
+    public void login(ObjectMessage message) throws Exception {
         try {
             Account newAccount = (Account) message.getObject();
             userManagement.login(newAccount);
@@ -91,8 +100,9 @@ public class UserManagementMessageBean implements MessageListener {
      * Update email address
      *
      * @param message
+     * @throws Exception
      */
-    public void updateEmailAddress(ObjectMessage message) {
+    public void updateEmailAddress(ObjectMessage message) throws Exception {
         try {
             Account newAccount = (Account) message.getObject();
             userManagement.updateEmailAddress(newAccount);
@@ -105,8 +115,9 @@ public class UserManagementMessageBean implements MessageListener {
      * Change password
      *
      * @param message
+     * @throws Exception
      */
-    public void changePassword(ObjectMessage message) {
+    public void changePassword(ObjectMessage message) throws Exception {
         try {
             Account newAccount = (Account) message.getObject();
             userManagement.changePassword(newAccount);
@@ -119,8 +130,9 @@ public class UserManagementMessageBean implements MessageListener {
      * Delete account
      *
      * @param message
+     * @throws Exception
      */
-    public void deleteAccount(ObjectMessage message) {
+    public void deleteAccount(ObjectMessage message) throws Exception {
         try {
             Account newAccount = (Account) message.getObject();
             userManagement.deleteAccount(newAccount);
