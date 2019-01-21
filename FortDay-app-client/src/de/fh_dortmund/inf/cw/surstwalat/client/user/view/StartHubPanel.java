@@ -4,15 +4,16 @@ import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import de.fh_dortmund.inf.cw.surstwalat.client.game.view.MainPanel;
 
 /**
- *
- * @author ExaShox
+ * Start Hub
+ * 
+ * @author Stephan Klimek
  */
-public class StarterPanel extends javax.swing.JPanel {
+public class StartHubPanel extends javax.swing.JPanel {
 
     /**
      * Creates new form StarterPanel
      */
-    public StarterPanel() {
+    public StartHubPanel() {
         initComponents();
     }
 
@@ -31,7 +32,6 @@ public class StarterPanel extends javax.swing.JPanel {
         jLabel1 = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(600, 400));
-        setPreferredSize(new java.awt.Dimension(600, 400));
 
         bt_startGame.setActionCommand("bt_startGame");
         bt_startGame.setLabel("Start");
@@ -97,7 +97,7 @@ public class StarterPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_editProfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_editProfilActionPerformed
-        MainFrame.getInstance().setFrame(new ProfilEditorPanel());
+        MainFrame.getInstance().setFrame(new ProfilEditorPanel(), false);
     }//GEN-LAST:event_bt_editProfilActionPerformed
 
     private void bt_closeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_closeActionPerformed
@@ -105,7 +105,7 @@ public class StarterPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_bt_closeActionPerformed
 
     private void bt_startGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_startGameActionPerformed
-        MainFrame.getInstance().setFrame(new MainPanel());
+        MainFrame.getInstance().setFrame(new MainPanel(), false);
     }//GEN-LAST:event_bt_startGameActionPerformed
 
 

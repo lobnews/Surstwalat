@@ -60,7 +60,7 @@ public class LoginPanel extends JPanel {
     private void initComponent() {
         GridBagLayout gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);
-        setPreferredSize(new Dimension(600, 400));
+        setMinimumSize(new Dimension(600, 400));
 
         GridBagConstraints gridBag = new GridBagConstraints();
         gridBag.fill = GridBagConstraints.HORIZONTAL;
@@ -165,14 +165,14 @@ public class LoginPanel extends JPanel {
         }
 
         // Success
-        MainFrame.getInstance().setFrame(new StarterPanel());
+        MainFrame.getInstance().setFrame(new StartHubPanel(), false);
     }
 
     /**
      * Hackin (fake login)
      */
     private void hackin() {
-        MainFrame.getInstance().setFrame(new StarterPanel());
+        MainFrame.getInstance().setFrame(new StartHubPanel(), false);
     }
 
     /**
@@ -209,7 +209,7 @@ public class LoginPanel extends JPanel {
      * Open register panel
      */
     private void openRegisterPanel() {
-        MainFrame.getInstance().setFrame(new RegistryPanel());
+        MainFrame.getInstance().setFrame(new RegistryPanel(), false);
     }
 
     /**

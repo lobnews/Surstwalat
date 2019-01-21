@@ -64,7 +64,7 @@ public class RegistryPanel extends JPanel {
     private void initComponent() {
         GridBagLayout gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);
-        setPreferredSize(new Dimension(600, 400));
+        setMinimumSize(new Dimension(600, 400));
 
         GridBagConstraints gridBag = new GridBagConstraints();
         gridBag.fill = GridBagConstraints.HORIZONTAL;
@@ -74,51 +74,51 @@ public class RegistryPanel extends JPanel {
 
         // Error label
         lb_errorMsg = new JLabel();
-        lb_errorMsg.setForeground(Color.RED);             
+        lb_errorMsg.setForeground(Color.RED);
         gridBag.gridx = 0;
         gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
-        this.add(lb_errorMsg, gridBag);
-        
+        add(lb_errorMsg, gridBag);
+
         // Username
         lb_username = new JLabel("Benutzername: ");
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
-        this.add(lb_username, gridBag);
+        add(lb_username, gridBag);
 
         tf_username = new JTextField(20);
         tf_username.requestFocus();
         gridBag.gridx = 1;
         gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
-        this.add(tf_username, gridBag);
+        add(tf_username, gridBag);
 
         // Email
         lb_email = new JLabel("E-Mail Adresse: ");
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
-        this.add(lb_email, gridBag);
+        add(lb_email, gridBag);
 
         tf_email = new JTextField(20);
         gridBag.gridx = 1;
         gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
-        this.add(tf_email, gridBag);
+        add(tf_email, gridBag);
 
         // Password
         lb_password = new JLabel("Password: ");
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
-        this.add(lb_password, gridBag);
+        add(lb_password, gridBag);
 
         pf_password = new JPasswordField(20);
         gridBag.gridx = 1;
         gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
-        this.add(pf_password, gridBag);
+        add(pf_password, gridBag);
         setBorder(new LineBorder(Color.GRAY));
 
         // Password repeat
@@ -126,13 +126,13 @@ public class RegistryPanel extends JPanel {
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
-        this.add(lb_password_repeat, gridBag);
+        add(lb_password_repeat, gridBag);
 
         pf_password_repeat = new JPasswordField(20);
         gridBag.gridx = 1;
         gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
-        this.add(pf_password_repeat, gridBag);
+        add(pf_password_repeat, gridBag);
         setBorder(new LineBorder(Color.GRAY));
 
         // Registry Button
@@ -143,7 +143,7 @@ public class RegistryPanel extends JPanel {
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 3;
-        this.add(bt_registry, gridBag);
+        add(bt_registry, gridBag);
 
         // Back Button
         bt_abort = new JButton("Abbrechen");
@@ -153,7 +153,7 @@ public class RegistryPanel extends JPanel {
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 3;
-        this.add(bt_abort, gridBag);
+        add(bt_abort, gridBag);
     }
 
     /**
@@ -229,6 +229,6 @@ public class RegistryPanel extends JPanel {
      * Get a site back
      */
     private void back() {
-        MainFrame.getInstance().setFrame(new LoginPanel());
+        MainFrame.getInstance().setFrame(new LoginPanel(), false);
     }
 }

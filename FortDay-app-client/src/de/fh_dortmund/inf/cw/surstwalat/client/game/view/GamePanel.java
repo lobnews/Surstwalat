@@ -5,6 +5,7 @@
  */
 package de.fh_dortmund.inf.cw.surstwalat.client.game.view;
 
+import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import de.fh_dortmund.inf.cw.surstwalat.client.game.util.Map;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -84,6 +85,7 @@ public class GamePanel extends javax.swing.JPanel implements Observer {
             }
         }
         gamePanel.setMinimumSize(new Dimension(FieldPanel.MIN_WIDTH * map.getxHeight(), FieldPanel.MIN_HEIGHT * map.getyHeight()));
+        MainFrame.getInstance().setMinimumSize(gamePanel.getMinimumSize());
         try {
             background = ImageIO.read(GamePanel.class.getClassLoader().getResource(map.getBackgroundMap()));
         } catch (IOException ex) {
@@ -91,6 +93,7 @@ public class GamePanel extends javax.swing.JPanel implements Observer {
         }
 
         repaint();
+        revalidate();
     }
 
     @Override
