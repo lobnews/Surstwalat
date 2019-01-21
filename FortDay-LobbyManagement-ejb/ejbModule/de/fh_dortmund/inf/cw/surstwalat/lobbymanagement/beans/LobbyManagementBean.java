@@ -118,6 +118,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	public void startGame(int gameId, int fieldsize) {
 		try {
 			Game g = getGameByGameID(gameId);
+			g.setAiPlayerCount(4-g.getHumanUsersInGame().size());
 			g.setGameStarted(true);
 			em.persist(g);
 
@@ -131,26 +132,6 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	private void sendGameStartedMessage(int gameId, List<Account> users, int fieldsize) {
 		ObjectMessage msg = jmsContext.createObjectMessage();
 		try {
-			if(users.size() > 0) {
-				msg.setIntProperty(PropertyType.USER1_ID, users.get(0).getId());
-			}else {
-				msg.setIntProperty(PropertyType.USER1_ID, -1);
-			}
-			if(users.size() > 1) {
-				msg.setIntProperty(PropertyType.USER2_ID, users.get(1).getId());
-			}else {
-				msg.setIntProperty(PropertyType.USER2_ID, -1);
-			}			
-			if(users.size() > 2) {
-				msg.setIntProperty(PropertyType.USER3_ID, users.get(2).getId());
-			}else {
-				msg.setIntProperty(PropertyType.USER3_ID, -1);
-			}			
-			if(users.size() > 3) {
-				msg.setIntProperty(PropertyType.USER4_ID, users.get(3).getId());
-			}else {
-				msg.setIntProperty(PropertyType.USER4_ID, -1);
-			}
 			msg.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.GAME_STARTED);
 			msg.setIntProperty(PropertyType.GAME_ID, gameId);
 			msg.setIntProperty(PropertyType.GAME_FIELDSIZE, fieldsize);
