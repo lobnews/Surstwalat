@@ -1,5 +1,7 @@
 package de.fh_dortmund.inf.cw.surstwalat.globaleventmanagement.beans;
 
+import java.util.List;
+
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -15,6 +17,7 @@ import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Game;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Playground;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Token;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Zone;
 import de.fh_dortmund.inf.cw.surstwalat.globaleventmanagement.beans.interfaces.GlobalEventManagementLocal;
 
@@ -111,15 +114,17 @@ public class GlobalEventManagementBean implements GlobalEventManagementLocal{
 	}
 
 	@Override
-	public void triggerDamage(int gameId, int playerNo, int characterId, int damage) {
+	public void triggerDamage(int gameId, List<Token> token) {
 		ObjectMessage message = jmsContext.createObjectMessage();
 		try {
-			message.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.TRIGGER_DAMAGE);
-			message.setIntProperty(PropertyType.GAME_ID, gameId);
-			message.setIntProperty(PropertyType.PLAYER_NO, playerNo);
-			message.setIntProperty(PropertyType.CHARACTER_ID, characterId);
-			message.setIntProperty(PropertyType.DAMAGE, damage);
-			jmsContext.createProducer().send(eventTopic, message);
+			int damage = getZoneByGameID(gameId).getDamage();
+			for (Token hitToken : token) {
+				message.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.TRIGGER_DAMAGE);
+				message.setIntProperty(PropertyType.GAME_ID, gameId);
+				message.setIntProperty(PropertyType.CHARACTER_ID, hitToken.getId());
+				message.setIntProperty(PropertyType.DAMAGE, damage);
+				jmsContext.createProducer().send(eventTopic, message);
+			}
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}

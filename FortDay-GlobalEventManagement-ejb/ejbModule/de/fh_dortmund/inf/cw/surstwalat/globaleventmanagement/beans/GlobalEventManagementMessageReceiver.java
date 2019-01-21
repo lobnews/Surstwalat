@@ -1,5 +1,7 @@
 package de.fh_dortmund.inf.cw.surstwalat.globaleventmanagement.beans;
 
+import java.util.List;
+
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
@@ -10,6 +12,7 @@ import javax.jms.ObjectMessage;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Token;
 import de.fh_dortmund.inf.cw.surstwalat.globaleventmanagement.beans.interfaces.GlobalEventManagementLocal;
 
 /**
@@ -41,7 +44,7 @@ public class GlobalEventManagementMessageReceiver implements MessageListener{
     		case MessageType.PLAYER_ROLL: playerRoll(message);break;
     		case MessageType.START_ROUND: updateZone(message);break;
     		case MessageType.GAME_STARTED: triggerStartingItems(message);break;
-    		// TODO Message, dass Figur in Gift steht bearbeiten
+    		case MessageType.CHARACTERS_IN_TOXIC: triggerCharacterDamage(message);break;
     	}
 	}
 
@@ -78,7 +81,17 @@ public class GlobalEventManagementMessageReceiver implements MessageListener{
 		}
     }
     
-    public void triggerDamage(Message message) {
-    	//TODO Auslesen der Nachricht, dass eine Spielfigur außerhalb der sicheren Zone steht, Aufruf der triggerDamage Methode im GlobalEventManagement
+    public void triggerCharacterDamage(Message message)
+    {
+    	try {
+			int gameId = message.getIntProperty(PropertyType.GAME_ID);
+			
+			Object object = ((ObjectMessage) message).getObject();
+			List<Token> token = (List<Token>) object;
+			
+			globalEventManagement.triggerDamage(gameId, token);
+		} catch (JMSException e) {
+			e.printStackTrace();
+		}
     }
 }
