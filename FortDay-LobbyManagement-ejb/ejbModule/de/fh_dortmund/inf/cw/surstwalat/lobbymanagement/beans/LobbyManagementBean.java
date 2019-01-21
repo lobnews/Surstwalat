@@ -81,6 +81,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		Account user = getAccountByUserID(userID);
 		Game game = createNewGame();
 		game.addHumanUserToOpenGame(user);
+		game.setAiPlayerCount(4-game.getHumanUsersInGame().size());
 		user.setInLobby(false);
 		em.persist(game);
 		em.persist(user);
@@ -96,6 +97,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 			throw new GameIsFullException();
 		}else {
 			game.addHumanUserToOpenGame(user);
+			game.setAiPlayerCount(4-game.getHumanUsersInGame().size());
 			user.setInLobby(false);
 			em.persist(game);
 			em.persist(user);
@@ -118,7 +120,6 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	public void startGame(int gameId, int fieldsize) {
 		try {
 			Game g = getGameByGameID(gameId);
-			g.setAiPlayerCount(4-g.getHumanUsersInGame().size());
 			g.setGameStarted(true);
 			em.persist(g);
 
@@ -186,6 +187,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		for(Game game:allGames) {
 			if(!game.isGameStarted() && game.getHumanUsersInGame().contains(account)) {
 				game.removeHumanUserFromOpenGame(account);
+				game.setAiPlayerCount(4-game.getHumanUsersInGame().size());
 				if(game.getHumanUsersInGame().size() == 0) {
 					em.remove(game);
 				}
