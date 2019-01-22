@@ -49,9 +49,9 @@ public class ItemmanagementBean {
 	@PostConstruct
 	public void init() {
 		System.out.println("Itemmanagement wurde gestartet");
-//		fillDefaultItems();
-//		
-//		fillAirDropItems();
+		fillDefaultItems();
+		
+		fillAirDropItems();
 	}
 
 	private void fillAirDropItems() {
