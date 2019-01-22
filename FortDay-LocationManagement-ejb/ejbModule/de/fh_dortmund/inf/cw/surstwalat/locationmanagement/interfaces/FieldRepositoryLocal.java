@@ -1,8 +1,8 @@
 package de.fh_dortmund.inf.cw.surstwalat.locationmanagement.interfaces;
 
-import de.fh_dortmund.inf.cw.surstwalat.common.model.PlayField;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Field;
 
-public interface FieldRepositoryLocal extends ILocationManagement<PlayField, Integer>
+public interface FieldRepositoryLocal extends ILocationManagement<Field, Integer>
 {
-    public PlayField findFieldByItemId(int itemId);
+    public Field findFieldByItemId(int itemId);
 }

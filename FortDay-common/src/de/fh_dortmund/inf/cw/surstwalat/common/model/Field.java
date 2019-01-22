@@ -18,7 +18,7 @@ import javax.persistence.Table;
   @NamedQuery(name = "PlayField.getByItemId", query = "SELECT f FROM PlayField f WHERE f.item.id = :itemId")
 })
 @Entity
-public class PlayField implements Serializable
+public class Field implements Serializable
 {
 
     @Id

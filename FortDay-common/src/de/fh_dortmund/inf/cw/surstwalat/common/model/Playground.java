@@ -30,7 +30,7 @@ public class Playground implements Serializable
     private int id;
 
     @OneToMany
-    private List<PlayField> fields;
+    private List<Field> fields;
 
     @JoinColumn
     private Game game;
@@ -45,12 +45,12 @@ public class Playground implements Serializable
         this.game = game;
     }
 
-    public List<PlayField> getFields()
+    public List<Field> getFields()
     {
         return fields;
     }
 
-    public void setFields(List<PlayField> fields)
+    public void setFields(List<Field> fields)
     {
         this.fields = fields;
     }
@@ -60,7 +60,7 @@ public class Playground implements Serializable
         return id;
     }
 
-    public PlayField getField(int i)
+    public Field getField(int i)
     {
         return fields.get(i % fields.size());
     }

@@ -11,13 +11,13 @@
 		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Action</class>
 		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.ActionResult</class>
 		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.RollActionResult</class>
-		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.PlayField</class>
+		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Field</class>
 		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Playground</class>
-		<!-- properties>
+		<properties>
 			<property name="eclipselink.target-database" value="MySQL"/>
 			<property name="eclipselink.ddl-generation" value="create-tables" />
 			<property name="eclipselink.ddl-generation.output-mode" value="database" />
 			<property name="eclipselink.logging.level" value="INFO"/>
-		</properties-->
+		</properties>
 	</persistence-unit>
 </persistence>

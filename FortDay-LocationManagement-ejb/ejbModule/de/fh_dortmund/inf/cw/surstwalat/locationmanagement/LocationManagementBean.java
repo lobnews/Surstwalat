@@ -6,7 +6,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import de.fh_dortmund.inf.cw.surstwalat.common.model.PlayField;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Field;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Game;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Playground;
@@ -63,11 +63,11 @@ public class LocationManagementBean implements LocationManagementLocal
         Game game = gameRepository.findById(gameId);
         playground.setGameId(game);
 
-        List<PlayField> fields = new ArrayList<>();
+        List<Field> fields = new ArrayList<>();
 
         for (int i = 0; i < fieldSize; i++)
         {
-            PlayField f = new PlayField();
+            Field f = new Field();
             fields.add(f);
         }
 
@@ -202,7 +202,7 @@ public class LocationManagementBean implements LocationManagementLocal
     {
         if (itemId != -1)
         {
-            PlayField field = fieldRepository.findFieldByItemId(itemId);
+            Field field = fieldRepository.findFieldByItemId(itemId);
             field.setItem(null);
             fieldRepository.save(field);
         }
