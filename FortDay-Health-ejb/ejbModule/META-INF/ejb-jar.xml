@@ -4,6 +4,9 @@
         <message-driven>
             <ejb-name>HealthMessageBean</ejb-name>
         </message-driven>
+        <session>
+            <ejb-name>HealthManagementBean</ejb-name>
+        </session>
     </enterprise-beans>
     <ejb-client-jar>FortDay-common.jar</ejb-client-jar>
 </ejb-jar>

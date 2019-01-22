@@ -19,6 +19,7 @@ public interface PropertyType {
 	public static final String NEXT_ZONE_BEGIN = "NEXT_ZONE_BEGIN";
 	public static final String NEXT_ZONE_SIZE = "NEXT_ZONE_SIZE";
 	public static final String DAMAGE = "DAMAGE";
+        public static final String HEALTH = "HEALTH";
 	public static final String CHARACTER_ID = "CHARACTER_ID";
     public static final String FIELD_ID = "FIELD_ID";
     public static final String ENEMY_CHARACTER_ID = "ENEMY_CHARACTER_ID";
