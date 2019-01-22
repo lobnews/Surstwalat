@@ -6,7 +6,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import de.fh_dortmund.inf.cw.surstwalat.common.model.Field;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.PlayField;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Game;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Playground;
@@ -63,11 +63,11 @@ public class LocationManagementBean implements LocationManagementLocal
         Game game = gameRepository.findById(gameId);
         playground.setGameId(game);
 
-        List<Field> fields = new ArrayList<>();
+        List<PlayField> fields = new ArrayList<>();
 
         for (int i = 0; i < fieldSize; i++)
         {
-            Field f = new Field();
+            PlayField f = new PlayField();
             fields.add(f);
         }
 
@@ -77,13 +77,13 @@ public class LocationManagementBean implements LocationManagementLocal
     }
 
     @Override
-    public void updateZone(int gameId, int zoneBegin, int zoneEnd)
+    public void updateZone(int gameId, int zoneBegin, int zoneSize)
     {
         Playground playground = playgroundRepository.getByGameId(gameId);
         playground.getFields().forEach(f -> {
             f.setToxic(false);
         });
-        for (int i = zoneBegin; i < zoneEnd; i++)
+        for (int i = zoneBegin; i < zoneBegin + zoneSize; i++)
         {
             playground.getFields().get(i % playground.getFields().size()).setToxic(true);
         }
@@ -202,7 +202,7 @@ public class LocationManagementBean implements LocationManagementLocal
     {
         if (itemId != -1)
         {
-            Field field = fieldRepository.findFieldByItemId(itemId);
+            PlayField field = fieldRepository.findFieldByItemId(itemId);
             field.setItem(null);
             fieldRepository.save(field);
         }

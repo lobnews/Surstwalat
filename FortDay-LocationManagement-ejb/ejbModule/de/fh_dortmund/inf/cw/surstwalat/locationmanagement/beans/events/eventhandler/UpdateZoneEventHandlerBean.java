@@ -34,7 +34,7 @@ public class UpdateZoneEventHandlerBean implements MessageListener
                 .updateZone(
                     message.getIntProperty(PropertyType.GAME_ID),
                     message.getIntProperty(PropertyType.CURRENT_ZONE_BEGIN),
-                    message.getIntProperty(PropertyType.CURRENT_ZONE_END));
+                    message.getIntProperty(PropertyType.CURRENT_ZONE_SIZE));
         }
         catch (JMSException e)
         {

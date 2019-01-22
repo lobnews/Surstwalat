@@ -32,20 +32,20 @@ public class TestBean
         System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ LocationManagement !!!  started");
 
         Item i = new Item();
-        itemRepository.save(i);
+        i=itemRepository.save(i);
 
         Player p = new Player();
-        entityManager.persist(p);
+        p= entityManager.merge(p);
 
         Token t = new Token();
         t.setPlayerId(1);
         t.setNr(1);
-        entityManager.persist(t);
+        t= entityManager.merge(t);
 
         locationManagement.createPlayground(1, 40);
-        locationManagement.addItemToPlayground(1, 251);
-        locationManagement.addTokenToPlayground(1, 1, 1);
-        locationManagement.moveToken(1, 1, 2);
+        locationManagement.addItemToPlayground(1, i.getId());
+        locationManagement.addTokenToPlayground(1, t.getPlayerId(), t.getNr());
+        locationManagement.moveToken(1, t.getId(), 2);
         locationManagement.removeItemFromPlayground(1, 1);
 
     }
