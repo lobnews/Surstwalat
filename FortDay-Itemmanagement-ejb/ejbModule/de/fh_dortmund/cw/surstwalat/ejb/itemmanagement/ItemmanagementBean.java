@@ -25,6 +25,10 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Player;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Playground;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
 
+/**
+ * @author Marvin Wölk
+ *
+ */
 @Singleton
 public class ItemmanagementBean {
 	
@@ -56,23 +60,23 @@ public class ItemmanagementBean {
 
 	private void fillAirDropItems() {
 		airDropItems = new ArrayList<>();
-		defaultItems.add(new HealthItem(Level.Stufe_2));
-		defaultItems.add(new HealthItem(Level.Stufe_3));
-		defaultItems.add(new HealthItem(Level.Stufe_3));
-		defaultItems.add(new Dice(new int[]{1}, "1"));
-		defaultItems.add(new Dice(new int[]{2}, "2"));
-		defaultItems.add(new Dice(new int[]{3}, "3"));
-		defaultItems.add(new Dice(new int[]{4}, "4"));
-		defaultItems.add(new Dice(new int[]{5}, "5"));
-		defaultItems.add(new Dice(new int[]{6}, "6"));
-		defaultItems.add(new Dice(new int[]{7}, "7"));
-		defaultItems.add(new Dice(new int[]{-1}, "-1"));
-		defaultItems.add(new Dice(new int[]{-2}, "-2"));
-		defaultItems.add(new Dice(new int[]{-3}, "-3"));
-		defaultItems.add(new Dice(new int[]{-4}, "-4"));
-		defaultItems.add(new Dice(new int[]{-5}, "-5"));
-		defaultItems.add(new Dice(new int[]{-6}, "-6"));
-		defaultItems.add(new Dice(new int[]{-7}, "-7"));
+		airDropItems.add(new HealthItem(Level.Stufe_2));
+		airDropItems.add(new HealthItem(Level.Stufe_3));
+		airDropItems.add(new HealthItem(Level.Stufe_3));
+		airDropItems.add(new Dice(new int[]{1}, "1"));
+		airDropItems.add(new Dice(new int[]{2}, "2"));
+		airDropItems.add(new Dice(new int[]{3}, "3"));
+		airDropItems.add(new Dice(new int[]{4}, "4"));
+		airDropItems.add(new Dice(new int[]{5}, "5"));
+		airDropItems.add(new Dice(new int[]{6}, "6"));
+		airDropItems.add(new Dice(new int[]{7}, "7"));
+		airDropItems.add(new Dice(new int[]{-1}, "-1"));
+		airDropItems.add(new Dice(new int[]{-2}, "-2"));
+		airDropItems.add(new Dice(new int[]{-3}, "-3"));
+		airDropItems.add(new Dice(new int[]{-4}, "-4"));
+		airDropItems.add(new Dice(new int[]{-5}, "-5"));
+		airDropItems.add(new Dice(new int[]{-6}, "-6"));
+		airDropItems.add(new Dice(new int[]{-7}, "-7"));
 	}
 
 	private void fillDefaultItems() {

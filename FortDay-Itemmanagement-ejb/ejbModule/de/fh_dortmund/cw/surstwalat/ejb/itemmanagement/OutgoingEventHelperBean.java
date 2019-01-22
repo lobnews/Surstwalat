@@ -16,6 +16,10 @@ import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Player;
 
+/**
+ * @author Marvin Wölk
+ *
+ */
 @Stateless
 public class OutgoingEventHelperBean {
 

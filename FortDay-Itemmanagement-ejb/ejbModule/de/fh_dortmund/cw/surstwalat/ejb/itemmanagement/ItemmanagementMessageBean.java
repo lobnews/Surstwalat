@@ -10,6 +10,10 @@ import javax.jms.MessageListener;
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
 
+/**
+ * @author Marvin Wölk
+ *
+ */
 @MessageDriven(activationConfig = {
         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic") }, mappedName = "java:global/jms/FortDayEventTopic")
 public class ItemmanagementMessageBean implements MessageListener {
@@ -44,7 +48,6 @@ public class ItemmanagementMessageBean implements MessageListener {
 			}
 
 		} catch (JMSException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
