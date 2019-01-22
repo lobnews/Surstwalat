@@ -10,7 +10,7 @@ import javax.mail.internet.InternetAddress;
  */
 public class Validator {
     
-    public static final int MINIMALINPUTLENGTH = 5;
+    public static final int MINIMALINPUTLENGTH = 4;
     public static final int MAXIMALINPUTLENGTH = 30;
     
     /**

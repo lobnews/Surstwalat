@@ -85,13 +85,13 @@ public class MainPanel extends javax.swing.JPanel {
 
         @Override
         public void setSelectedItem(Object anItem) {
-            System.out.println("Set Item " + anItem);
+//            System.out.println("Set Item " + anItem);
             int i = 0;
             for (Map map : maps) {
                 if (anItem.equals(map.getName())) {
-                    System.out.println("Found item at " + i);
+//                    System.out.println("Found item at " + i);
                     selected = i;
-                    System.out.println(String.format("Found %d observers.", countObservers()));
+//                    System.out.println(String.format("Found %d observers.", countObservers()));
                     setChanged();
                     notifyObservers(map);
                     return;

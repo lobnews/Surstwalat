@@ -11,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Table(name = "Playground")
@@ -33,6 +34,7 @@ public class Playground implements Serializable
     private List<Field> fields;
 
     @JoinColumn
+    @OneToOne
     private Game game;
 
     public Game getGame()

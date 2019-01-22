@@ -4,6 +4,9 @@ import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Designer;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Validator;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedException;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -33,13 +36,12 @@ public class LoginPanel extends JPanel {
      */
     private static final long serialVersionUID = 1563209170882467417L;
 
-    private JLabel lb_errorMsg;
+    private JLabel lb_infoBox;
     private JLabel lb_username;
     private JTextField tf_username;
     private JLabel lb_password;
     private JPasswordField pf_password;
     private JButton bt_login;
-    private JButton bt_hackin;
     private JButton bt_registry;
     private JButton bt_close;
 
@@ -55,12 +57,12 @@ public class LoginPanel extends JPanel {
     }
 
     /**
-     * initialize ui components
+     * Initialize ui components
      */
     private void initComponent() {
         GridBagLayout gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);
-        setPreferredSize(new Dimension(600, 400));
+        setMinimumSize(new Dimension(600, 400));
 
         GridBagConstraints gridBag = new GridBagConstraints();
         gridBag.fill = GridBagConstraints.HORIZONTAL;
@@ -69,11 +71,11 @@ public class LoginPanel extends JPanel {
         int gridRow = 0;
 
         // Error label
-        lb_errorMsg = new JLabel();
+        lb_infoBox = new JLabel();
         gridBag.gridx = 0;
         gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
-        this.add(lb_errorMsg, gridBag);
+        this.add(lb_infoBox, gridBag);
 
         // Username
         lb_username = new JLabel("Username: ");
@@ -112,16 +114,6 @@ public class LoginPanel extends JPanel {
         gridBag.gridwidth = 3;
         this.add(bt_login, gridBag);
 
-        // Fake login button
-        bt_hackin = new JButton("Hackin");
-        bt_hackin.addActionListener((ActionEvent e) -> {
-            hackin();
-        });
-        gridBag.gridx = 0;
-        gridBag.gridy = ++gridRow;
-        gridBag.gridwidth = 3;
-        this.add(bt_hackin, gridBag);
-
         // Registry button
         bt_registry = new JButton("Registrieren");
         bt_registry.addActionListener((ActionEvent e) -> {
@@ -135,7 +127,7 @@ public class LoginPanel extends JPanel {
         // Close button
         bt_close = new JButton("Beenden");
         bt_close.addActionListener((ActionEvent e) -> {
-            close();
+            exit();
         });
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
@@ -155,24 +147,24 @@ public class LoginPanel extends JPanel {
             return;
         }
 
-        // Registration call
+        // Login call
         try {
             userManager.login(name, password);
-        } catch (Exception ex) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, null, ex);
+
+            // Success
+            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, "Login success");
+            MainFrame.getInstance().setFrame(new StartHubPanel(), false);
+        } catch (AccountNotFoundException e) {
+            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, "AccountNotFoundException");
+            lb_infoBox.setText(Designer.errorBox("Das angegebene Konto konnte nicht gefunden werden."));
+        } catch (LoginFailedException e) {
+            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, "LoginFailedException");
+            lb_infoBox.setText(Designer.errorBox("Das angegebene Passwort ist falsch."));
+        } catch (GeneralServiceException e) {
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, "GeneralServiceException", e);
             JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
-
-        // Success
-        MainFrame.getInstance().setFrame(new StarterPanel());
-    }
-
-    /**
-     * Hackin (fake login)
-     */
-    private void hackin() {
-        MainFrame.getInstance().setFrame(new StarterPanel());
     }
 
     /**
@@ -197,8 +189,8 @@ public class LoginPanel extends JPanel {
 
         // Error dialog
         if (errorMsgList.size() > 0) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.FINER, null, errorMsgList.toString());
-            lb_errorMsg.setText(Designer.errorBox(errorMsgList));
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Input error!", errorMsgList.toString());
+            lb_infoBox.setText(Designer.errorBox(errorMsgList));
             errorMsgList.clear();
             return false;
         }
@@ -209,13 +201,13 @@ public class LoginPanel extends JPanel {
      * Open register panel
      */
     private void openRegisterPanel() {
-        MainFrame.getInstance().setFrame(new RegistryPanel());
+        MainFrame.getInstance().setFrame(new RegistryPanel(), false);
     }
 
     /**
      * Exit program
      */
-    private void close() {
+    private void exit() {
         System.exit(0);
     }
 }

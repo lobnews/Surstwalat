@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.user.modal.ChangePasswordDialog;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import java.awt.Dimension;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -32,7 +33,7 @@ public class ProfilEditorPanel extends JPanel {
      */
     private static final long serialVersionUID = 1563209170882467417L;
 
-    private JLabel lb_errorMsg;
+    private JLabel lb_infoBox;
     private JLabel lb_username;
     private JTextField tf_username;
     private JLabel lb_email;
@@ -59,7 +60,7 @@ public class ProfilEditorPanel extends JPanel {
     private void initComponent() {
         GridBagLayout gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);
-        setPreferredSize(new Dimension(600, 400));
+        setMinimumSize(new Dimension(600, 400));
 
         GridBagConstraints gridBag = new GridBagConstraints();
         gridBag.fill = GridBagConstraints.HORIZONTAL;
@@ -68,11 +69,11 @@ public class ProfilEditorPanel extends JPanel {
         int gridRow = 0;
 
         // Error label
-        lb_errorMsg = new JLabel();
+        lb_infoBox = new JLabel();
         gridBag.gridx = 0;
         gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
-        this.add(lb_errorMsg, gridBag);
+        this.add(lb_infoBox, gridBag);
 
         // Username
         lb_username = new JLabel("Benutzername: ");
@@ -153,21 +154,17 @@ public class ProfilEditorPanel extends JPanel {
             return;
         }
 
-        // Registration call
+        // update call
         try {
             userManager.updateEmailAddress(email);
-        } catch (Exception ex) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, null, ex);
+            tf_email.setText("");
+            lb_infoBox.setText(Designer.successBox("E-Mail-Adresse wurde erfolgreich geändert."));
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Update email address success");
+        } catch (GeneralServiceException e) {
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, "GeneralServiceException", e);
             JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
-
-        // Success dialog
-        JOptionPane.showMessageDialog(
-                this,
-                "E-Mail-Adresse wurde erfolgreich geändert.",
-                "Erfolgreich!",
-                JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -181,13 +178,13 @@ public class ProfilEditorPanel extends JPanel {
 
         // Check email address
         if (!Validator.checkEmailAddress(email)) {
-            errorMsgList.add("Die E-Mail-Adresse ist nicht korrekt.");
+            errorMsgList.add("Die Angabe ist keine korrekte E-Mail-Adresse.");
         }
 
         // Error dialog
         if (errorMsgList.size() > 0) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.FINER, null, errorMsgList.toString());
-            lb_errorMsg.setText(Designer.errorBox(errorMsgList));
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Input error!", errorMsgList.toString());
+            lb_infoBox.setText(Designer.errorBox(errorMsgList));
             errorMsgList.clear();
             return false;
         }
@@ -208,11 +205,24 @@ public class ProfilEditorPanel extends JPanel {
     private void deleteAccount() {
         int dialogResult = JOptionPane.showConfirmDialog(
                 MainFrame.getInstance(),
-                "Achtung! Willst du dein Profil wirklich löschen?",
+                "Achtung: Konto wirklich löschen?",
                 "Warnung!",
                 JOptionPane.YES_NO_OPTION);
         if (dialogResult == JOptionPane.YES_OPTION) {
-            userManager.deleteAccount();
+            try {
+                userManager.deleteAccount();
+
+                // Success dialog
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Das Konto wurde erfolgreich gelöscht.",
+                        "Erfolgreich!",
+                        JOptionPane.INFORMATION_MESSAGE);
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Delete success");
+                close();
+            } catch (GeneralServiceException e) {
+                Logger.getLogger(ProfilEditorPanel.class.getName()).log(Level.SEVERE, "GeneralServiceException", e);
+            }
         }
     }
 
@@ -220,6 +230,13 @@ public class ProfilEditorPanel extends JPanel {
      * Get a site back
      */
     private void back() {
-        MainFrame.getInstance().setFrame(new StarterPanel());
+        MainFrame.getInstance().setFrame(new StartHubPanel(), false);
+    }
+
+    /**
+     * Exit program
+     */
+    private void close() {
+        System.exit(0);
     }
 }
