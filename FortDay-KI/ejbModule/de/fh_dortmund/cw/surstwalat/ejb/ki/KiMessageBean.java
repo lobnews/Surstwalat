@@ -45,7 +45,6 @@ public class KiMessageBean implements MessageListener {
 					try 
 					{
 						int userid = message.getIntProperty(PropertyType.PLAYER_NO);
-						List<Item> inventory = message.getBody(c)
 					}
 					catch(Exception e) {
 			    		e.printStackTrace();
@@ -54,8 +53,14 @@ public class KiMessageBean implements MessageListener {
 				}
 
 			private void makeTurn(Message message) {
-						int userid = message.getIntProperty(PropertyType.USER1_ID);
-						kiBean.makeTurn(userid);
+						int userid;
+						try {
+							userid = message.getIntProperty(PropertyType.USER1_ID);
+							kiBean.makeTurn(userid);
+						} catch (JMSException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 					}
 
 			private void createKi(Message message) {
@@ -83,4 +88,3 @@ public class KiMessageBean implements MessageListener {
 			}
 
 	}
-}
