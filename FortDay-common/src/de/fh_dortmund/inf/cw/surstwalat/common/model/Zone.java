@@ -22,7 +22,7 @@ import javax.persistence.Table;
 @Table(name="Zone")
 @Entity
 @NamedQueries({
-	@NamedQuery(name="Zone.getByGameId", query="SELECT z FROM Zone z WHERE z.game_id = :id")
+	//@NamedQuery(name="Zone.getByGameId", query="SELECT z FROM Zone z WHERE z.game = :id")
 })
 public class Zone implements Serializable{
     
