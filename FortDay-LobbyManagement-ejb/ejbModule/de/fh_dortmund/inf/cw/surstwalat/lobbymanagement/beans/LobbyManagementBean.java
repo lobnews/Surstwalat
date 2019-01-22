@@ -48,7 +48,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	@PostConstruct
 	public void init() {
 		System.out.println("@@@FortDayLobbyManagementBean started");
-		runTests();
+		//runTests();
 	}
 	
 
