@@ -39,7 +39,7 @@ public class ChangePasswordDialog extends JDialog {
      */
     private static final long serialVersionUID = -9083280899052966509L;
 
-    private JLabel lb_errorMsg;
+    private JLabel lb_infoBox;
     private JLabel lb_password_old;
     private JPasswordField pf_password_old;
     private JLabel lb_password;
@@ -74,12 +74,12 @@ public class ChangePasswordDialog extends JDialog {
         int gridRow = 0;
 
         // Error label
-        lb_errorMsg = new JLabel();
-        lb_errorMsg.setForeground(Color.RED);
+        lb_infoBox = new JLabel();
+        lb_infoBox.setForeground(Color.RED);
         gridBag.gridx = 0;
         gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
-        gridPanel.add(lb_errorMsg, gridBag);
+        gridPanel.add(lb_infoBox, gridBag);
 
         // Password old
         lb_password_old = new JLabel("Altes Password: ");
@@ -166,21 +166,22 @@ public class ChangePasswordDialog extends JDialog {
         // Registration call
         try {
             userManager.changePassword(oldPassword, newPassword);
+
+            // Success dialog
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Passwort wurde erfolgreich geändert.",
+                    "Erfolgreich!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            close();
         } catch (WrongPasswordException e) {
             Logger.getLogger(ChangePasswordDialog.class.getName()).log(Level.INFO, null, e);
+            lb_infoBox.setText(Designer.errorBox("Das aktuelle Passwort ist falsch!"));
         } catch (GeneralServiceException e) {
             Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, null, e);
             JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
-
-        // Success dialog
-        JOptionPane.showMessageDialog(
-                this,
-                "Passwort wurde erfolgreich geändert.",
-                "Erfolgreich!",
-                JOptionPane.INFORMATION_MESSAGE);
-        close();
     }
 
     /**
@@ -206,8 +207,8 @@ public class ChangePasswordDialog extends JDialog {
 
         // Error dialog
         if (errorMsgList.size() > 0) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.FINER, null, errorMsgList.toString());
-            lb_errorMsg.setText(Designer.errorBox(errorMsgList));
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.FINER, "Eingabefehler!", errorMsgList.toString());
+            lb_infoBox.setText(Designer.errorBox(errorMsgList));
             errorMsgList.clear();
             return false;
         }

@@ -36,7 +36,7 @@ public class LoginPanel extends JPanel {
      */
     private static final long serialVersionUID = 1563209170882467417L;
 
-    private JLabel lb_errorMsg;
+    private JLabel lb_infoBox;
     private JLabel lb_username;
     private JTextField tf_username;
     private JLabel lb_password;
@@ -72,11 +72,11 @@ public class LoginPanel extends JPanel {
         int gridRow = 0;
 
         // Error label
-        lb_errorMsg = new JLabel();
+        lb_infoBox = new JLabel();
         gridBag.gridx = 0;
         gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
-        this.add(lb_errorMsg, gridBag);
+        this.add(lb_infoBox, gridBag);
 
         // Username
         lb_username = new JLabel("Username: ");
@@ -138,7 +138,7 @@ public class LoginPanel extends JPanel {
         // Close button
         bt_close = new JButton("Beenden");
         bt_close.addActionListener((ActionEvent e) -> {
-            close();
+            exit();
         });
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
@@ -165,11 +165,13 @@ public class LoginPanel extends JPanel {
             // Success
             MainFrame.getInstance().setFrame(new StartHubPanel(), false);
         } catch (NoResultException e) {
-            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, null, e);
+            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, "NoResultException", e);
+            lb_infoBox.setText(Designer.errorBox("Das angegebene Konto konnte nicht gefunden werden."));
         } catch (FailedLoginException e) {
-            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, null, e);
+            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, "FailedLoginException");
+            lb_infoBox.setText(Designer.errorBox("Das angegebene Passwort ist falsch."));
         } catch (GeneralServiceException e) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, "GeneralServiceException", e);
             JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
@@ -204,8 +206,8 @@ public class LoginPanel extends JPanel {
 
         // Error dialog
         if (errorMsgList.size() > 0) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, null, errorMsgList.toString());
-            lb_errorMsg.setText(Designer.errorBox(errorMsgList));
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Eingabefehler!", errorMsgList.toString());
+            lb_infoBox.setText(Designer.errorBox(errorMsgList));
             errorMsgList.clear();
             return false;
         }
@@ -222,7 +224,7 @@ public class LoginPanel extends JPanel {
     /**
      * Exit program
      */
-    private void close() {
+    private void exit() {
         System.exit(0);
     }
 }
