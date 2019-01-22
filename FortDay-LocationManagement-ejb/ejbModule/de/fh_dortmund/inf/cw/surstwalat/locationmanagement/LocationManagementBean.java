@@ -77,15 +77,15 @@ public class LocationManagementBean implements LocationManagementLocal
     }
 
     @Override
-    public void updateZone(int gameId, int zoneBegin, int zoneEnd)
+    public void updateZone(int gameId, int zoneBegin, int zoneSize)
     {
         Playground playground = playgroundRepository.getByGameId(gameId);
         playground.getFields().forEach(f -> {
             f.setToxic(false);
         });
-        for (int i = zoneBegin; i < zoneEnd; i++)
+        for (int i = zoneBegin; i < zoneBegin + zoneSize; i++)
         {
-            playground.getFields().get(i % playground.getFields().size()).setToxic(true);
+            playground.getField(i).setToxic(true);
         }
 
         playgroundRepository.save(playground);

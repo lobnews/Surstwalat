@@ -11,31 +11,32 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-@Table(name="Field")
-@Entity
-@NamedQueries({
-    @NamedQuery(name="Field.getById", query="SELECT f FROM Field f WHERE f.id = :id"),
-    @NamedQuery(name="Field.getByItemId", query="SELECT f FROM Field f WHERE f.item.id = :itemId")
+@Table(name = "PlayField")
+@NamedQueries(
+{
+  @NamedQuery(name = "PlayField.getById", query = "SELECT f FROM PlayField f WHERE f.id = :id"),
+  @NamedQuery(name = "PlayField.getByItemId", query = "SELECT f FROM PlayField f WHERE f.item.id = :itemId")
 })
+@Entity
 public class Field implements Serializable
 {
 
     @Id
     @GeneratedValue
-    @Column(name="id")
+    @Column(name = "id")
     private int id;
-    
+
     @JoinColumn
     @ManyToOne
     private Item item;
-    
+
     @JoinColumn
     @ManyToOne
     private Token token;
-    
+
     @Column
     private boolean isToxic = false;
-    
+
     public Item getItem()
     {
         return item;
@@ -71,5 +72,4 @@ public class Field implements Serializable
         return id;
     }
 
-    
 }
