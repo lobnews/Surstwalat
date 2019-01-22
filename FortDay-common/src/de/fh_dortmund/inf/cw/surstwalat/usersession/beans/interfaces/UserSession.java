@@ -1,5 +1,6 @@
 package de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces;
 
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
@@ -32,7 +33,7 @@ public interface UserSession{
 	
 	public void deleteAccount() throws GeneralServiceException;
 	
-	public void playerRolls(int gameID, int playerID, int value);
+	public void playerRolls(int gameID, int playerID, Dice dice);
 	
 	public void startRound(int gameID, int number);
 	
@@ -43,4 +44,6 @@ public interface UserSession{
 	public void endRound(int gameID,int number);
 	
 	public void addItemToPlayer(int gameID, int playerID, Item item);
+	
+	public void useItem(int gameID, int playerID, Item item);
 }

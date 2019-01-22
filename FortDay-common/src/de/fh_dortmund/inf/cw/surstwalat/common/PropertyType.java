@@ -45,4 +45,5 @@ public interface PropertyType {
     public static final String ITEM_ID = "ITEM_ID";
     public static final String TOKEN_ID = "TOKEN_ID";
     public static final String ITEM_POS = "ITEM_POS";
+    public static final String ROUND_NO = "ROUND_NO";
 }
