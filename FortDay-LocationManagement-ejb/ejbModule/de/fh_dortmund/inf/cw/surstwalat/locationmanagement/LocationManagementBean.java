@@ -85,7 +85,7 @@ public class LocationManagementBean implements LocationManagementLocal
         });
         for (int i = zoneBegin; i < zoneBegin + zoneSize; i++)
         {
-            playground.getFields().get(i % playground.getFields().size()).setToxic(true);
+            playground.getField(i).setToxic(true);
         }
 
         playgroundRepository.save(playground);
