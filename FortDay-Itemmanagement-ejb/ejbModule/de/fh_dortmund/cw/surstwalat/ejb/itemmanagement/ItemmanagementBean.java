@@ -9,6 +9,8 @@ import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
+import javax.ejb.Stateful;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.jms.Destination;
 import javax.jms.JMSContext;
@@ -20,17 +22,19 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.HealthItem;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.HealthItem.Level;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Player;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Playground;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
 
-@Startup
 @Singleton
 public class ItemmanagementBean {
+	
+	public static final String name = "[ITEMMANAG]";
 	
 	@Inject
 	private JMSContext jmsContext;
 	
-//	@PersistenceContext
-//	private EntityManager entitymanager;
+	@PersistenceContext
+	private EntityManager entitymanager;
 	
 	@Resource(lookup="java:global/jms/FortDayEventTopic")
 	private Topic topic;
@@ -45,9 +49,9 @@ public class ItemmanagementBean {
 	@PostConstruct
 	public void init() {
 		System.out.println("Itemmanagement wurde gestartet");
-		fillDefaultItems();
-		
-		fillAirDropItems();
+//		fillDefaultItems();
+//		
+//		fillAirDropItems();
 	}
 
 	private void fillAirDropItems() {
@@ -101,40 +105,47 @@ public class ItemmanagementBean {
 		defaultItems.add(new Dice(new int[]{2,4,6}, "Grade"));
 	}
 	
-	public void addItemToUser(String UserID, Item item) {
-//		Player player = entitymanager.find(Player.class, UserID);
-//		if(player != null) {
-//			player.addItem(item);
-//			entitymanager.merge(player);
-//		}
+	public void addItemToUser(int playerID, int itemID) {
+		Player player = entitymanager.find(Player.class, playerID);
+		Item item = entitymanager.find(Item.class, itemID);
+		if(player != null && item != null) {
+			player.addItem(item);
+			entitymanager.merge(player);
+			System.out.println(name + " Item(" + itemID + ") wurd Player(" + player.getId() + ") hinzugefügt");
+		} else {
+			System.out.println(name + " Player(" + playerID + ") oder Item(" + itemID + ") ungültig");
+		}
 	}
 	
-	public void sendUserInventar(int gameId, String player_No, Destination dest) {
-//		Player player = entitymanager.find(Player.class, player_No);
-//		sender.sendInventar(gameId, player);
+	public void sendUserInventar(int gameId, int playerId, Destination dest) {
+		Player player = entitymanager.find(Player.class, playerId);
+		sender.sendInventar(gameId, player);
 	}
 	
 	public void spawnAirDrop(int gameId) {
 		Random rnd = new Random();
 		Item spawn = airDropItems.get(rnd.nextInt(defaultItems.size()));
-		spawnItem(gameId, spawn);
+		spawnItem(gameId, spawn, -1);
 	}
 	
 	public void spawnAllItems(int gameId, List<Item> items) {
-		items.forEach(e -> spawnItem(gameId, e));
+		items.forEach(e -> spawnItem(gameId, e, -1));
 	}
 	
-	public void spawnItems(int gameId, int feldSize, int dichte) {
+	public void spawnItems(int gameId, int dichte) {
+		int feldSize = entitymanager.createNamedQuery("Playground.getByGameId", Playground.class).getSingleResult().getFields().size();
+		
 		Random rnd = new Random();
 		for(int i = 0; i < feldSize; i++) {
 			if(rnd.nextInt(100) < dichte) {
 				Item spawn = defaultItems.get(rnd.nextInt(defaultItems.size()));
-				spawnItem(gameId, spawn);
+				spawnItem(gameId, spawn, -1);
 			}
 		}
 	}
 	
-	private void spawnItem(int gameId, Item item) {
-		sender.sendAddItemToPlayground(gameId, item);
+	private void spawnItem(int gameId, Item item, int pos) {
+		sender.sendAddItemToPlayground(gameId, item, pos);
+		System.out.println(name + gameId + " Spawn Item:{" + item + ", pos: " + pos + "}");
 	}
 }
