@@ -16,26 +16,32 @@ import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Player;
 
+/**
+ * @author Marvin Wölk
+ *
+ */
 @Stateless
-public class OutgoingEventHelperBean{
+public class OutgoingEventHelperBean {
 
 	@Inject
 	private JMSContext jmsContext;
 	@Resource(lookup = "java:global/jms/FortDayEventTopic")
 	private Topic eventTopic;
 
-	public void sendAddItemToPlayground(Integer gameId, Item item){
-			ObjectMessage message = createObjectMessage(gameId, MessageType.ITEM_SPAWN);
-			trySetObject(message, item);
-			sendMessage(message);
+	public void sendAddItemToPlayground(Integer gameId, Item item, int pos) {
+		ObjectMessage message = createObjectMessage(gameId, MessageType.ITEM_SPAWN);
+		trySetIntProperty(message, PropertyType.ITEM_ID, item.getId());
+		trySetIntProperty(message, PropertyType.ITEM_POS, pos);
+		sendMessage(message);
+		System.out.println("[ITEMMANAG_" + gameId + "] Neues Item wurde erzeugt: " + item.getClass().getTypeName() + ":{" + item.getId() + ", pos:" + pos + "}");
 	}
-	
+
 	public void sendInventar(Integer gameId, Player player) {
-		ObjectMessage message = createObjectMessage(gameId, MessageType.ITEM_INVENTAR);
-		trySetIntProperty(message, PropertyType.PLAYER_NO, player.getId());
+		ObjectMessage message = createObjectMessage(gameId, MessageType.PLAYER_INVENTAR);
+		trySetIntProperty(message, PropertyType.PLAYER_ID, player.getId());
 		trySetObject(message, (Serializable) player.getItems());
 		sendMessage(message);
-}
+	}
 
 	private ObjectMessage createObjectMessage(Integer gameId, int messageType) {
 		ObjectMessage message = jmsContext.createObjectMessage();

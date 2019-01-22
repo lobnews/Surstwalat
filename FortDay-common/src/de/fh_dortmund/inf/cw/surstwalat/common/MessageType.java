@@ -38,8 +38,9 @@ public interface MessageType {
 	//Item MANAGEMENT 100 - 110
 	public static final int ITEM_SPAWN = 100;
 	public static final int ITEM_ADD_TO_USER = 101;
-	public static final int ITEM_INVENTAR = 102;
 	public static final int ITEM = 103;
+	public static final int PLAYER_INVENTAR = 104;
+	public static final int SEND_PLAYER_INVENTAR = 105;
 	//LocationManagement
     public static final int NO_COLLISION = 111;
     public static final int PLAYER_ON_FIELD = 112;
