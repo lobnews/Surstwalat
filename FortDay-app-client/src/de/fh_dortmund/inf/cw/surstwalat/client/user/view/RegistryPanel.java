@@ -185,9 +185,10 @@ public class RegistryPanel extends JPanel {
             // Success dialog
             JOptionPane.showMessageDialog(
                     RegistryPanel.this,
-                    "Hallo, " + accoutName + ". Du hast dich erfolgreich bei FortDay registriert.", 
+                    "Hallo, " + accoutName + ". Du hast dich erfolgreich bei FortDay registriert.",
                     "Registrierung erfolgreich!",
                     JOptionPane.INFORMATION_MESSAGE);
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Registration success");
             back();
         } catch (AccountAlreadyExistException e) {
             Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "AccountAlreadyExistException");
@@ -222,7 +223,7 @@ public class RegistryPanel extends JPanel {
 
         // Error dialog
         if (errorMsgList.size() > 0) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, null, errorMsgList.toString());
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Input error!", errorMsgList.toString());
             lb_errorMsg.setText(Designer.errorBox(errorMsgList));
             errorMsgList.clear();
             return false;

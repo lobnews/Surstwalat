@@ -173,6 +173,7 @@ public class ChangePasswordDialog extends JDialog {
                     "Passwort wurde erfolgreich geändert.",
                     "Erfolgreich!",
                     JOptionPane.INFORMATION_MESSAGE);
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Update password success");
             close();
         } catch (WrongPasswordException e) {
             Logger.getLogger(ChangePasswordDialog.class.getName()).log(Level.INFO, "WrongPasswordException");
@@ -207,7 +208,7 @@ public class ChangePasswordDialog extends JDialog {
 
         // Error dialog
         if (errorMsgList.size() > 0) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.FINER, "Eingabefehler!", errorMsgList.toString());
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Input error!", errorMsgList.toString());
             lb_infoBox.setText(Designer.errorBox(errorMsgList));
             errorMsgList.clear();
             return false;

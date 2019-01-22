@@ -152,6 +152,7 @@ public class LoginPanel extends JPanel {
             userManager.login(name, password);
 
             // Success
+            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, "Login success");
             MainFrame.getInstance().setFrame(new StartHubPanel(), false);
         } catch (AccountNotFoundException e) {
             Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, "AccountNotFoundException");
@@ -188,7 +189,7 @@ public class LoginPanel extends JPanel {
 
         // Error dialog
         if (errorMsgList.size() > 0) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Eingabefehler!", errorMsgList.toString());
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Input error!", errorMsgList.toString());
             lb_infoBox.setText(Designer.errorBox(errorMsgList));
             errorMsgList.clear();
             return false;

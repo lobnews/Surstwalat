@@ -42,7 +42,7 @@ public class UserManagementMessageBean implements MessageListener {
             try {
                 messageType = message.getIntProperty(PropertyType.MESSAGE_TYPE);
             } catch (JMSException e) {
-                System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementMessageBean.onMessage(): JMSException");
+                Logger.getLogger(UserManagementMessageBean.class.getName()).log(Level.SEVERE, "JMSException", e);
             }
 
             switch (messageType) {
@@ -62,8 +62,8 @@ public class UserManagementMessageBean implements MessageListener {
                     changePassword(message);
                     break;
             }
-        } catch (Exception ex) {
-            Logger.getLogger(UserManagementMessageBean.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception e) {
+            Logger.getLogger(UserManagementMessageBean.class.getName()).log(Level.SEVERE, "Exception", e);
         }
     }
 

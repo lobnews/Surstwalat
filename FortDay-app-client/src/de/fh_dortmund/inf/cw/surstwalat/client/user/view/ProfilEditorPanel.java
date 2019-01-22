@@ -159,7 +159,7 @@ public class ProfilEditorPanel extends JPanel {
             userManager.updateEmailAddress(email);
             tf_email.setText("");
             lb_infoBox.setText(Designer.successBox("E-Mail-Adresse wurde erfolgreich geändert."));
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.FINE, "GeneralServiceException");
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Update email address success");
         } catch (GeneralServiceException e) {
             Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, "GeneralServiceException", e);
             JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);
@@ -183,7 +183,7 @@ public class ProfilEditorPanel extends JPanel {
 
         // Error dialog
         if (errorMsgList.size() > 0) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Eingabefehler!", errorMsgList.toString());
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Input error!", errorMsgList.toString());
             lb_infoBox.setText(Designer.errorBox(errorMsgList));
             errorMsgList.clear();
             return false;
@@ -218,6 +218,7 @@ public class ProfilEditorPanel extends JPanel {
                         "Das Konto wurde erfolgreich gelöscht.",
                         "Erfolgreich!",
                         JOptionPane.INFORMATION_MESSAGE);
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Delete success");
                 close();
             } catch (GeneralServiceException e) {
                 Logger.getLogger(ProfilEditorPanel.class.getName()).log(Level.SEVERE, "GeneralServiceException", e);
