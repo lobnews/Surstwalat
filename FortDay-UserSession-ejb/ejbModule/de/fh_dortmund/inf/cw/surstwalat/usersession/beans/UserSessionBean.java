@@ -15,6 +15,7 @@ import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
 import de.fh_dortmund.inf.cw.surstwalat.common.exceptions.UserNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Action;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.ActionType;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
@@ -113,8 +114,9 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	@Override
 	public void playerRolls(int gameID, int playerID,  Dice dice) {
 		ObjectMessage msg = createObjectMessage(gameID, MessageType.PLAYER_ACTION);
-		// Not sure about this one
-		trySetStringProperty(msg, PropertyType.ACTION_TYPE, ActionType.ROLL.toString());
+		Action a = new Action();
+		a.setActionType(ActionType.ROLL);
+		trySetIntProperty(msg, PropertyType.ACTION_TYPE, a.getActionType().ordinal());
 		trySetIntProperty(msg, PropertyType.PLAYER_NO, playerID);
 		trySetObject(msg, dice);
 
@@ -124,8 +126,9 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	@Override
 	public void useItem(int gameID, int playerID, Item item) {
 		ObjectMessage msg = createObjectMessage(gameID, MessageType.PLAYER_ACTION);
-		// Not sure about this one
-		trySetStringProperty(msg, PropertyType.ACTION_TYPE, ActionType.USE_ITEM.toString());
+		Action a = new Action();
+		a.setActionType(ActionType.USE_ITEM);
+		trySetIntProperty(msg, PropertyType.ACTION_TYPE, a.getActionType().ordinal());
 		trySetIntProperty(msg, PropertyType.PLAYER_NO, playerID);
 		trySetObject(msg, item);
 
