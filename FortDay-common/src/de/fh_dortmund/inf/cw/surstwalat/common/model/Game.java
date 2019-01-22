@@ -8,7 +8,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
@@ -54,10 +53,10 @@ public class Game implements Serializable{
 	public Game() {
 		gameStarted = false;
 		if(players == null) {
-			players = new ArrayList<Player>();
+			players = new ArrayList<>();
 		}		
 		if(humanUsersInGame == null) {
-			humanUsersInGame = new ArrayList<Account>();
+			humanUsersInGame = new ArrayList<>();
 		}
 	}
 

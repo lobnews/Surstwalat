@@ -4,6 +4,8 @@ import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Designer;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Validator;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -64,7 +66,7 @@ public class RegistryPanel extends JPanel {
     private void initComponent() {
         GridBagLayout gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);
-        setPreferredSize(new Dimension(600, 400));
+        setMinimumSize(new Dimension(600, 400));
 
         GridBagConstraints gridBag = new GridBagConstraints();
         gridBag.fill = GridBagConstraints.HORIZONTAL;
@@ -74,51 +76,51 @@ public class RegistryPanel extends JPanel {
 
         // Error label
         lb_errorMsg = new JLabel();
-        lb_errorMsg.setForeground(Color.RED);             
+        lb_errorMsg.setForeground(Color.RED);
         gridBag.gridx = 0;
         gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
-        this.add(lb_errorMsg, gridBag);
-        
+        add(lb_errorMsg, gridBag);
+
         // Username
         lb_username = new JLabel("Benutzername: ");
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
-        this.add(lb_username, gridBag);
+        add(lb_username, gridBag);
 
         tf_username = new JTextField(20);
         tf_username.requestFocus();
         gridBag.gridx = 1;
         gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
-        this.add(tf_username, gridBag);
+        add(tf_username, gridBag);
 
         // Email
         lb_email = new JLabel("E-Mail Adresse: ");
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
-        this.add(lb_email, gridBag);
+        add(lb_email, gridBag);
 
         tf_email = new JTextField(20);
         gridBag.gridx = 1;
         gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
-        this.add(tf_email, gridBag);
+        add(tf_email, gridBag);
 
         // Password
         lb_password = new JLabel("Password: ");
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
-        this.add(lb_password, gridBag);
+        add(lb_password, gridBag);
 
         pf_password = new JPasswordField(20);
         gridBag.gridx = 1;
         gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
-        this.add(pf_password, gridBag);
+        add(pf_password, gridBag);
         setBorder(new LineBorder(Color.GRAY));
 
         // Password repeat
@@ -126,13 +128,13 @@ public class RegistryPanel extends JPanel {
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
-        this.add(lb_password_repeat, gridBag);
+        add(lb_password_repeat, gridBag);
 
         pf_password_repeat = new JPasswordField(20);
         gridBag.gridx = 1;
         gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
-        this.add(pf_password_repeat, gridBag);
+        add(pf_password_repeat, gridBag);
         setBorder(new LineBorder(Color.GRAY));
 
         // Registry Button
@@ -143,7 +145,7 @@ public class RegistryPanel extends JPanel {
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 3;
-        this.add(bt_registry, gridBag);
+        add(bt_registry, gridBag);
 
         // Back Button
         bt_abort = new JButton("Abbrechen");
@@ -153,7 +155,7 @@ public class RegistryPanel extends JPanel {
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 3;
-        this.add(bt_abort, gridBag);
+        add(bt_abort, gridBag);
     }
 
     /**
@@ -179,18 +181,22 @@ public class RegistryPanel extends JPanel {
         // Registration call
         try {
             userManager.register(accoutName, email, password);
-        } catch (Exception ex) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, null, ex);
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
-        }
 
-        // Success dialog
-        JOptionPane.showMessageDialog(
-                RegistryPanel.this,
-                "Hallo, " + accoutName + ". Du hast dich erfolgreich bei FortDay registriert.", "Registrierung erfolgreich!",
-                JOptionPane.INFORMATION_MESSAGE);
-        back();
+            // Success dialog
+            JOptionPane.showMessageDialog(
+                    RegistryPanel.this,
+                    "Hallo, " + accoutName + ". Du hast dich erfolgreich bei FortDay registriert.",
+                    "Registrierung erfolgreich!",
+                    JOptionPane.INFORMATION_MESSAGE);
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Registration success");
+            back();
+        } catch (AccountAlreadyExistException e) {
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "AccountAlreadyExistException");
+            lb_errorMsg.setText(Designer.errorBox("Der angegebene Benutzername ist bereits vorhanden."));
+        } catch (GeneralServiceException e) {
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, "GeneralServiceException", e);
+            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -217,7 +223,7 @@ public class RegistryPanel extends JPanel {
 
         // Error dialog
         if (errorMsgList.size() > 0) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.FINER, null, errorMsgList.toString());
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Input error!", errorMsgList.toString());
             lb_errorMsg.setText(Designer.errorBox(errorMsgList));
             errorMsgList.clear();
             return false;
@@ -229,6 +235,6 @@ public class RegistryPanel extends JPanel {
      * Get a site back
      */
     private void back() {
-        MainFrame.getInstance().setFrame(new LoginPanel());
+        MainFrame.getInstance().setFrame(new LoginPanel(), false);
     }
 }

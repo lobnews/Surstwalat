@@ -1,12 +1,12 @@
 package de.fh_dortmund.inf.cw.surstwalat.common.model;
 
 import java.io.Serializable;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -27,9 +27,11 @@ public class Field implements Serializable
     private int id;
 
     @JoinColumn
+    @ManyToOne
     private Item item;
 
     @JoinColumn
+    @ManyToOne
     private Token token;
 
     @Column

@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author Lars
+ * @author Lars Borisek
  */
 public class MainFrame extends javax.swing.JFrame {
 
@@ -39,13 +39,13 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        mainPanel1 = new de.fh_dortmund.inf.cw.surstwalat.client.game.view.MainPanel();
         loginPanel1 = new de.fh_dortmund.inf.cw.surstwalat.client.user.view.LoginPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("FortDay-Client");
         setMinimumSize(new java.awt.Dimension(100, 100));
         getContentPane().add(loginPanel1, java.awt.BorderLayout.CENTER);
+        this.setMinimumSize(loginPanel1.getMinimumSize());
 
         setSize(new java.awt.Dimension(416, 339));
         setLocationRelativeTo(null);
@@ -71,7 +71,7 @@ public class MainFrame extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         //</editor-fold>
 
         /* Create and display the form */
@@ -81,14 +81,22 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     public void setFrame(JPanel newFrame) {
+        setFrame(newFrame, true);
+    }
+
+    public void setFrame(JPanel newFrame, boolean pack) {
         getContentPane().removeAll();
         getContentPane().add(newFrame, java.awt.BorderLayout.CENTER);
-        this.pack();
-        this.repaint();
+        this.setMinimumSize(newFrame.getMinimumSize());
+        if (pack) {
+            pack();
+        } else {
+            revalidate();
+        }
+        repaint();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.fh_dortmund.inf.cw.surstwalat.client.user.view.LoginPanel loginPanel1;
-    private de.fh_dortmund.inf.cw.surstwalat.client.game.view.MainPanel mainPanel1;
     // End of variables declaration//GEN-END:variables
 }
