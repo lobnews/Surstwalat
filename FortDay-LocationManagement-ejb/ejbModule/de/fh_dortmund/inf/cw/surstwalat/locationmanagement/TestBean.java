@@ -29,6 +29,7 @@ public class TestBean
     @PostConstruct
     public void init()
     {
+    	/*
         System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ LocationManagement !!!  started");
 
         Item i = new Item();
@@ -47,7 +48,7 @@ public class TestBean
         locationManagement.addTokenToPlayground(1, t.getPlayerId(), t.getNr());
         locationManagement.moveToken(1, t.getId(), 2);
         locationManagement.removeItemFromPlayground(1, 1);
-
+		*/
     }
 
 }

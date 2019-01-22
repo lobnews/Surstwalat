@@ -11,11 +11,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-@Table(name = "PlayField")
+@Table(name = "Field")
 @NamedQueries(
 {
-  @NamedQuery(name = "PlayField.getById", query = "SELECT f FROM PlayField f WHERE f.id = :id"),
-  @NamedQuery(name = "PlayField.getByItemId", query = "SELECT f FROM PlayField f WHERE f.item.id = :itemId")
+  @NamedQuery(name = "Field.getById", query = "SELECT f FROM Field f WHERE f.id = :id"),
+  @NamedQuery(name = "Field.getByItemId", query = "SELECT f FROM Field f WHERE f.item.id = :itemId")
 })
 @Entity
 public class Field implements Serializable
