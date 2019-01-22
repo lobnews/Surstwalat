@@ -1,5 +1,6 @@
 package de.fh_dortmund.inf.cw.surstwalat.usermanagement;
 
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.util.HashManager;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces.UserManagementLocal;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
@@ -36,7 +37,6 @@ public class UserManagementPersistBean implements UserManagementLocal {
      */
     @Override
     public void register(Account account) throws AccountAlreadyExistException, GeneralServiceException {
-        hashAccount(account);
         try {
             entityManager.persist(account);
             entityManager.flush();
@@ -60,7 +60,6 @@ public class UserManagementPersistBean implements UserManagementLocal {
      */
     @Override
     public Account login(Account account) throws AccountNotFoundException, LoginFailedException, GeneralServiceException {
-        hashAccount(account);
         Account dbAccount = getAccountByName(account.getName());
         if (dbAccount.getPassword().equals(account.getPassword())) {
             return dbAccount;
@@ -157,34 +156,5 @@ public class UserManagementPersistBean implements UserManagementLocal {
             System.err.println(e.getClass());
             throw new GeneralServiceException();
         }
-    }
-
-    /**
-     * Hash plaintext
-     *
-     * @param plaintext
-     * @return hashed text
-     */
-    public String generateHash(String plaintext) {
-        String hash;
-        try {
-            MessageDigest encoder = MessageDigest.getInstance("SHA-1");
-            hash = String.format("%040x", new BigInteger(1, encoder.digest(plaintext.getBytes())));
-        } catch (NoSuchAlgorithmException e) {
-            hash = null;
-        }
-        return hash;
-    }
-
-    /**
-     * Hash account password
-     *
-     * @param account account without hashed password
-     * @return account with hashed password
-     * @throws NullPointerException if account param ist null
-     */
-    private Account hashAccount(Account account) {
-        account.setPassword(generateHash(account.getPassword()));
-        return account;
     }
 }

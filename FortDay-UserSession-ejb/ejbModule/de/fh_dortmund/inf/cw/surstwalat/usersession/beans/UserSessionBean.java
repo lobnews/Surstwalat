@@ -21,6 +21,7 @@ import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoun
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedException;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.util.HashManager;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionLocal;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
 import javax.ejb.EJB;
@@ -46,10 +47,11 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
     @Override
     public void login(String username, String password)
             throws AccountNotFoundException, LoginFailedException, GeneralServiceException {
-        Account userLocal = new Account();
-        userLocal.setName(username);
-        userLocal.setPassword(password);
-        user = userManagement.login(userLocal);
+        Account localAccount = new Account();
+        localAccount.setName(username);
+        password = HashManager.hashPassword(password);
+        localAccount.setPassword(password);
+        user = userManagement.login(localAccount);
 
 //            ObjectMessage msg = createObjectMessage(2, MessageType.USER_LOGIN);
 //            trySetObject(msg, user);
@@ -79,6 +81,9 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
     @Override
     public void changePassword(String oldPassword, String newPassword)
             throws WrongPasswordException, GeneralServiceException {
+        oldPassword = HashManager.hashPassword(oldPassword);
+        newPassword = HashManager.hashPassword(newPassword);
+        
         if (user.getPassword().contentEquals(oldPassword)) {
             user.setPassword(newPassword);
             userManagement.changePassword(user);
@@ -94,11 +99,12 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
     @Override
     public void register(String username, String password, String email)
             throws AccountAlreadyExistException, GeneralServiceException {
-        Account userLocal = new Account();
-        userLocal.setName(username);
-        userLocal.setPassword(password);
-        userLocal.setEmail(email);
-        userManagement.register(userLocal);
+        Account localAccount = new Account();
+        localAccount.setName(username);
+        password = HashManager.hashPassword(password);
+        localAccount.setPassword(password);
+        localAccount.setEmail(email);
+        userManagement.register(localAccount);
 //            ObjectMessage msg = createObjectMessage(2, MessageType.USER_REGISTER);
 //            trySetObject(msg, user);
 //            sendMessage(msg);
