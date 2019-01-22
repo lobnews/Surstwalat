@@ -175,10 +175,10 @@ public class ChangePasswordDialog extends JDialog {
                     JOptionPane.INFORMATION_MESSAGE);
             close();
         } catch (WrongPasswordException e) {
-            Logger.getLogger(ChangePasswordDialog.class.getName()).log(Level.INFO, null, e);
+            Logger.getLogger(ChangePasswordDialog.class.getName()).log(Level.INFO, "WrongPasswordException");
             lb_infoBox.setText(Designer.errorBox("Das aktuelle Passwort ist falsch!"));
         } catch (GeneralServiceException e) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, "GeneralServiceException", e);
             JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }

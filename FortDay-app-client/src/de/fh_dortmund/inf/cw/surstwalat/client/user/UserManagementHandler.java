@@ -6,22 +6,16 @@ import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralService
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordException;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
-import javax.jms.ExceptionListener;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.MessageListener;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-import javax.persistence.NoResultException;
-import javax.security.auth.login.FailedLoginException;
 
 /**
  * Handler for UserManagement
  *
  * @author Stephan Klimek
  */
-public class UserManagementHandler implements MessageListener, ExceptionListener {
+public class UserManagementHandler {
 
     private static UserManagementHandler instance;
 
@@ -62,26 +56,6 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
      */
     public static UserManagementHandler getNewInstance() {
         return new UserManagementHandler();
-    }
-
-    /**
-     * On Message
-     *
-     * @param message
-     */
-    @Override
-    public void onMessage(Message message) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    /**
-     * On Exception
-     *
-     * @param exception
-     */
-    @Override
-    public void onException(JMSException exception) {
-        System.err.println(exception.getMessage());
     }
 
     /**

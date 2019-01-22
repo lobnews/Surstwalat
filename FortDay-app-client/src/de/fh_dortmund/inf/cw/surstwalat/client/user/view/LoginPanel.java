@@ -42,7 +42,6 @@ public class LoginPanel extends JPanel {
     private JLabel lb_password;
     private JPasswordField pf_password;
     private JButton bt_login;
-    private JButton bt_hackin;
     private JButton bt_registry;
     private JButton bt_close;
 
@@ -115,16 +114,6 @@ public class LoginPanel extends JPanel {
         gridBag.gridwidth = 3;
         this.add(bt_login, gridBag);
 
-        // Fake login button
-        bt_hackin = new JButton("Hackin");
-        bt_hackin.addActionListener((ActionEvent e) -> {
-            hackin();
-        });
-        gridBag.gridx = 0;
-        gridBag.gridy = ++gridRow;
-        gridBag.gridwidth = 3;
-        this.add(bt_hackin, gridBag);
-
         // Registry button
         bt_registry = new JButton("Registrieren");
         bt_registry.addActionListener((ActionEvent e) -> {
@@ -175,13 +164,6 @@ public class LoginPanel extends JPanel {
             JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
-    }
-
-    /**
-     * Hackin (fake login)
-     */
-    private void hackin() {
-        MainFrame.getInstance().setFrame(new StartHubPanel(), false);
     }
 
     /**
