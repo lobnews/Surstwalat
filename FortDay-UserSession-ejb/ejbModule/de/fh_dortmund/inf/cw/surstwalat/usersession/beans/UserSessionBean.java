@@ -122,6 +122,17 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote{
 	}
 	
 	@Override
+	public void useItem(int gameID, int playerID, Item item) {
+		ObjectMessage msg = createObjectMessage(gameID, MessageType.PLAYER_ACTION);
+		// Not sure about this one
+		trySetStringProperty(msg, PropertyType.ACTION_TYPE, ActionType.USE_ITEM.toString());
+		trySetIntProperty(msg, PropertyType.PLAYER_NO, playerID);
+		trySetObject(msg, item);
+
+		sendMessage(msg);
+	}
+	
+	@Override
 	public void startRound(int gameID, int number) {
 		ObjectMessage msg = createObjectMessage(gameID, MessageType.START_ROUND);
 		trySetIntProperty(msg, PropertyType.ROUND_NO, number);

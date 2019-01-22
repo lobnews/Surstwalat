@@ -36,4 +36,6 @@ public interface UserSession{
 	public void endRound(int gameID,int number);
 	
 	public void addItemToPlayer(int gameID, int playerID, Item item);
+	
+	public void useItem(int gameID, int playerID, Item item);
 }
