@@ -22,7 +22,7 @@ import javax.persistence.Table;
 
 })
 @Entity
-public class Token  implements Serializable{
+public class Token implements Serializable{
 
 	//temp, spaeter zusammengesetzten key nutzen ?
 	@Id

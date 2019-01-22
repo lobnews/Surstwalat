@@ -1,6 +1,7 @@
 package de.fh_dortmund.inf.cw.surstwalat.common.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 import java.util.List;
 
@@ -8,8 +9,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -25,7 +24,7 @@ import javax.persistence.Table;
 @NamedQueries({
 	@NamedQuery(name="Player.getById", query="SELECT p FROM Player p WHERE p.id = :id")
 })
-public class Player  implements Serializable{
+public class Player implements Serializable{
 
 
 	@Id
@@ -63,9 +62,7 @@ public class Player  implements Serializable{
 		this.isHuman = isHuman;
 	}
 	public void addItem(Item...items) {
-		for (Item item : items) {
-			this.items.add(item);
-		}
+            this.items.addAll(Arrays.asList(items));
 	}
 	public Game getGame() {
 		return game;
