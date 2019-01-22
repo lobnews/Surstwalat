@@ -185,16 +185,16 @@ public class RegistryPanel extends JPanel {
             // Success dialog
             JOptionPane.showMessageDialog(
                     RegistryPanel.this,
-                    "Hallo, " + accoutName + ". Du hast dich erfolgreich bei FortDay registriert.", "Registrierung erfolgreich!",
+                    "Hallo, " + accoutName + ". Du hast dich erfolgreich bei FortDay registriert.", 
+                    "Registrierung erfolgreich!",
                     JOptionPane.INFORMATION_MESSAGE);
             back();
         } catch (AccountAlreadyExistException e) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, null, e);
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "AccountAlreadyExistException");
             lb_errorMsg.setText(Designer.errorBox("Der angegebene Benutzername ist bereits vorhanden."));
         } catch (GeneralServiceException e) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, null, e);
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, "GeneralServiceException", e);
             JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
         }
     }
 

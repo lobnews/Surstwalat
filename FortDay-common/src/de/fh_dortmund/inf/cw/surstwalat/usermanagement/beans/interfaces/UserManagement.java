@@ -8,8 +8,8 @@ package de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
-import javax.persistence.NoResultException;
-import javax.security.auth.login.FailedLoginException;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedException;
 
 /**
  * UserManagement interface
@@ -18,7 +18,7 @@ import javax.security.auth.login.FailedLoginException;
  */
 public interface UserManagement {
 
-    public Account login(Account account) throws NoResultException, FailedLoginException, GeneralServiceException;
+    public Account login(Account account) throws AccountNotFoundException, LoginFailedException, GeneralServiceException;
 
     public void changePassword(Account account) throws GeneralServiceException;
 

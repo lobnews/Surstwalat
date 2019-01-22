@@ -2,10 +2,10 @@ package de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordException;
-import javax.persistence.NoResultException;
-import javax.security.auth.login.FailedLoginException;
 
 /**
  * @author Daniel Buschmann
@@ -14,7 +14,7 @@ import javax.security.auth.login.FailedLoginException;
 public interface UserSession{
 
 	public void login(String username, String password) 
-                throws NoResultException, FailedLoginException, GeneralServiceException;
+                throws AccountNotFoundException, LoginFailedException, GeneralServiceException;
 	
 	public void logout();
 	

@@ -29,16 +29,21 @@ public class Account implements Serializable {
 
     @Id
     @GeneratedValue
-    @Column(name = "id")
+    @Column(name = "id", nullable = false, unique = true)
     private int id;
-    @Column(name = "name")
+
+    @Column(name = "name", nullable = false, unique = true)
     private String name;
-    @Column(name = "email")
+
+    @Column(name = "email", nullable = false)
     private String email;
-    @Column(name = "password")
+
+    @Column(name = "password", nullable = false)
     private String password;
+
     @Column(name = "inLobby")
     private boolean inLobby;
+    
     @ManyToMany(mappedBy = "humanUsersInGame")
     private List<Game> games;
 

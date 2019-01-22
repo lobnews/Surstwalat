@@ -4,6 +4,8 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces.UserManagementLocal;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -12,8 +14,8 @@ import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
-import javax.security.auth.login.FailedLoginException;
 
 /**
  *
@@ -37,7 +39,10 @@ public class UserManagementPersistBean implements UserManagementLocal {
         hashAccount(account);
         try {
             entityManager.persist(account);
+            entityManager.flush();
         } catch (EntityExistsException e) {
+            throw new AccountAlreadyExistException();
+        } catch (PersistenceException e) {
             throw new AccountAlreadyExistException();
         } catch (Exception e) {
             throw new GeneralServiceException();
@@ -45,22 +50,22 @@ public class UserManagementPersistBean implements UserManagementLocal {
     }
 
     /**
-     * Login user
+     * Login account
      *
      * @param account input account
      * @return logged in user account
-     * @throws NoResultException if account not exist
-     * @throws FailedLoginException if input datas not match the account
+     * @throws AccountNotFoundException if account not exist
+     * @throws LoginFailedException if input datas not match the account
      * @throws GeneralServiceException if there is a general service exception
      */
     @Override
-    public Account login(Account account) throws NoResultException, FailedLoginException, GeneralServiceException {
+    public Account login(Account account) throws AccountNotFoundException, LoginFailedException, GeneralServiceException {
         hashAccount(account);
         Account dbAccount = getAccountByName(account.getName());
         if (dbAccount.getPassword().equals(account.getPassword())) {
             return dbAccount;
         } else {
-            throw new FailedLoginException();
+            throw new LoginFailedException();
         }
     }
 
@@ -74,6 +79,7 @@ public class UserManagementPersistBean implements UserManagementLocal {
     public void changePassword(Account account) throws GeneralServiceException {
         try {
             entityManager.merge(account);
+            entityManager.flush();
         } catch (Exception e) {
             throw new GeneralServiceException();
         }
@@ -89,6 +95,7 @@ public class UserManagementPersistBean implements UserManagementLocal {
     public void updateEmailAddress(Account account) throws GeneralServiceException {
         try {
             entityManager.merge(account);
+            entityManager.flush();
         } catch (Exception e) {
             throw new GeneralServiceException();
         }
@@ -114,16 +121,17 @@ public class UserManagementPersistBean implements UserManagementLocal {
      *
      * @param id account id
      * @return account
-     * @throws NoResultException if there is no result
+     * @throws AccountNotFoundException if there is no result
      * @throws GeneralServiceException if there is a general service exception
      */
-    public Account getAccountById(int id) throws NoResultException, GeneralServiceException {
-        TypedQuery<Account> accountQuery = entityManager.createNamedQuery("Account.getById", Account.class);
-        accountQuery.setParameter("id", id);
+    public Account getAccountById(int id) throws AccountNotFoundException, GeneralServiceException {
         try {
-            return accountQuery.getSingleResult();
+            TypedQuery<Account> accountQuery = entityManager.createNamedQuery("Account.getById", Account.class);
+            accountQuery.setParameter("id", id);
+            Account account = accountQuery.getSingleResult();
+            return account;
         } catch (NoResultException e) {
-            throw e;
+            throw new AccountNotFoundException();
         } catch (Exception e) {
             throw new GeneralServiceException();
         }
@@ -134,17 +142,19 @@ public class UserManagementPersistBean implements UserManagementLocal {
      *
      * @param name account name
      * @return account from db
-     * @throws NoResultException if there is no result
+     * @throws AccountNotFoundException if there is no result
      * @throws GeneralServiceException if there is a general service exception
      */
-    public Account getAccountByName(String name) throws NoResultException, GeneralServiceException {
-        TypedQuery<Account> accountQuery = entityManager.createNamedQuery("Account.getByName", Account.class);
-        accountQuery.setParameter("name", name);
+    public Account getAccountByName(String name) throws AccountNotFoundException, GeneralServiceException {
         try {
-            return accountQuery.getSingleResult();
+            TypedQuery<Account> accountQuery = entityManager.createNamedQuery("Account.getByName", Account.class);
+            accountQuery.setParameter("name", name);
+            Account account = accountQuery.getSingleResult();
+            return account;
         } catch (NoResultException e) {
-            throw e;
+            throw new AccountNotFoundException();
         } catch (Exception e) {
+            System.err.println(e.getClass());
             throw new GeneralServiceException();
         }
     }

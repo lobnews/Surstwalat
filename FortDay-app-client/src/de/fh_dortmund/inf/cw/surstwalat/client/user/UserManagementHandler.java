@@ -1,7 +1,9 @@
 package de.fh_dortmund.inf.cw.surstwalat.client.user;
 
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordException;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
 import javax.jms.ExceptionListener;
@@ -101,12 +103,12 @@ public class UserManagementHandler implements MessageListener, ExceptionListener
      *
      * @param name account name
      * @param password account password
-     * @throws NoResultException if account not exist
-     * @throws FailedLoginException if input datas not match the account
+     * @throws AccountNotFoundException if account not exist
+     * @throws LoginFailedException if input datas not match the account
      * @throws GeneralServiceException if there is a general service exception
      */
     public void login(String name, String password)
-            throws NoResultException, FailedLoginException, GeneralServiceException {
+            throws AccountNotFoundException, LoginFailedException, GeneralServiceException {
         userSessionRemote.login(name, password);
     }
 

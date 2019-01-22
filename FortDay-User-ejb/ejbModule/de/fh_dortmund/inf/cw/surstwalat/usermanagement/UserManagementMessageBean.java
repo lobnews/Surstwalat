@@ -18,6 +18,7 @@ import javax.jms.ObjectMessage;
  * @author Stephan Klimek
  *
  */
+@Deprecated
 @MessageDriven(
         activationConfig = {
             @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic")},
@@ -29,7 +30,7 @@ public class UserManagementMessageBean implements MessageListener {
 
     /**
      * Listens to messages
-     * 
+     *
      * @param incomingMessage Incoming message
      */
     @Override

@@ -157,7 +157,9 @@ public class ProfilEditorPanel extends JPanel {
         // update call
         try {
             userManager.updateEmailAddress(email);
+            tf_email.setText("");
             lb_infoBox.setText(Designer.successBox("E-Mail-Adresse wurde erfolgreich geändert."));
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.FINE, "GeneralServiceException");
         } catch (GeneralServiceException e) {
             Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, "GeneralServiceException", e);
             JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);

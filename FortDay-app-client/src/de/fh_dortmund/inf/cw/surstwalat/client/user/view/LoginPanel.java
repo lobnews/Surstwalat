@@ -4,7 +4,9 @@ import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Designer;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Validator;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedException;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -14,8 +16,6 @@ import java.awt.event.ActionEvent;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.persistence.NoResultException;
-import javax.security.auth.login.FailedLoginException;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -58,7 +58,7 @@ public class LoginPanel extends JPanel {
     }
 
     /**
-     * initialize ui components
+     * Initialize ui components
      */
     private void initComponent() {
         GridBagLayout gridBagLayout = new GridBagLayout();
@@ -158,17 +158,17 @@ public class LoginPanel extends JPanel {
             return;
         }
 
-        // Registration call
+        // Login call
         try {
             userManager.login(name, password);
 
             // Success
             MainFrame.getInstance().setFrame(new StartHubPanel(), false);
-        } catch (NoResultException e) {
-            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, "NoResultException", e);
+        } catch (AccountNotFoundException e) {
+            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, "AccountNotFoundException");
             lb_infoBox.setText(Designer.errorBox("Das angegebene Konto konnte nicht gefunden werden."));
-        } catch (FailedLoginException e) {
-            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, "FailedLoginException");
+        } catch (LoginFailedException e) {
+            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, "LoginFailedException");
             lb_infoBox.setText(Designer.errorBox("Das angegebene Passwort ist falsch."));
         } catch (GeneralServiceException e) {
             Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, "GeneralServiceException", e);
