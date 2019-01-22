@@ -11,7 +11,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
-@Table(name = "PlayField")
+@Table(name = "Field")
 @NamedQueries(
 {
   @NamedQuery(name = "Field.getById", query = "SELECT f FROM Field f WHERE f.id = :id"),

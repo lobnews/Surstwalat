@@ -11,8 +11,8 @@
 		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Action</class>
 		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.ActionResult</class>
 		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.RollActionResult</class>
-				<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Playground</class>
-				<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Field</class>
-		
+		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Playground</class>
+		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Field</class>
+		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Zone</class>		
 	</persistence-unit>
 </persistence>
