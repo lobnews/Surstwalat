@@ -3,16 +3,19 @@
 	<persistence-unit name="FortDayDB" transaction-type="JTA">
 		<jta-data-source>java:app/jdbc/FortDayDB</jta-data-source>
 		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Account</class>
-		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Game</class>
-		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Item</class>
-		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Dice</class>
-		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Player</class>
-		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Token</class>	
 		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Action</class>
 		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.ActionResult</class>
-		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.RollActionResult</class>
+		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.ActionType</class>
+		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Dice</class>
 		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Field</class>
+		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Game</class>
+		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.HealthItem</class>
+		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Item</class>
+		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Player</class>
 		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Playground</class>
+		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.RollActionResult</class>
+		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Token</class>	
+		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Zone</class>			
 		<properties>
 			<property name="eclipselink.target-database" value="MySQL"/>
 			<property name="eclipselink.ddl-generation" value="create-tables" />
