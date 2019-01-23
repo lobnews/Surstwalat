@@ -40,7 +40,7 @@ public class UserManagementHandler {
     /**
      * Get instance UserManagementHandler
      *
-     * @return
+     * @return instance of UserManagementHandler
      */
     public static UserManagementHandler getInstance() {
         if (instance == null) {
@@ -52,7 +52,7 @@ public class UserManagementHandler {
     /**
      * Get new instance UserManagementHandler
      *
-     * @return
+     * @return new instance of UserManagementHandler
      */
     public static UserManagementHandler getNewInstance() {
         return new UserManagementHandler();
@@ -89,14 +89,14 @@ public class UserManagementHandler {
     /**
      * Update account password
      *
-     * @param oldPassword
-     * @param newPassword
+     * @param curPassword current password
+     * @param newPassword new password
      * @throws WrongPasswordException if old password is wrong
      * @throws GeneralServiceException if there is a general service exception
      */
-    public void changePassword(String oldPassword, String newPassword)
+    public void changePassword(String curPassword, String newPassword)
             throws WrongPasswordException, GeneralServiceException {
-        userSessionRemote.changePassword(oldPassword, newPassword);
+        userSessionRemote.changePassword(curPassword, newPassword);
     }
 
     /**

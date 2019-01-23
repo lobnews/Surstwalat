@@ -12,7 +12,6 @@ public class Designer {
     private static final String BOXHTML_BEGIN
             = "<html><head><style>"
             + "html, body { "
-            //            + "width: 235px;"
             + "width: 100%;"
             + "}"
             + "</style></head><body style=\""
@@ -26,8 +25,8 @@ public class Designer {
     /**
      * Makes a list of error messages to red error message box
      *
-     * @param messageList
-     * @return
+     * @param messageList list of error messages
+     * @return box with error messages
      */
     public static String errorBox(LinkedList<String> messageList) {
         return errorBox(" - " + String.join("<br/> - ", messageList));
@@ -36,8 +35,8 @@ public class Designer {
     /**
      * Makes a string of error message/s to red error message box
      *
-     * @param message
-     * @return
+     * @param message error message
+     * @return box with error message
      */
     public static String errorBox(String message) {
         return BOXHTML_BEGIN
@@ -51,8 +50,8 @@ public class Designer {
     /**
      * Makes a list of success messages to green success message box
      *
-     * @param messageList
-     * @return
+     * @param messageList list of success messages
+     * @return box with success messages
      */
     public static String successBox(LinkedList<String> messageList) {
         return successBox(" - " + String.join("<br/> - ", messageList));
@@ -61,8 +60,8 @@ public class Designer {
     /**
      * Makes a string of success message/s to green success message box
      *
-     * @param message
-     * @return
+     * @param message list of success messages
+     * @return box with success messages
      */
     public static String successBox(String message) {
         return BOXHTML_BEGIN

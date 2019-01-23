@@ -6,8 +6,6 @@ import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralService
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
@@ -29,7 +27,7 @@ public class UserManagementPersistBean implements UserManagementLocal {
     /**
      * Registed new account
      *
-     * @param account input account
+     * @param account account to register
      * @throws AccountAlreadyExistException if the account already exists.
      * @throws GeneralServiceException if there is a general service exception
      */
@@ -50,7 +48,7 @@ public class UserManagementPersistBean implements UserManagementLocal {
     /**
      * Login account
      *
-     * @param account input account
+     * @param account account to login
      * @return logged in user account
      * @throws AccountNotFoundException if account not exist
      * @throws LoginFailedException if input datas not match the account
@@ -69,7 +67,7 @@ public class UserManagementPersistBean implements UserManagementLocal {
     /**
      * Update account password
      *
-     * @param account
+     * @param account account to update
      * @throws GeneralServiceException if there is a general service exception
      */
     @Override
@@ -85,7 +83,7 @@ public class UserManagementPersistBean implements UserManagementLocal {
     /**
      * Update account email address
      *
-     * @param account
+     * @param account account to update
      * @throws GeneralServiceException if there is a general service exception
      */
     @Override
@@ -101,7 +99,7 @@ public class UserManagementPersistBean implements UserManagementLocal {
     /**
      * Remove account
      *
-     * @param account
+     * @param account account to delete
      * @throws GeneralServiceException if there is a general service exception
      */
     @Override
