@@ -16,8 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
+ * Entity that represents a Game Entity. It includes information about its players and rounds.
  * @author Niklas Sprenger
- *
+ * 
  */
 @Table(name="Game")
 @Entity
