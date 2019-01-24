@@ -23,7 +23,8 @@ import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.GameRepositoryLoca
 import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.PlayerRepositoryLocal;
 
 /**
- * Session Bean implementation class DispatcherBean
+ * Bean for various dispatcher functions
+ * The class manages the Game sequence and state
  * 
  * @author Johannes Heiderich
  */
@@ -48,6 +49,9 @@ public class DispatcherBean implements DispatcherLocal {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * @see DispatcherLocal#createPlayers(int)
+	 */
 	@Override
 	public void createPlayers(int gameId) {
 		// TODO Auto-generated method stub
@@ -72,10 +76,20 @@ public class DispatcherBean implements DispatcherLocal {
 		}
 	}
 
+	/**
+	 * @see DispatcherLocal#playerRoll(int, Dice)
+	 */
 	@Override
 	public void playerRoll(int playerId, Dice dice) {
 		Player player = playerRepository.findById(playerId);
 		if (player != null) {
+			
+			if(dice == null) {
+				dice = new Dice();
+				dice.setLabel("Default Dice");
+				dice.setNumbers(new int[] {1,2,3,4,5,6});
+			}
+			
 			Action action = new Action();
 			action.setActionType(ActionType.ROLL);
 			action.setItem(dice);
@@ -88,6 +102,16 @@ public class DispatcherBean implements DispatcherLocal {
 		}
 	}
 
+	/**
+	 * @see DispatcherLocal#dispatch(int)
+	 * creates a list of currently alive player objects and sorts them by number of roll actions and player number
+	 * if the list has size greater than one the first player (lowest number of roll actions and the lowest
+	 * player number) is set as the next player 
+	 * If the next player action count equals the current game round the game round attribute of the game is incremented
+	 * and a message of type START_ROUND is triggered
+	 * otherwise an ASSIGN_ACTIVE_PLAYER message is triggered
+	 * If the list of alive players equals 1 a PLAYER_WINS message is triggered
+	 */
 	@Override
 	public void dispatch(int gameId) {
 		Game game = gameRepository.findById(gameId);
@@ -110,7 +134,10 @@ public class DispatcherBean implements DispatcherLocal {
 				if (p.isAlive())
 					alivePlayers.add(p);
 			}
-			if (alivePlayers.size() > 0) {
+			if(alivePlayers.size() == 1) {
+				Player winner = alivePlayers.first();
+				eventHelper.triggerPlayerWinsEvent(gameId, winner.getId(), winner.getPlayerNo());
+			} else if (alivePlayers.size() > 1) {
 				int firstPlayerRollsCount = filterActions(alivePlayers.first().getActions(), ActionType.ROLL).size();
 
 				if (firstPlayerRollsCount == game.getCurrentRound()) {
@@ -125,6 +152,9 @@ public class DispatcherBean implements DispatcherLocal {
 		}
 	}
 
+	/**
+	 * @see DispatcherLocal#onPlayerDeath(int)
+	 */
 	@Override
 	public void onPlayerDeath(int playerId) {
 		Player p = playerRepository.findById(playerId);
@@ -135,6 +165,14 @@ public class DispatcherBean implements DispatcherLocal {
 		}
 	}
 
+	/**
+	 * Creates a player object
+	 * @param id the user id
+	 * @param no number of the player
+	 * @param game the game object
+	 * @param isHuman if player is human
+	 * @return a Player object
+	 */
 	private Player createPlayer(int id, int no, Game game, boolean isHuman) {
 		Player p = new Player();
 		p.setAccountId(id);
@@ -145,6 +183,12 @@ public class DispatcherBean implements DispatcherLocal {
 		return playerRepository.save(p);
 	}
 
+	/**
+	 * Creates a filtered list of actions that have the given @see de.fh_dortmund.inf.cw.surstwalat.common.model.ActionType
+	 * @param actions the unfiltered list
+	 * @param type the type criteria
+	 * @return list of filtered actions
+	 */
 	private List<Action> filterActions(List<Action> actions, ActionType type) {
 		List<Action> filtered = new ArrayList<>();
 		for (Action a : actions) {

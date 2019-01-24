@@ -6,7 +6,7 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Player;
 import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.PlayerRepositoryLocal;
 
 /**
- * Session Bean implementation class PlayerRepositoryBean
+ * Repository class for @see de.fh_dortmund.inf.cw.surstwalat.common.model.Player objects
  * @author Johannes Heiderich
  */
 @Stateless
