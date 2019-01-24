@@ -12,7 +12,7 @@ import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
 import de.fh_dortmund.inf.cw.surstwalat.dispatcher.beans.interfaces.DispatcherLocal;
 
 /**
- * Message-Driven Bean implementation class for: GameStartedEventHandlerBean
+ * Message-Driven Bean, which listens on GAME_STARTED messages on the FortDayEventTopic
  * @author Johannes Heiderich
  */
 @MessageDriven(
@@ -29,6 +29,8 @@ public class GameStartedEventHandlerBean implements MessageListener {
 	private DispatcherLocal dispatcher;
 	/**
      * @see MessageListener#onMessage(Message)
+     * Extracts the GAME_ID MessageProperty of the received message and triggers the creation of new players at the DispatcherBean
+     * @param message die empfangene Nachricht
      */
     public void onMessage(Message message) {
         try {

@@ -6,7 +6,7 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Action;
 import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.ActionRepositoryLocal;
 
 /**
- * Session Bean implementation class ActionRepositoryBean
+ * Repository class for @see de.fh_dortmund.inf.cw.surstwalat.common.model.Action objects
  * @author Johannes Heiderich
  */
 @Stateless

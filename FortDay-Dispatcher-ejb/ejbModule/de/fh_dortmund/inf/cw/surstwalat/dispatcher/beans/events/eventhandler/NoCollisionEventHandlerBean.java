@@ -11,7 +11,7 @@ import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
 import de.fh_dortmund.inf.cw.surstwalat.dispatcher.beans.interfaces.DispatcherLocal;
 
 /**
- * Message-Driven Bean implementation class for: EventHandlerBean
+ * Message-Driven Bean, which listens on NO_COLLISION messages on the FortDayEventTopic
  * @author Johannes Heiderich
  */
 @MessageDriven(
@@ -26,6 +26,11 @@ public class NoCollisionEventHandlerBean implements MessageListener {
 	@EJB
 	private DispatcherLocal dispatcher;
 	
+	/**
+	 * @see MessageListener#onMessage(Message)
+	 * Extracts the GAME_ID MessageProperty of the received message and triggers a dispatch function at the DispatcherBean
+	 * @param message die empfangene Nachricht
+	 */
     public void onMessage(Message message) {
     	  try {
           	System.out.println("[DISPATCHER] NO_COLLISION received");
