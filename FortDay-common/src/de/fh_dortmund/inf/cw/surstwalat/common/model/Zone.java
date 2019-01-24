@@ -26,6 +26,7 @@ import javax.persistence.Table;
 	@NamedQuery(name="Zone.getByGameId", query="SELECT z FROM Zone z WHERE z.id = :id")
 })
 public class Zone implements Serializable{
+    
 	@Id
 	@GeneratedValue
 	@Column(name="id")
