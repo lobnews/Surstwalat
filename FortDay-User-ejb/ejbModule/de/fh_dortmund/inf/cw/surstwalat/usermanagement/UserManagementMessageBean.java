@@ -31,7 +31,7 @@ public class UserManagementMessageBean implements MessageListener {
     /**
      * Listens to messages
      *
-     * @param incomingMessage Incoming message
+     * @param incomingMessage incomming Objectmessage
      */
     @Override
     public void onMessage(Message incomingMessage) {
@@ -70,8 +70,8 @@ public class UserManagementMessageBean implements MessageListener {
     /**
      * Registered a new user
      *
-     * @param message
-     * @throws Exception
+     * @param message incomming Objectmessage
+     * @throws Exception if there is a exception
      */
     public void register(ObjectMessage message) throws Exception {
         try {
@@ -85,8 +85,8 @@ public class UserManagementMessageBean implements MessageListener {
     /**
      * Login user
      *
-     * @param message
-     * @throws Exception
+     * @param message incomming Objectmessage
+     * @throws Exception if there is a exception
      */
     public void login(ObjectMessage message) throws Exception {
         try {
@@ -100,8 +100,8 @@ public class UserManagementMessageBean implements MessageListener {
     /**
      * Update email address
      *
-     * @param message
-     * @throws Exception
+     * @param message incomming Objectmessage
+     * @throws Exception if there is a exception
      */
     public void updateEmailAddress(ObjectMessage message) throws Exception {
         try {
@@ -115,8 +115,8 @@ public class UserManagementMessageBean implements MessageListener {
     /**
      * Change password
      *
-     * @param message
-     * @throws Exception
+     * @param message incomming Objectmessage
+     * @throws Exception if there is a exception
      */
     public void changePassword(ObjectMessage message) throws Exception {
         try {
@@ -130,8 +130,8 @@ public class UserManagementMessageBean implements MessageListener {
     /**
      * Delete account
      *
-     * @param message
-     * @throws Exception
+     * @param message incomming Objectmessage
+     * @throws Exception if there is a exception
      */
     public void deleteAccount(ObjectMessage message) throws Exception {
         try {

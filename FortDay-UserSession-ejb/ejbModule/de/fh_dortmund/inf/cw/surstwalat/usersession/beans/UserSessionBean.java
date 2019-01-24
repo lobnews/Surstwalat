@@ -47,6 +47,9 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
     
     private Account user;
 
+    /* (non-Javadoc)
+     * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#login(java.lang.String, java.lang.String)
+     */
     @Override
     public void login(String username, String password)
             throws AccountNotFoundException, LoginFailedException, GeneralServiceException {
@@ -55,25 +58,11 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
         password = HashManager.hashPassword(password);
         localAccount.setPassword(password);
         user = userManagement.login(localAccount);
-
-//            ObjectMessage msg = createObjectMessage(2, MessageType.USER_LOGIN);
-//            trySetObject(msg, user);
-//            sendMessage(msg);
-//		try {
-//			if (username.equals(user.getName()) && password.equals(user.getPassword()))
-//			{
-//				ObjectMessage msg = createObjectMessage(2, MessageType.USER_REGISTER);
-//			X	trySetObject(msg, user);
-//				sendMessage(msg);
-//			}
-//			else {
-//				throw new UserNotFoundException();
-//			}
-//		} catch (UserNotFoundException e) {
-//			e.printStackTrace();
-//		}
     }
 
+    /* (non-Javadoc)
+     * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#changePassword(java.lang.String, java.lang.String)
+     */
     @Override
     public void changePassword(String oldPassword, String newPassword)
             throws WrongPasswordException, GeneralServiceException {
@@ -83,15 +72,14 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
         if (user.getPassword().contentEquals(oldPassword)) {
             user.setPassword(newPassword);
             userManagement.changePassword(user);
-//                        ObjectMessage msg = createObjectMessage(2, MessageType.USER_CHANGE_PASSWORD);
-//                        user.setPassword(newPassword);
-//                        trySetObject(msg, user);
-//                        sendMessage(msg);
         } else {
             throw new WrongPasswordException();
         }
     }
 
+    /* (non-Javadoc)
+     * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#register(java.lang.String, java.lang.String, java.lang.String)
+     */
     @Override
     public void register(String username, String password, String email)
             throws AccountAlreadyExistException, GeneralServiceException {
@@ -101,29 +89,29 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
         localAccount.setPassword(password);
         localAccount.setEmail(email);
         userManagement.register(localAccount);
-//            ObjectMessage msg = createObjectMessage(2, MessageType.USER_REGISTER);
-//            trySetObject(msg, user);
-//            sendMessage(msg);
     }
     
+    /* (non-Javadoc)
+     * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#updateEmailAddress(java.lang.String)
+     */
     @Override
     public void updateEmailAddress(String email) throws GeneralServiceException {
         user.setEmail(email);
         userManagement.updateEmailAddress(user);
-//		ObjectMessage msg = createObjectMessage(2, MessageType.USER_UPDATE_EMAIL);
-//		trySetObject(msg, user);
-//		sendMessage(msg);
     }
 
+    /* (non-Javadoc)
+     * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#deleteAccount()
+     */
     @Override
     public void deleteAccount() throws GeneralServiceException {
         userManagement.deleteAccount(user);
-//		ObjectMessage msg = createObjectMessage(2, MessageType.USER_DELETE);
-//		trySetObject(msg, user);
-//		sendMessage(msg);
     }
     
 
+	/* (non-Javadoc)
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#logout()
+	 */
 	@Override
 	public void logout() 
 	{
@@ -132,6 +120,9 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 		sendMessage(msg);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#disconnect()
+	 */
 	@Override
 	public void disconnect() 
 	{
@@ -140,6 +131,9 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 		sendMessage(msg);
 	}
 
+	/* (non-Javadoc)
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#timeout()
+	 */
 	@Override
 	public void timeout() 
 	{
@@ -148,6 +142,9 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 		sendMessage(msg);
 	}	
 	
+	/* (non-Javadoc)
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#playerRolls(int, int, de.fh_dortmund.inf.cw.surstwalat.common.model.Dice)
+	 */
 	@Override
 	public void playerRolls(int gameID, int playerID,  Dice dice) {
 		ObjectMessage msg = createObjectMessage(gameID, MessageType.PLAYER_ACTION);
@@ -160,6 +157,9 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 		sendMessage(msg);
 	}
 	
+	/* (non-Javadoc)
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#useItem(int, int, de.fh_dortmund.inf.cw.surstwalat.common.model.Item)
+	 */
 	@Override
 	public void useItem(int gameID, int playerID, Item item) {
 		ObjectMessage msg = createObjectMessage(gameID, MessageType.PLAYER_ACTION);
@@ -172,6 +172,9 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 		sendMessage(msg);
 	}
 	
+	/* (non-Javadoc)
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#startRound(int, int)
+	 */
 	@Override
 	public void startRound(int gameID, int number) {
 		ObjectMessage msg = createObjectMessage(gameID, MessageType.START_ROUND);
@@ -179,6 +182,9 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 		sendMessage(msg);			
 	}
 	
+	/* (non-Javadoc)
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#userJoinedGame(int)
+	 */
 	@Override
 	public void userJoinedGame(int gameID) {
 		ObjectMessage msg = createObjectMessage(gameID, MessageType.USER_JOINGAME);
@@ -187,6 +193,9 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 		sendMessage(msg);		
 	}
 
+	/* (non-Javadoc)
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#userCreatedGame()
+	 */
 	@Override
 	public void userCreatedGame() {
 		ObjectMessage msg = createObjectMessage(0, MessageType.USER_CREATEGAME);
@@ -195,6 +204,9 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 		sendMessage(msg);			
 	}
 	
+	/* (non-Javadoc)
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#endRound(int, int)
+	 */
 	@Override
 	public void endRound(int gameID, int number) {
 		ObjectMessage msg = createObjectMessage(gameID, MessageType.END_ROUND);
@@ -203,6 +215,9 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 		sendMessage(msg);		
 	}
 
+	/* (non-Javadoc)
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#addItemToPlayer(int, int, de.fh_dortmund.inf.cw.surstwalat.common.model.Item)
+	 */
 	@Override
 	public void addItemToPlayer(int gameID, int playerID, Item item) {
 		ObjectMessage msg = createObjectMessage(gameID, MessageType.ADD_ITEM_TO_PLAYER);
@@ -218,6 +233,11 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 	// General methods for generating and sending messages below //
 	
 	/* Creates an Object message with the gameId and message Type */
+	/**
+	 * @param gameId
+	 * @param messageType
+	 * @return
+	 */
 	private ObjectMessage createObjectMessage(Integer gameId, int messageType) {
 		ObjectMessage msg = jmsContext.createObjectMessage();
 		trySetIntProperty(msg, PropertyType.MESSAGE_TYPE, messageType);
@@ -226,6 +246,11 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 	}
 	
 	/* Tries to set an Int Property; JMSException when failed */
+	/**
+	 * @param msg
+	 * @param propertyType
+	 * @param value
+	 */
 	private void trySetIntProperty(Message msg, String propertyType, Integer value) {
 		try {
 			msg.setIntProperty(propertyType, value);
@@ -235,6 +260,11 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 	}
 
 	/* Tries to set a String Property; JMSException when failed */
+	/**
+	 * @param msg
+	 * @param propertyType
+	 * @param value
+	 */
 	private void trySetStringProperty(Message msg, String propertyType, String value) {
 		try {
 			msg.setStringProperty(propertyType, value);
@@ -244,6 +274,10 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 	}
 	
 	/* Tries to set an Object Property; JMSException when failed */
+	/**
+	 * @param msg
+	 * @param object
+	 */
 	private void trySetObject(ObjectMessage msg, Serializable object) {
 		try {
 			msg.setObject(object);
@@ -253,6 +287,9 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 	}
 	
 	/* Sends the given ObjectMessage */
+	/**
+	 * @param msg
+	 */
 	private void sendMessage(ObjectMessage msg) {
 		jmsContext.createProducer().send(eventTopic, msg);
 	}

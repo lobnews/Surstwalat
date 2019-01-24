@@ -8,10 +8,45 @@ import javax.ejb.Local;
  */
 @Local
 public interface EventHelperLocal {
+	/**
+	 * Sends a message of type ASSIGN_PLAYER
+	 * @param gameId the id of the game
+	 * @param userId the id of the user
+	 * @param playerNo the number of the player
+	 */
 	void triggerAssignPlayerEvent(Integer gameId, Integer userId, Integer playerNo);
+	/**
+	 * Sends a message of type START_ROUND
+	 * @param gameId the id of the game
+	 * @param roundNo the current round of the game
+	 */
 	void triggerStartRoundEvent(Integer gameId, Integer roundNo);
+	/**
+	 * Sends a message of type ASSIGN_ACTIVE_PLAYER
+	 * @param gameId the id of the game
+	 * @param playerId the id of the player
+	 * @param playerNo the number of the player
+	 */
 	void triggerAssignActivePlayerEvent(Integer gameId, Integer playerId, Integer playerNo);
+	/**
+	 * Sends a message of type PLAYER_ROLL
+	 * @param gameId the id of the game
+	 * @param playerNo the number of the player
+	 * @param value the roll value
+	 */
 	void triggerPlayerRollEvent(Integer gameId, Integer playerNo, Integer value);
-//	void triggerEndRoundEvent(Integer gameId, Integer roundNo);
+	/**
+	 * Sends a message of type ELIMINATE_PLAYER
+	 * @param gameId the id of the game
+	 * @param playerId the id of the player
+	 * @param playerNo the number of the player
+	 */
 	void triggerEliminatePlayerEvent(Integer gameId, Integer playerId, Integer playerNo);
+	/**
+	 * Sends a message of type PLAYER_WINS
+	 * @param gameId the id of the game
+	 * @param playerId the id of the player
+	 * @param playerNo the number of the player
+	 */
+	void triggerPlayerWinsEvent(Integer gameId, Integer playerId, Integer playerNo);
 }

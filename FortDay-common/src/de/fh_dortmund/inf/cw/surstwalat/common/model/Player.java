@@ -16,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
+ * This entity presents an Player-object. Each user of a game has 4 player (figurines).
  * @author Niklas Sprenger
  *
  */

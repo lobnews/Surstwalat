@@ -14,8 +14,7 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
 import de.fh_dortmund.inf.cw.surstwalat.dispatcher.beans.interfaces.DispatcherLocal;
 
 /**
- * Message-Driven Bean implementation class for: PlayerActionEventHandlerBean
- * 
+ * Message-Driven Bean, which listens on PLAYER_ACTION messages on the FortDayEventTopic
  * @author Johannes Heiderich
  */
 @MessageDriven(activationConfig = {
@@ -28,6 +27,11 @@ public class PlayerActionEventHandlerBean implements MessageListener {
 	private DispatcherLocal dispatcher;
 
 
+	/**
+	 * @see MessageListener#onMessage(Message)
+	 * Checks if the received message is of ACTION_TYPE ROLL and triggers the playerRoll Method at the DispatcherBean 
+	 * @param message die empfangene Nachricht
+	 */
 	public void onMessage(Message message) {
 		// TODO Auto-generated method stub
 		try {

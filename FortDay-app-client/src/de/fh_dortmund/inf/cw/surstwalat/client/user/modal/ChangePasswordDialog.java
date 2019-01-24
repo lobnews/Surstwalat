@@ -54,7 +54,7 @@ public class ChangePasswordDialog extends JDialog {
     /**
      * Default Constructor
      *
-     * @param parent
+     * @param parent parent component
      */
     public ChangePasswordDialog(Component parent) {
         initComponent(parent);
