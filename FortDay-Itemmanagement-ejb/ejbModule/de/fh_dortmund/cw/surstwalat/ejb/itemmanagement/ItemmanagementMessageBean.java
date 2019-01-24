@@ -42,6 +42,13 @@ public class ItemmanagementMessageBean implements MessageListener {
 					int itemID = message.getIntProperty(PropertyType.ITEM_ID);
 					itemBean.addItemToUser(playerID, itemID);
 					break;
+				case MessageType.SEND_PLAYER_INVENTAR:
+					playerID = message.getIntProperty(PropertyType.PLAYER_ID);
+					itemBean.sendUserInventar(gameId, playerID);
+					break;
+				case MessageType.PLAYER_ACTION :
+					
+					break;
 				case MessageType.ELIMINATE_PLAYER:
 					//ITEMS werden nach dem Tod nicht gespawnt
 					break;
