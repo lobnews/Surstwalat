@@ -7,6 +7,4 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 public interface Ki {
 	
 	public void makeTurn();
-	
-	public List<Item> getInventory();
 }
