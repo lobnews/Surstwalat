@@ -15,9 +15,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.user.modal.ChangePasswordDialog;
+import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import java.awt.Dimension;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -58,6 +60,8 @@ public class ProfilEditorPanel extends JPanel {
      * Initialize ui components
      */
     private void initComponent() {
+        Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("ui_controls");
+
         GridBagLayout gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);
         setMinimumSize(new Dimension(600, 400));
@@ -76,7 +80,7 @@ public class ProfilEditorPanel extends JPanel {
         this.add(lb_infoBox, gridBag);
 
         // Username
-        lb_username = new JLabel("Benutzername: ");
+        lb_username = new JLabel(textRepository.get("username"));
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
@@ -90,7 +94,7 @@ public class ProfilEditorPanel extends JPanel {
         this.add(tf_username, gridBag);
 
         // Email
-        lb_email = new JLabel("E-Mail Adresse: ");
+        lb_email = new JLabel(textRepository.get("email_new"));
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
@@ -103,7 +107,7 @@ public class ProfilEditorPanel extends JPanel {
         this.add(tf_email, gridBag);
 
         // Edit profil button
-        bt_updateProfil = new JButton("Speichern");
+        bt_updateProfil = new JButton(textRepository.get("change_email"));
         bt_updateProfil.addActionListener((ActionEvent e) -> {
             updateEmailAddress();
         });
@@ -113,7 +117,7 @@ public class ProfilEditorPanel extends JPanel {
         this.add(bt_updateProfil, gridBag);
 
         // Change password button
-        bt_changePassword = new JButton("Passwort ändern");
+        bt_changePassword = new JButton(textRepository.get("change_password"));
         bt_changePassword.addActionListener((ActionEvent e) -> {
             openChangePasswordDialog();
         });
@@ -123,7 +127,7 @@ public class ProfilEditorPanel extends JPanel {
         this.add(bt_changePassword, gridBag);
 
         // Delete profil button
-        bt_deleteProfil = new JButton("Löschen");
+        bt_deleteProfil = new JButton(textRepository.get("delete"));
         bt_deleteProfil.addActionListener((ActionEvent e) -> {
             deleteAccount();
         });
@@ -133,7 +137,7 @@ public class ProfilEditorPanel extends JPanel {
         this.add(bt_deleteProfil, gridBag);
 
         // Back button
-        bt_back = new JButton("Zurück");
+        bt_back = new JButton(textRepository.get("back"));
         bt_back.addActionListener((ActionEvent e) -> {
             back();
         });
@@ -147,6 +151,7 @@ public class ProfilEditorPanel extends JPanel {
      * Update email address
      */
     private void updateEmailAddress() {
+        Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
         String email = tf_email.getText();
 
         // Validation check
@@ -158,11 +163,15 @@ public class ProfilEditorPanel extends JPanel {
         try {
             userManager.updateEmailAddress(email);
             tf_email.setText("");
-            lb_infoBox.setText(Designer.successBox("E-Mail-Adresse wurde erfolgreich geändert."));
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Update email address success");
+            lb_infoBox.setText(Designer.successBox(textRepository.get("change_email_success")));
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("change_email_success"));
         } catch (GeneralServiceException e) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, "GeneralServiceException", e);
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_ex"), e);
+            JOptionPane.showMessageDialog(
+                    MainFrame.getInstance(),
+                    textRepository.get("generalServiceException"),
+                    textRepository.get("generalServiceException_short"),
+                    JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
     }
@@ -174,16 +183,17 @@ public class ProfilEditorPanel extends JPanel {
      * @return
      */
     private boolean checkEmailAddress(String email) {
+        Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
         LinkedList<String> errorMsgList = new LinkedList<>();
 
         // Check email address
         if (!Validator.checkEmailAddress(email)) {
-            errorMsgList.add("Die Angabe ist keine korrekte E-Mail-Adresse.");
+            errorMsgList.add(textRepository.get("email_not_valid"));
         }
 
         // Error dialog
         if (errorMsgList.size() > 0) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Input error!", errorMsgList.toString());
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("input_error_short"), errorMsgList.toString());
             lb_infoBox.setText(Designer.errorBox(errorMsgList));
             errorMsgList.clear();
             return false;
@@ -203,11 +213,14 @@ public class ProfilEditorPanel extends JPanel {
      * Delete account
      */
     private void deleteAccount() {
+        Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
+
         int dialogResult = JOptionPane.showConfirmDialog(
                 MainFrame.getInstance(),
-                "Achtung: Konto wirklich löschen?",
-                "Warnung!",
+                textRepository.get("delete_check"),
+                textRepository.get("Warning"),
                 JOptionPane.YES_NO_OPTION);
+
         if (dialogResult == JOptionPane.YES_OPTION) {
             try {
                 userManager.deleteAccount();
@@ -215,13 +228,19 @@ public class ProfilEditorPanel extends JPanel {
                 // Success dialog
                 JOptionPane.showMessageDialog(
                         this,
-                        "Das Konto wurde erfolgreich gelöscht.",
-                        "Erfolgreich!",
+                        textRepository.get("delete_success"),
+                        textRepository.get("Success"),
                         JOptionPane.INFORMATION_MESSAGE);
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Delete success");
+                Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("delete_success"));
                 close();
             } catch (GeneralServiceException e) {
-                Logger.getLogger(ProfilEditorPanel.class.getName()).log(Level.SEVERE, "GeneralServiceException", e);
+                Logger.getLogger(ProfilEditorPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_ex"), e);
+                JOptionPane.showMessageDialog(
+                        MainFrame.getInstance(),
+                        textRepository.get("generalServiceException"),
+                        textRepository.get("generalServiceException_short"),
+                        JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
             }
         }
     }

@@ -2,6 +2,8 @@ package de.fh_dortmund.inf.cw.surstwalat.client.user.view;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import de.fh_dortmund.inf.cw.surstwalat.client.game.view.MainPanel;
+import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
+import java.util.Map;
 
 /**
  * Start Hub
@@ -10,10 +12,13 @@ import de.fh_dortmund.inf.cw.surstwalat.client.game.view.MainPanel;
  */
 public class StartHubPanel extends javax.swing.JPanel {
 
+    Map<String, String> textRepository;
+
     /**
      * Creates new form StarterPanel
      */
     public StartHubPanel() {
+        textRepository = TextRepository.getInstance().getTextRepository("ui_controls");
         initComponents();
     }
 
@@ -29,12 +34,14 @@ public class StartHubPanel extends javax.swing.JPanel {
         bt_startGame = new javax.swing.JButton();
         bt_editProfil = new javax.swing.JButton();
         bt_close = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        lb_title = new javax.swing.JLabel();
 
         setMinimumSize(new java.awt.Dimension(600, 400));
 
+        bt_startGame.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         bt_startGame.setActionCommand("bt_startGame");
-        bt_startGame.setLabel("Start");
+        bt_startGame.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        bt_startGame.setLabel(textRepository.get("start_game"));
         bt_startGame.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_startGameActionPerformed(evt);
@@ -42,7 +49,7 @@ public class StartHubPanel extends javax.swing.JPanel {
         });
 
         bt_editProfil.setActionCommand("bt_editProfil");
-        bt_editProfil.setLabel("Profil");
+        bt_editProfil.setLabel(textRepository.get("profil"));
         bt_editProfil.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_editProfilActionPerformed(evt);
@@ -50,7 +57,7 @@ public class StartHubPanel extends javax.swing.JPanel {
         });
 
         bt_close.setActionCommand("bt_close");
-        bt_close.setLabel("Beenden");
+        bt_close.setLabel(textRepository.get("exit"));
         bt_close.setName(""); // NOI18N
         bt_close.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -58,9 +65,9 @@ public class StartHubPanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("FortDay");
+        lb_title.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
+        lb_title.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lb_title.setText("FortDay");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -69,31 +76,34 @@ public class StartHubPanel extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(253, 253, 253)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(bt_editProfil, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bt_editProfil, javax.swing.GroupLayout.DEFAULT_SIZE, 77, Short.MAX_VALUE)
                     .addComponent(bt_close, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(274, 274, 274))
             .addGroup(layout.createSequentialGroup()
-                .addGap(215, 215, 215)
-                .addComponent(bt_startGame, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(224, 224, 224))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(178, 178, 178)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(178, 178, 178)
+                        .addComponent(lb_title, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(165, 165, 165)
+                        .addComponent(bt_startGame, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(36, 36, 36)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(73, 73, 73)
-                .addComponent(bt_startGame, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
-                .addGap(47, 47, 47)
-                .addComponent(bt_editProfil)
+                .addComponent(lb_title, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                .addComponent(bt_startGame, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(62, 62, 62)
+                .addComponent(bt_editProfil, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bt_close)
+                .addComponent(bt_close, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23))
         );
+
+        bt_close.getAccessibleContext().setAccessibleName(textRepository.get("exit"));
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_editProfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_editProfilActionPerformed
@@ -113,6 +123,6 @@ public class StartHubPanel extends javax.swing.JPanel {
     private javax.swing.JButton bt_close;
     private javax.swing.JButton bt_editProfil;
     private javax.swing.JButton bt_startGame;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel lb_title;
     // End of variables declaration//GEN-END:variables
 }

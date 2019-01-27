@@ -1,0 +1,53 @@
+ui_controls:
+    # Labels
+    username: "Benutzername:"
+    password: "Passwort:"
+    password_current: "Aktuelles Passwort:"
+    password_repeat: "Passwort wiederholen:"
+    email: "E-Mail-Adresse:"
+    email_new: "Neue E-Mail-Adresse:"
+    # Actions
+    signin: Registrieren
+    login: Einloggen
+    start_game: Start
+    profil: Profil
+    save: Speichern
+    change_password: Passwort ändern
+    change_email: E-Mail-Adresse ändern
+    delete: Löschen
+    back: Zurück
+    cancel: Abbrechen
+    exit: Beenden    
+messages:
+    # General
+    Warning: Warnung!
+    Success: Erfolgreich!
+    input_error_short: Eingabefehler!
+    # Action
+    signin_success_short: Registrierung erfolgreich
+    signin_success: Glückwunsch, %s! Erfolgreich bei FortDay registriert.
+    login_success_short: Login erfolgreich
+    change_email_success: E-Mail-Adresse wurde erfolgreich geändert.
+    change_password_success_short: Passwort geändert.
+    change_password_success: Passwort wurde erfolgreich geändert.
+    delete_check: "Achtung: Konto wirklich löschen?"
+    delete_success: Das Konto wurde erfolgreich gelöscht.
+    # Validation
+    username_empty: Kein Benutzername angegeben
+    username_length: Der Benutzername muss zwischen %d und %d Zeichen lang sein.
+    password_empty: Kein Passwort angegeben
+    password_length: Der Passwort muss zwischen %d und %d Zeichen lang sein.
+    passwords_do_not_match: Die neuen Passwörter stimmen nicht überein.
+    email_not_valid: Die Angabe ist keine korrekte E-Mail-Adresse.
+    # Exceptions
+    accountNotFoundException_ex: AccountNotFoundException 
+    accountNotFoundException: Das angegebene Konto konnte nicht gefunden werden.
+    loginFailedException_ex: LoginFailedException
+    loginFailedException: Das angegebene Passwort ist falsch.
+    accountAlreadyExistException_ex: AccountAlreadyExistException
+    accountAlreadyExistException: Der angegebene Benutzername ist bereits vorhanden.
+    wrongPasswordException_ex: WrongPasswordException
+    wrongPasswordException: Das aktuelle Passwort ist falsch.
+    generalServiceException_ex: GeneralServiceException
+    generalServiceException_short: Verbindungfehler!
+    generalServiceException: Fehler bei der Verbindung mit dem Server!
