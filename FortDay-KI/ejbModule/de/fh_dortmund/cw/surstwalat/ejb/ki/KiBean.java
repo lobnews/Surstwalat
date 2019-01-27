@@ -1,15 +1,15 @@
 package de.fh_dortmund.cw.surstwalat.ejb.ki;
 
 import java.util.List;
-
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
+import de.fh_dortmund.inf.cw.surstwalat.ki.beans.interfaces.KiLocal;
+import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.ejb.Stateful;
 
-import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
-import de.fh_dortmund.inf.cw.surstwalat.ki.beans.interfaces.KiRemote;
-import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession;
-
-public class KiBean implements KiRemote {
+@Stateful
+public class KiBean implements KiLocal {
 	
 	@EJB
 	private UserSession session;
@@ -25,6 +25,7 @@ public class KiBean implements KiRemote {
 		System.out.println("@@@FortDayKi started");
 	}
 	
+        @Override
 	public List<Item> getInventory()
 	{
 		return null;
@@ -54,5 +55,4 @@ public class KiBean implements KiRemote {
 	public void setInventory(List<Item> inventory) {
 		this.inventory = inventory;
 	}
-
 }
