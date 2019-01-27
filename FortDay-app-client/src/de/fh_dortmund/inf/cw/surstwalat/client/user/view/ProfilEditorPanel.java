@@ -18,10 +18,13 @@ import de.fh_dortmund.inf.cw.surstwalat.client.user.modal.ChangePasswordDialog;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -46,14 +49,27 @@ public class ProfilEditorPanel extends JPanel {
     private JButton bt_back;
 
     private final UserManagementHandler userManager;
+    private final Image backgroundImage;
 
     /**
      * Default Constructor
      */
     public ProfilEditorPanel() {
+        backgroundImage = new ImageIcon(getClass().getResource("/resources/backgrounds/background.jpg")).getImage();
         initComponent();
 
         userManager = UserManagementHandler.getInstance();
+    }
+
+    /**
+     * Paint component
+     *
+     * @param g graphics
+     */
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponents(g);
+        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
 
     /**
@@ -64,7 +80,7 @@ public class ProfilEditorPanel extends JPanel {
 
         GridBagLayout gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);
-        setMinimumSize(new Dimension(600, 400));
+        setMinimumSize(new Dimension(600, 438));
 
         GridBagConstraints gridBag = new GridBagConstraints();
         gridBag.fill = GridBagConstraints.HORIZONTAL;

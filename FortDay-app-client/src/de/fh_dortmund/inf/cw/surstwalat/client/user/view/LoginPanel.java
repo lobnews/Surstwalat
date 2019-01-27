@@ -4,20 +4,25 @@ import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Designer;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Validator;
+import de.fh_dortmund.inf.cw.surstwalat.client.util.FontRepository;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedException;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -48,14 +53,27 @@ public class LoginPanel extends JPanel {
     private JButton bt_close;
 
     private final UserManagementHandler userManager;
+    private final Image backgroundImage;
 
     /**
      * Default Constructor
      */
     public LoginPanel() {
+        backgroundImage = new ImageIcon(getClass().getResource("/resources/backgrounds/background-login.png")).getImage();
         initComponent();
 
         userManager = UserManagementHandler.getInstance();
+    }
+    
+    /**
+     * Paint component
+     * 
+     * @param g graphics
+     */
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponents(g);
+        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
 
     /**
@@ -66,21 +84,20 @@ public class LoginPanel extends JPanel {
 
         GridBagLayout gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);
-        setMinimumSize(new Dimension(600, 400));
+        setMinimumSize(new Dimension(600, 438));
 
         GridBagConstraints gridBag = new GridBagConstraints();
         gridBag.fill = GridBagConstraints.HORIZONTAL;
         gridBag.insets = new Insets(5, 5, 5, 5);
 
         int gridRow = 0;
-
         // Error label
         lb_infoBox = new JLabel();
         gridBag.gridx = 0;
         gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
         this.add(lb_infoBox, gridBag);
-
+        
         // Username
         lb_username = new JLabel(textRepository.get("username"));
         gridBag.gridx = 0;

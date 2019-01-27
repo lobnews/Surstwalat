@@ -9,8 +9,10 @@ import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlready
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
@@ -18,6 +20,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -51,14 +54,27 @@ public class RegistryPanel extends JPanel {
     private JButton bt_abort;
 
     private final UserManagementHandler userManager;
+    private final Image backgroundImage;
 
     /**
      * Default Constructor
      */
     public RegistryPanel() {
+        backgroundImage = new ImageIcon(getClass().getResource("/resources/backgrounds/background.jpg")).getImage();
         initComponent();
 
         userManager = UserManagementHandler.getInstance();
+    }
+
+    /**
+     * Paint component
+     *
+     * @param g graphics
+     */
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponents(g);
+        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
 
     /**
@@ -69,7 +85,7 @@ public class RegistryPanel extends JPanel {
 
         GridBagLayout gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);
-        setMinimumSize(new Dimension(600, 400));
+        setMinimumSize(new Dimension(600, 438));
 
         GridBagConstraints gridBag = new GridBagConstraints();
         gridBag.fill = GridBagConstraints.HORIZONTAL;
@@ -216,7 +232,7 @@ public class RegistryPanel extends JPanel {
      */
     private boolean checkRegistration(Map<String, String> inputMap) {
         Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
-        
+
         LinkedList<String> errorMsgList = new LinkedList<>();
 
         // Input validation checking

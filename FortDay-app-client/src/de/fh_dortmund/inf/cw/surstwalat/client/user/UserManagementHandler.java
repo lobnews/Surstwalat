@@ -6,9 +6,11 @@ import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralService
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordException;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
+import java.awt.Image;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.swing.ImageIcon;
 
 /**
  * Handler for UserManagement
