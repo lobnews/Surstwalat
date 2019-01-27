@@ -4,6 +4,7 @@ import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Designer;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Validator;
+import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import java.awt.Color;
@@ -64,6 +65,8 @@ public class RegistryPanel extends JPanel {
      * Initialize ui components
      */
     private void initComponent() {
+        Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("ui_controls");
+
         GridBagLayout gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);
         setMinimumSize(new Dimension(600, 400));
@@ -83,7 +86,7 @@ public class RegistryPanel extends JPanel {
         add(lb_errorMsg, gridBag);
 
         // Username
-        lb_username = new JLabel("Benutzername: ");
+        lb_username = new JLabel(textRepository.get("username"));
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
@@ -97,7 +100,7 @@ public class RegistryPanel extends JPanel {
         add(tf_username, gridBag);
 
         // Email
-        lb_email = new JLabel("E-Mail Adresse: ");
+        lb_email = new JLabel(textRepository.get("email"));
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
@@ -110,7 +113,7 @@ public class RegistryPanel extends JPanel {
         add(tf_email, gridBag);
 
         // Password
-        lb_password = new JLabel("Password: ");
+        lb_password = new JLabel(textRepository.get("password"));
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
@@ -124,7 +127,7 @@ public class RegistryPanel extends JPanel {
         setBorder(new LineBorder(Color.GRAY));
 
         // Password repeat
-        lb_password_repeat = new JLabel("Passwort wiederholen: ");
+        lb_password_repeat = new JLabel(textRepository.get("password_repeat"));
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
@@ -138,7 +141,7 @@ public class RegistryPanel extends JPanel {
         setBorder(new LineBorder(Color.GRAY));
 
         // Registry Button
-        bt_registry = new JButton("Registrieren");
+        bt_registry = new JButton(textRepository.get("signin"));
         bt_registry.addActionListener((ActionEvent e) -> {
             register();
         });
@@ -148,7 +151,7 @@ public class RegistryPanel extends JPanel {
         add(bt_registry, gridBag);
 
         // Back Button
-        bt_abort = new JButton("Abbrechen");
+        bt_abort = new JButton(textRepository.get("cancel"));
         bt_abort.addActionListener((ActionEvent e) -> {
             back();
         });
@@ -162,6 +165,8 @@ public class RegistryPanel extends JPanel {
      * Registration
      */
     private void register() {
+        Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
+
         String accoutName = tf_username.getText();
         String password = String.valueOf(pf_password.getPassword());
         String password_repeat = String.valueOf(pf_password_repeat.getPassword());
@@ -185,17 +190,21 @@ public class RegistryPanel extends JPanel {
             // Success dialog
             JOptionPane.showMessageDialog(
                     RegistryPanel.this,
-                    "Hallo, " + accoutName + ". Du hast dich erfolgreich bei FortDay registriert.",
-                    "Registrierung erfolgreich!",
+                    textRepository.get("accountAlreadyExistException"),
+                    textRepository.get("accountAlreadyExistException_short"),
                     JOptionPane.INFORMATION_MESSAGE);
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Registration success");
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("signin_success_short"));
             back();
         } catch (AccountAlreadyExistException e) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "AccountAlreadyExistException");
-            lb_errorMsg.setText(Designer.errorBox("Der angegebene Benutzername ist bereits vorhanden."));
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("accountAlreadyExistException_short"));
+            lb_errorMsg.setText(Designer.errorBox(textRepository.get("accountAlreadyExistException")));
         } catch (GeneralServiceException e) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, "GeneralServiceException", e);
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_short"), e);
+            JOptionPane.showMessageDialog(
+                    MainFrame.getInstance(),
+                    textRepository.get("generalServiceException"),
+                    textRepository.get("generalServiceException_short"),
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 

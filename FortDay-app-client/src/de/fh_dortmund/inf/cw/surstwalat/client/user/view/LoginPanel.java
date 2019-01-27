@@ -4,6 +4,7 @@ import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Designer;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Validator;
+import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedException;
@@ -14,6 +15,7 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -60,6 +62,8 @@ public class LoginPanel extends JPanel {
      * Initialize ui components
      */
     private void initComponent() {
+        Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("ui_controls");
+
         GridBagLayout gridBagLayout = new GridBagLayout();
         setLayout(gridBagLayout);
         setMinimumSize(new Dimension(600, 400));
@@ -78,7 +82,7 @@ public class LoginPanel extends JPanel {
         this.add(lb_infoBox, gridBag);
 
         // Username
-        lb_username = new JLabel("Username: ");
+        lb_username = new JLabel(textRepository.get("username"));
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
@@ -91,7 +95,7 @@ public class LoginPanel extends JPanel {
         this.add(tf_username, gridBag);
 
         // Password
-        lb_password = new JLabel("Password: ");
+        lb_password = new JLabel(textRepository.get("password"));
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
@@ -105,7 +109,7 @@ public class LoginPanel extends JPanel {
         setBorder(new LineBorder(Color.GRAY));
 
         // Login button
-        bt_login = new JButton("Login");
+        bt_login = new JButton(textRepository.get("login"));
         bt_login.addActionListener((ActionEvent e) -> {
             login();
         });
@@ -115,7 +119,7 @@ public class LoginPanel extends JPanel {
         this.add(bt_login, gridBag);
 
         // Registry button
-        bt_registry = new JButton("Registrieren");
+        bt_registry = new JButton(textRepository.get("signin"));
         bt_registry.addActionListener((ActionEvent e) -> {
             openRegisterPanel();
         });
@@ -125,7 +129,7 @@ public class LoginPanel extends JPanel {
         this.add(bt_registry, gridBag);
 
         // Close button
-        bt_close = new JButton("Beenden");
+        bt_close = new JButton(textRepository.get("exit"));
         bt_close.addActionListener((ActionEvent e) -> {
             exit();
         });
@@ -139,6 +143,7 @@ public class LoginPanel extends JPanel {
      * Login
      */
     private void login() {
+        Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
         String name = tf_username.getText();
         String password = String.valueOf(pf_password.getText());
 
@@ -152,17 +157,29 @@ public class LoginPanel extends JPanel {
             userManager.login(name, password);
 
             // Success
-            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, "Login success");
+            Logger
+                    .getLogger(LoginPanel.class
+                            .getName()).log(Level.INFO, textRepository.get("login_success_short"));
             MainFrame.getInstance().setFrame(new StartHubPanel(), false);
+
         } catch (AccountNotFoundException e) {
-            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, "AccountNotFoundException");
-            lb_infoBox.setText(Designer.errorBox("Das angegebene Konto konnte nicht gefunden werden."));
+            Logger.getLogger(LoginPanel.class
+                    .getName()).log(Level.INFO, textRepository.get("accountNotFoundException_short"));
+            lb_infoBox.setText(Designer.errorBox(textRepository.get("accountNotFoundException")));
+
         } catch (LoginFailedException e) {
-            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, "LoginFailedException");
-            lb_infoBox.setText(Designer.errorBox("Das angegebene Passwort ist falsch."));
+            Logger.getLogger(LoginPanel.class
+                    .getName()).log(Level.INFO, textRepository.get("loginFailedException_short"));
+            lb_infoBox.setText(Designer.errorBox(textRepository.get("loginFailedException")));
+
         } catch (GeneralServiceException e) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, "GeneralServiceException", e);
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(RegistryPanel.class
+                    .getName()).log(Level.SEVERE, textRepository.get("generalServiceException_short"), e);
+            JOptionPane.showMessageDialog(
+                    MainFrame.getInstance(),
+                    textRepository.get("generalServiceException"),
+                    textRepository.get("generalServiceException_short"),
+                    JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
     }
@@ -175,21 +192,27 @@ public class LoginPanel extends JPanel {
      * @return
      */
     private boolean checkLoginInput(String name, String password) {
+        Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
         LinkedList<String> errorMsgList = new LinkedList<>();
 
         // Check name
         if (!Validator.isEmptyString(name)) {
-            errorMsgList.add("Kein Benutzername angegeben.");
+            errorMsgList.add(textRepository.get("username_empty"));
         }
 
         // Check password
         if (!Validator.isEmptyString(password)) {
-            errorMsgList.add("Kein Passwort angegeben.");
+            errorMsgList.add(textRepository.get("password_empty"));
+
         }
 
         // Error dialog
         if (errorMsgList.size() > 0) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Input error!", errorMsgList.toString());
+            Logger.getLogger(
+                    RegistryPanel.class.getName()).log(Level.INFO,
+                    textRepository.get("input_error_short"),
+                    errorMsgList.toString());
+
             lb_infoBox.setText(Designer.errorBox(errorMsgList));
             errorMsgList.clear();
             return false;

@@ -1,0 +1,39 @@
+ui_controls:
+    # Labels
+    username: "Benutzername:"
+    password: "Passwort:"
+    password_repeat: "Passwort wiederholen:"
+    email: "E-Mail-Adresse:"
+    # Actions
+    change_password: Passwort ändern
+    save: Speichern
+    login: Einloggen
+    signin: Registrieren
+    back: Zurück
+    cancel: Abbrechen
+    exit: Beenden    
+messages:
+    # General
+    Warning: Warnung!
+    Success: Erfolgreich!
+    input_error_short: Eingabefehler!
+    # Validation
+    username_empty: Kein Benutzername angegeben
+    password_empty: Kein Passwort angegeben
+    email_not_valid: Die Angabe ist keine korrekte E-Mail-Adresse.
+    # Action
+    signin_success_short: Erfolgreich registriert.
+    signin_success: Glückwunsch! Erfolgreich bei FortDay registriert.
+    login_success_short: Login erfolgreich!
+    change_email_success: E-Mail-Adresse wurde erfolgreich geändert.
+    delete_check: "Achtung: Konto wirklich löschen?"
+    delete_success: Das Konto wurde erfolgreich gelöscht.
+    # Exceptions
+    accountNotFoundException_short: AccountNotFoundException 
+    accountNotFoundException: Das angegebene Konto konnte nicht gefunden werden.
+    loginFailedException_short: LoginFailedException
+    loginFailedException: Das angegebene Passwort ist falsch.
+    accountAlreadyExistException_short: AccountAlreadyExistException
+    accountAlreadyExistException: Der angegebene Benutzername ist bereits vorhanden.
+    generalServiceException_short: GeneralServiceException
+    generalServiceException: Fehler bei der Verbindung mit dem Server!
