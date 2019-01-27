@@ -12,9 +12,6 @@ import javax.jms.Topic;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
-import de.fh_dortmund.inf.cw.surstwalat.common.model.Action;
-import de.fh_dortmund.inf.cw.surstwalat.common.model.ActionType;
-import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Player;
 
 @Stateless
@@ -30,25 +27,7 @@ public class OutgoingEventHelperBean {
 		trySetIntProperty(message, PropertyType.PLAYER_NO, player_no);
 		sendMessage(message);
 	}
-	
-	public void sendUseItem(int gameid, int player_no, Item item) {
-		ObjectMessage msg = createObjectMessage(gameid, MessageType.PLAYER_ACTION);
-		Action a = new Action();
-		a.setActionType(ActionType.USE_ITEM);
-		trySetIntProperty(msg, PropertyType.ACTION_TYPE, a.getActionType().ordinal());
-		trySetIntProperty(msg, PropertyType.PLAYER_NO, player_no);
-		trySetObject(msg, item);
-		sendMessage(msg);
-	}
-	
-	public void sendPlayerRoll(int gameid, int player_no) {
-		ObjectMessage msg = createObjectMessage(gameid, MessageType.PLAYER_ACTION);
-		Action a = new Action();
-		a.setActionType(ActionType.ROLL);
-		trySetIntProperty(msg, PropertyType.ACTION_TYPE, a.getActionType().ordinal());
-		trySetIntProperty(msg, PropertyType.PLAYER_NO, player_no);
-		sendMessage(msg);
-	}
+
 
 	private ObjectMessage createObjectMessage(Integer gameId, int messageType) {
 		ObjectMessage message = jmsContext.createObjectMessage();

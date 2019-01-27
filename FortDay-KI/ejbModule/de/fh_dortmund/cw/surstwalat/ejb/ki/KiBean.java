@@ -30,22 +30,24 @@ public class KiBean implements KiRemote {
 	public void init() {
 		System.out.println("@@@FortDayKi started");
 	}
+	
+	public List<Item> getInventory()
+	{
+		return null;
+	}
 
 	@Override
 	public void makeTurn() {
 		sender.sendInventoryRequest(gameid, player_no);
 		this.setInventory(getInventory());
 		
-		Item item;
-		
 		if(!inventory.isEmpty())
 		{
-			item = inventory.get(0);
-			sender.sendUseItem(gameid, player_no, item);
+			
 		}
 		else
 		{
-			sender.sendPlayerRoll(gameid,player_no);
+			
 		}
 	}
 
