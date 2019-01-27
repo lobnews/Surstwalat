@@ -94,7 +94,7 @@ public class ProfilEditorPanel extends JPanel {
         this.add(tf_username, gridBag);
 
         // Email
-        lb_email = new JLabel(textRepository.get("email"));
+        lb_email = new JLabel(textRepository.get("email_new"));
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
@@ -107,7 +107,7 @@ public class ProfilEditorPanel extends JPanel {
         this.add(tf_email, gridBag);
 
         // Edit profil button
-        bt_updateProfil = new JButton(textRepository.get("save"));
+        bt_updateProfil = new JButton(textRepository.get("change_email"));
         bt_updateProfil.addActionListener((ActionEvent e) -> {
             updateEmailAddress();
         });
@@ -166,7 +166,7 @@ public class ProfilEditorPanel extends JPanel {
             lb_infoBox.setText(Designer.successBox(textRepository.get("change_email_success")));
             Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("change_email_success"));
         } catch (GeneralServiceException e) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_short"), e);
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_ex"), e);
             JOptionPane.showMessageDialog(
                     MainFrame.getInstance(),
                     textRepository.get("generalServiceException"),
@@ -234,7 +234,13 @@ public class ProfilEditorPanel extends JPanel {
                 Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("delete_success"));
                 close();
             } catch (GeneralServiceException e) {
-                Logger.getLogger(ProfilEditorPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_short"), e);
+                Logger.getLogger(ProfilEditorPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_ex"), e);
+                JOptionPane.showMessageDialog(
+                        MainFrame.getInstance(),
+                        textRepository.get("generalServiceException"),
+                        textRepository.get("generalServiceException_short"),
+                        JOptionPane.ERROR_MESSAGE);
+                System.exit(1);
             }
         }
     }

@@ -157,24 +157,18 @@ public class LoginPanel extends JPanel {
             userManager.login(name, password);
 
             // Success
-            Logger
-                    .getLogger(LoginPanel.class
-                            .getName()).log(Level.INFO, textRepository.get("login_success_short"));
+            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, textRepository.get("login_success_short"));
             MainFrame.getInstance().setFrame(new StartHubPanel(), false);
-
         } catch (AccountNotFoundException e) {
-            Logger.getLogger(LoginPanel.class
-                    .getName()).log(Level.INFO, textRepository.get("accountNotFoundException_short"));
+            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, textRepository.get("accountNotFoundException_ex"));
             lb_infoBox.setText(Designer.errorBox(textRepository.get("accountNotFoundException")));
 
         } catch (LoginFailedException e) {
-            Logger.getLogger(LoginPanel.class
-                    .getName()).log(Level.INFO, textRepository.get("loginFailedException_short"));
+            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, textRepository.get("loginFailedException_ex"));
             lb_infoBox.setText(Designer.errorBox(textRepository.get("loginFailedException")));
 
         } catch (GeneralServiceException e) {
-            Logger.getLogger(RegistryPanel.class
-                    .getName()).log(Level.SEVERE, textRepository.get("generalServiceException_short"), e);
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_ex"), e);
             JOptionPane.showMessageDialog(
                     MainFrame.getInstance(),
                     textRepository.get("generalServiceException"),

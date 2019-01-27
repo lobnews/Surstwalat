@@ -5,6 +5,7 @@ import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Designer;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Validator;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.view.RegistryPanel;
+import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordException;
 import java.awt.BorderLayout;
@@ -66,6 +67,8 @@ public class ChangePasswordDialog extends JDialog {
      * initialize ui components
      */
     private void initComponent(Component parent) {
+        Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("ui_controls");
+        
         JPanel gridPanel = new JPanel(new GridBagLayout());
         GridBagConstraints gridBag = new GridBagConstraints();
         gridBag.fill = GridBagConstraints.HORIZONTAL;
@@ -82,7 +85,7 @@ public class ChangePasswordDialog extends JDialog {
         gridPanel.add(lb_infoBox, gridBag);
 
         // Password old
-        lb_password_old = new JLabel("Altes Password: ");
+        lb_password_old = new JLabel(textRepository.get("password_current"));
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
@@ -96,7 +99,7 @@ public class ChangePasswordDialog extends JDialog {
         gridPanel.setBorder(new LineBorder(Color.GRAY));
 
         // Password
-        lb_password = new JLabel("Password: ");
+        lb_password = new JLabel(textRepository.get("password"));
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
@@ -110,7 +113,7 @@ public class ChangePasswordDialog extends JDialog {
         gridPanel.setBorder(new LineBorder(Color.GRAY));
 
         // Password repeat
-        lb_password_repeat = new JLabel("Passwort wiederholen: ");
+        lb_password_repeat = new JLabel(textRepository.get("password_repeat"));
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
@@ -123,12 +126,12 @@ public class ChangePasswordDialog extends JDialog {
         gridPanel.add(pf_password_repeat, gridBag);
         gridPanel.setBorder(new LineBorder(Color.GRAY));
 
-        bt_update = new JButton("Speichern");
+        bt_update = new JButton(textRepository.get("save"));
         bt_update.addActionListener((ActionEvent e) -> {
             updatePassword();
         });
 
-        bt_cancel = new JButton("Abbrechen");
+        bt_cancel = new JButton(textRepository.get("cancel"));
         bt_cancel.addActionListener((ActionEvent e) -> {
             close();
         });
@@ -149,6 +152,8 @@ public class ChangePasswordDialog extends JDialog {
      * Update password
      */
     private void updatePassword() {
+        Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
+        
         String oldPassword = String.valueOf(pf_password_old.getText());
         String newPassword = String.valueOf(pf_password.getText());
         String newPassword_repeat = String.valueOf(pf_password_repeat.getText());
@@ -170,17 +175,21 @@ public class ChangePasswordDialog extends JDialog {
             // Success dialog
             JOptionPane.showMessageDialog(
                     this,
-                    "Passwort wurde erfolgreich geändert.",
-                    "Erfolgreich!",
+                    textRepository.get("change_password_success"),
+                    textRepository.get("change_password_success_short"),
                     JOptionPane.INFORMATION_MESSAGE);
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Update password success");
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("change_password_success_short"));
             close();
         } catch (WrongPasswordException e) {
-            Logger.getLogger(ChangePasswordDialog.class.getName()).log(Level.INFO, "WrongPasswordException");
-            lb_infoBox.setText(Designer.errorBox("Das aktuelle Passwort ist falsch!"));
+            Logger.getLogger(ChangePasswordDialog.class.getName()).log(Level.INFO, textRepository.get("wrongPasswordException_ex"));
+            lb_infoBox.setText(Designer.errorBox(textRepository.get("wrongPasswordException")));
         } catch (GeneralServiceException e) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, "GeneralServiceException", e);
-            JOptionPane.showMessageDialog(MainFrame.getInstance(), "Server wurde nicht gefunden!", "Systemfehler!", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_ex"), e);
+            JOptionPane.showMessageDialog(
+                    MainFrame.getInstance(), 
+                    textRepository.get("generalServiceException"), 
+                    textRepository.get("generalServiceException_short"), 
+                    JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
     }
@@ -192,23 +201,25 @@ public class ChangePasswordDialog extends JDialog {
      * @return
      */
     private boolean checkNewPassword(Map<String, String> inputMap) {
+        Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
+        
         LinkedList<String> errorMsgList = new LinkedList<>();
 
         // Check old password
         if (!Validator.isEmptyString(inputMap.get("oldPassword"))) {
-            errorMsgList.add("Kein gültiges Password.");
+            errorMsgList.add(textRepository.get("password_empty"));
         }
 
         // Password check
         if (!Validator.checkStringLength(inputMap.get("newPassword"))) {
-            errorMsgList.add("Das Passwort muss zwischen " + Validator.MINIMALINPUTLENGTH + " und " + Validator.MAXIMALINPUTLENGTH + " Zeichen lang sein.");
+            errorMsgList.add(String.format(textRepository.get("password_length"), Validator.MINIMALINPUTLENGTH, Validator.MAXIMALINPUTLENGTH));
         } else if (!inputMap.get("newPassword").equals(inputMap.get("newPassword_repeat"))) {
-            errorMsgList.add("Die Passwörter stimmen nicht über ein.");
+            errorMsgList.add(textRepository.get("passwords_do_not_match"));
         }
 
         // Error dialog
         if (errorMsgList.size() > 0) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Input error!", errorMsgList.toString());
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("input_error_short"), errorMsgList.toString());
             lb_infoBox.setText(Designer.errorBox(errorMsgList));
             errorMsgList.clear();
             return false;

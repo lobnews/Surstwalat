@@ -190,16 +190,16 @@ public class RegistryPanel extends JPanel {
             // Success dialog
             JOptionPane.showMessageDialog(
                     RegistryPanel.this,
-                    textRepository.get("accountAlreadyExistException"),
-                    textRepository.get("accountAlreadyExistException_short"),
+                    String.format(textRepository.get("signin_success"), accoutName),
+                    textRepository.get("signin_success_short"),
                     JOptionPane.INFORMATION_MESSAGE);
             Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("signin_success_short"));
             back();
         } catch (AccountAlreadyExistException e) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("accountAlreadyExistException_short"));
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("accountAlreadyExistException_ex"));
             lb_errorMsg.setText(Designer.errorBox(textRepository.get("accountAlreadyExistException")));
         } catch (GeneralServiceException e) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_short"), e);
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_ex"), e);
             JOptionPane.showMessageDialog(
                     MainFrame.getInstance(),
                     textRepository.get("generalServiceException"),
@@ -215,24 +215,26 @@ public class RegistryPanel extends JPanel {
      * @return
      */
     private boolean checkRegistration(Map<String, String> inputMap) {
+        Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
+        
         LinkedList<String> errorMsgList = new LinkedList<>();
 
         // Input validation checking
         if (!Validator.checkStringLength(inputMap.get("name"))) {
-            errorMsgList.add("Der Benutzername muss zwischen " + Validator.MINIMALINPUTLENGTH + " und " + Validator.MAXIMALINPUTLENGTH + " Zeichen lang sein.");
+            errorMsgList.add(String.format(textRepository.get("username_length"), Validator.MINIMALINPUTLENGTH, Validator.MAXIMALINPUTLENGTH));
         }
         if (!Validator.checkStringLength(inputMap.get("password"))) {
-            errorMsgList.add("Das Passwort muss zwischen " + Validator.MINIMALINPUTLENGTH + " und " + Validator.MAXIMALINPUTLENGTH + " Zeichen lang sein.");
+            errorMsgList.add(String.format(textRepository.get("password_length"), Validator.MINIMALINPUTLENGTH, Validator.MAXIMALINPUTLENGTH));
         } else if (!inputMap.get("password").equals(inputMap.get("password_repeat"))) {
-            errorMsgList.add("Die Passwörter stimmen nicht über ein.");
+            errorMsgList.add(textRepository.get("passwords_do_not_match"));
         }
         if (!Validator.checkEmailAddress(inputMap.get("email"))) {
-            errorMsgList.add("Die E-Mail-Adresse ist nicht korrekt.");
+            errorMsgList.add(textRepository.get("email_not_valid"));
         }
 
         // Error dialog
         if (errorMsgList.size() > 0) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, "Input error!", errorMsgList.toString());
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("input_error_short"), errorMsgList.toString());
             lb_errorMsg.setText(Designer.errorBox(errorMsgList));
             errorMsgList.clear();
             return false;
