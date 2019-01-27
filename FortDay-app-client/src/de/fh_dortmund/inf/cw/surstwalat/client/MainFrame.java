@@ -5,6 +5,7 @@
  */
 package de.fh_dortmund.inf.cw.surstwalat.client;
 
+import de.fh_dortmund.inf.cw.surstwalat.client.util.FontLoader;
 import javax.swing.JPanel;
 
 /**
@@ -55,6 +56,9 @@ public class MainFrame extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        // Load fonts for UI
+        FontLoader.loadFonts();
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.

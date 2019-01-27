@@ -17,7 +17,9 @@ import javax.swing.JTextField;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.modal.ChangePasswordDialog;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.LinkedList;
@@ -97,6 +99,8 @@ public class ProfilEditorPanel extends JPanel {
 
         // Username
         lb_username = new JLabel(textRepository.get("username"));
+        lb_username.setFont(new Font("Close and Open", 0, 16));     
+        lb_username.setForeground(Color.WHITE);
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
@@ -111,6 +115,8 @@ public class ProfilEditorPanel extends JPanel {
 
         // Email
         lb_email = new JLabel(textRepository.get("email_new"));
+        lb_email.setFont(new Font("Close and Open", 0, 16));
+        lb_email.setForeground(Color.WHITE);
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
@@ -124,6 +130,8 @@ public class ProfilEditorPanel extends JPanel {
 
         // Edit profil button
         bt_updateProfil = new JButton(textRepository.get("change_email"));
+        bt_updateProfil.setFont(new Font("Close and Open", 0, 16));
+        bt_updateProfil.setBackground(Color.WHITE);
         bt_updateProfil.addActionListener((ActionEvent e) -> {
             updateEmailAddress();
         });
@@ -134,6 +142,8 @@ public class ProfilEditorPanel extends JPanel {
 
         // Change password button
         bt_changePassword = new JButton(textRepository.get("change_password"));
+        bt_changePassword.setFont(new Font("Close and Open", 0, 16));
+        bt_changePassword.setBackground(Color.WHITE);
         bt_changePassword.addActionListener((ActionEvent e) -> {
             openChangePasswordDialog();
         });
@@ -144,6 +154,8 @@ public class ProfilEditorPanel extends JPanel {
 
         // Delete profil button
         bt_deleteProfil = new JButton(textRepository.get("delete"));
+        bt_deleteProfil.setFont(new Font("Close and Open", 0, 16));
+        bt_deleteProfil.setBackground(Color.WHITE);
         bt_deleteProfil.addActionListener((ActionEvent e) -> {
             deleteAccount();
         });
@@ -154,6 +166,8 @@ public class ProfilEditorPanel extends JPanel {
 
         // Back button
         bt_back = new JButton(textRepository.get("back"));
+        bt_back.setFont(new Font("Close and Open", 0, 16));   
+        bt_back.setBackground(Color.WHITE);
         bt_back.addActionListener((ActionEvent e) -> {
             back();
         });
