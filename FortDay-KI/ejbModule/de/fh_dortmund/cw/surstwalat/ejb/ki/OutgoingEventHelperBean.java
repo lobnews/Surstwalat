@@ -1,3 +1,5 @@
+package de.fh_dortmund.cw.surstwalat.ejb.ki;
+
 import java.io.Serializable;
 
 import javax.annotation.Resource;
@@ -15,7 +17,6 @@ import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Action;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.ActionType;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
-import de.fh_dortmund.inf.cw.surstwalat.common.model.Player;
 
 @Stateless
 public class OutgoingEventHelperBean {
