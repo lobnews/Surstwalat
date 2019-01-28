@@ -4,22 +4,19 @@ import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Designer;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Validator;
+import de.fh_dortmund.inf.cw.surstwalat.client.util.FontKeeper;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedException;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.logging.Level;
@@ -97,7 +94,7 @@ public class LoginPanel extends JPanel {
 
         // Username
         lb_username = new JLabel(textRepository.get("username"));
-        lb_username.setFont(new Font("Close and Open", 0, 16));
+        lb_username.setFont(FontKeeper.LABEL);
         lb_username.setForeground(Color.WHITE);
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
@@ -112,7 +109,7 @@ public class LoginPanel extends JPanel {
 
         // Password
         lb_password = new JLabel(textRepository.get("password"));
-        lb_password.setFont(new Font("Close and Open", 0, 16));
+        lb_password.setFont(FontKeeper.LABEL);
         lb_password.setForeground(Color.WHITE);
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
@@ -129,7 +126,7 @@ public class LoginPanel extends JPanel {
         // Login button
         bt_login = new JButton(textRepository.get("login"));
         bt_login.setBackground(new Color(44, 15, 148));
-        bt_login.setFont(new Font("Close and Open", 0, 16));
+        bt_login.setFont(FontKeeper.BUTTON);
         bt_login.setForeground(Color.WHITE);
         bt_login.addActionListener((ActionEvent e) -> {
             login();
@@ -142,7 +139,7 @@ public class LoginPanel extends JPanel {
         // Registry button
         bt_registry = new JButton(textRepository.get("signin"));
         bt_registry.setBackground(new Color(44, 15, 148));
-        bt_registry.setFont(new Font("Close and Open", 0, 16));
+        bt_registry.setFont(FontKeeper.BUTTON);
         bt_registry.setForeground(Color.WHITE);
         bt_registry.addActionListener((ActionEvent e) -> {
             openRegisterPanel();
@@ -155,7 +152,7 @@ public class LoginPanel extends JPanel {
         // Close button
         bt_close = new JButton(textRepository.get("exit"));
         bt_close.setBackground(new Color(44, 15, 148));
-        bt_close.setFont(new Font("Close and Open", 0, 16));
+        bt_close.setFont(FontKeeper.BUTTON);
         bt_close.setForeground(Color.WHITE);
         bt_close.addActionListener((ActionEvent e) -> {
             exit();

@@ -4,12 +4,12 @@ import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Designer;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Validator;
+import de.fh_dortmund.inf.cw.surstwalat.client.util.FontKeeper;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -61,7 +61,7 @@ public class RegistryPanel extends JPanel {
      * Default Constructor
      */
     public RegistryPanel() {
-        backgroundImage = new ImageIcon(getClass().getResource("/resources/backgrounds/background.jpg")).getImage();
+        backgroundImage = new ImageIcon(getClass().getResource("/resources/backgrounds/background.png")).getImage();
         initComponent();
 
         userManager = UserManagementHandler.getInstance();
@@ -104,7 +104,7 @@ public class RegistryPanel extends JPanel {
 
         // Username
         lb_username = new JLabel(textRepository.get("username"));
-        lb_username.setFont(new Font("Close and Open", 0, 16));
+        lb_username.setFont(FontKeeper.LABEL);
         lb_username.setForeground(Color.WHITE);
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
@@ -120,7 +120,7 @@ public class RegistryPanel extends JPanel {
 
         // Email
         lb_email = new JLabel(textRepository.get("email"));
-        lb_email.setFont(new Font("Close and Open", 0, 16));
+        lb_email.setFont(FontKeeper.LABEL);
         lb_email.setForeground(Color.WHITE);
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
@@ -135,7 +135,7 @@ public class RegistryPanel extends JPanel {
 
         // Password
         lb_password = new JLabel(textRepository.get("password"));
-        lb_password.setFont(new Font("Close and Open", 0, 16));
+        lb_password.setFont(FontKeeper.LABEL);
         lb_password.setForeground(Color.WHITE);
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
@@ -151,7 +151,7 @@ public class RegistryPanel extends JPanel {
 
         // Password repeat
         lb_password_repeat = new JLabel(textRepository.get("password_repeat"));
-        lb_password_repeat.setFont(new Font("Close and Open", 0, 16));
+        lb_password_repeat.setFont(FontKeeper.LABEL);
         lb_password_repeat.setForeground(Color.WHITE);
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
@@ -167,8 +167,9 @@ public class RegistryPanel extends JPanel {
 
         // Registry Button
         bt_registry = new JButton(textRepository.get("signin"));
-        bt_registry.setFont(new Font("Close and Open", 0, 16));
+        bt_registry.setFont(FontKeeper.BUTTON);
         bt_registry.setBackground(Color.WHITE);
+        bt_registry.setForeground(Color.DARK_GRAY);
         bt_registry.addActionListener((ActionEvent e) -> {
             register();
         });
@@ -179,8 +180,9 @@ public class RegistryPanel extends JPanel {
 
         // Back Button
         bt_abort = new JButton(textRepository.get("cancel"));
-        bt_abort.setFont(new Font("Close and Open", 0, 16));
+        bt_abort.setFont(FontKeeper.BUTTON);
         bt_abort.setBackground(Color.WHITE);
+        bt_abort.setForeground(Color.DARK_GRAY);
         bt_abort.addActionListener((ActionEvent e) -> {
             back();
         });

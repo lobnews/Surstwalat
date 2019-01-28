@@ -15,11 +15,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.user.modal.ChangePasswordDialog;
+import de.fh_dortmund.inf.cw.surstwalat.client.util.FontKeeper;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.LinkedList;
@@ -57,7 +57,7 @@ public class ProfilEditorPanel extends JPanel {
      * Default Constructor
      */
     public ProfilEditorPanel() {
-        backgroundImage = new ImageIcon(getClass().getResource("/resources/backgrounds/background.jpg")).getImage();
+        backgroundImage = new ImageIcon(getClass().getResource("/resources/backgrounds/background.png")).getImage();
         initComponent();
 
         userManager = UserManagementHandler.getInstance();
@@ -99,7 +99,7 @@ public class ProfilEditorPanel extends JPanel {
 
         // Username
         lb_username = new JLabel(textRepository.get("username"));
-        lb_username.setFont(new Font("Close and Open", 0, 16));     
+        lb_username.setFont(FontKeeper.LABEL);     
         lb_username.setForeground(Color.WHITE);
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
@@ -115,7 +115,7 @@ public class ProfilEditorPanel extends JPanel {
 
         // Email
         lb_email = new JLabel(textRepository.get("email_new"));
-        lb_email.setFont(new Font("Close and Open", 0, 16));
+        lb_email.setFont(FontKeeper.LABEL);
         lb_email.setForeground(Color.WHITE);
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
@@ -130,8 +130,9 @@ public class ProfilEditorPanel extends JPanel {
 
         // Edit profil button
         bt_updateProfil = new JButton(textRepository.get("change_email"));
-        bt_updateProfil.setFont(new Font("Close and Open", 0, 16));
+        bt_updateProfil.setFont(FontKeeper.BUTTON);
         bt_updateProfil.setBackground(Color.WHITE);
+        bt_updateProfil.setForeground(Color.DARK_GRAY);
         bt_updateProfil.addActionListener((ActionEvent e) -> {
             updateEmailAddress();
         });
@@ -142,8 +143,9 @@ public class ProfilEditorPanel extends JPanel {
 
         // Change password button
         bt_changePassword = new JButton(textRepository.get("change_password"));
-        bt_changePassword.setFont(new Font("Close and Open", 0, 16));
+        bt_changePassword.setFont(FontKeeper.BUTTON);
         bt_changePassword.setBackground(Color.WHITE);
+        bt_changePassword.setForeground(Color.DARK_GRAY);
         bt_changePassword.addActionListener((ActionEvent e) -> {
             openChangePasswordDialog();
         });
@@ -154,8 +156,9 @@ public class ProfilEditorPanel extends JPanel {
 
         // Delete profil button
         bt_deleteProfil = new JButton(textRepository.get("delete"));
-        bt_deleteProfil.setFont(new Font("Close and Open", 0, 16));
+        bt_deleteProfil.setFont(FontKeeper.BUTTON);
         bt_deleteProfil.setBackground(Color.WHITE);
+        bt_deleteProfil.setForeground(Color.DARK_GRAY);
         bt_deleteProfil.addActionListener((ActionEvent e) -> {
             deleteAccount();
         });
@@ -166,8 +169,9 @@ public class ProfilEditorPanel extends JPanel {
 
         // Back button
         bt_back = new JButton(textRepository.get("back"));
-        bt_back.setFont(new Font("Close and Open", 0, 16));   
+        bt_back.setFont(FontKeeper.BUTTON);   
         bt_back.setBackground(Color.WHITE);
+        bt_back.setForeground(Color.DARK_GRAY);
         bt_back.addActionListener((ActionEvent e) -> {
             back();
         });

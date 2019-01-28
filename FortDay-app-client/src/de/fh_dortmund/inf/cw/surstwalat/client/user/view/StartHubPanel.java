@@ -2,6 +2,7 @@ package de.fh_dortmund.inf.cw.surstwalat.client.user.view;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import de.fh_dortmund.inf.cw.surstwalat.client.game.view.MainPanel;
+import de.fh_dortmund.inf.cw.surstwalat.client.util.FontKeeper;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
 import java.util.Map;
 
@@ -53,7 +54,7 @@ public class StartHubPanel extends javax.swing.JPanel {
         foreground.setOpaque(false);
 
         bt_startGame.setBackground(new java.awt.Color(25, 10, 120));
-        bt_startGame.setFont(new java.awt.Font("Close and Open", 0, 38)); // NOI18N
+        bt_startGame.setFont(FontKeeper.BIG_BUTTON);
         bt_startGame.setForeground(new java.awt.Color(255, 255, 255));
         bt_startGame.setActionCommand("bt_startGame");
         bt_startGame.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -65,7 +66,7 @@ public class StartHubPanel extends javax.swing.JPanel {
         });
 
         bt_editProfil.setBackground(new java.awt.Color(44, 15, 148));
-        bt_editProfil.setFont(new java.awt.Font("Close and Open", 0, 16)); // NOI18N
+        bt_editProfil.setFont(FontKeeper.BUTTON);
         bt_editProfil.setForeground(new java.awt.Color(255, 255, 255));
         bt_editProfil.setActionCommand("bt_editProfil");
         bt_editProfil.setLabel(textRepository.get("profil"));
@@ -76,7 +77,7 @@ public class StartHubPanel extends javax.swing.JPanel {
         });
 
         bt_close.setBackground(new java.awt.Color(44, 15, 148));
-        bt_close.setFont(new java.awt.Font("Close and Open", 0, 16)); // NOI18N
+        bt_close.setFont(FontKeeper.BUTTON);
         bt_close.setForeground(new java.awt.Color(255, 255, 255));
         bt_close.setActionCommand("bt_close");
         bt_close.setLabel(textRepository.get("exit"));

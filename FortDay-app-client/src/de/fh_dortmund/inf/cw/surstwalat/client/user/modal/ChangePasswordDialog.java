@@ -5,6 +5,7 @@ import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Designer;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.util.Validator;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.view.RegistryPanel;
+import de.fh_dortmund.inf.cw.surstwalat.client.util.FontKeeper;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordException;
@@ -41,7 +42,7 @@ public class ChangePasswordDialog extends JDialog {
     private static final long serialVersionUID = -9083280899052966509L;
 
     private JLabel lb_infoBox;
-    private JLabel lb_password_old;
+    private JLabel lb_password_current;
     private JPasswordField pf_password_old;
     private JLabel lb_password;
     private JPasswordField pf_password;
@@ -70,6 +71,7 @@ public class ChangePasswordDialog extends JDialog {
         Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("ui_controls");
         
         JPanel gridPanel = new JPanel(new GridBagLayout());
+        gridPanel.setBackground(new Color(45, 98, 139));
         GridBagConstraints gridBag = new GridBagConstraints();
         gridBag.fill = GridBagConstraints.HORIZONTAL;
         setPreferredSize(new Dimension(400, 250));
@@ -84,12 +86,14 @@ public class ChangePasswordDialog extends JDialog {
         gridBag.gridwidth = 2;
         gridPanel.add(lb_infoBox, gridBag);
 
-        // Password old
-        lb_password_old = new JLabel(textRepository.get("password_current"));
+        // Password current
+        lb_password_current = new JLabel(textRepository.get("password_current"));
+        lb_password_current.setFont(FontKeeper.LABEL);
+        lb_password_current.setForeground(Color.WHITE);
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
-        gridPanel.add(lb_password_old, gridBag);
+        gridPanel.add(lb_password_current, gridBag);
 
         pf_password_old = new JPasswordField(20);
         gridBag.gridx = 1;
@@ -100,6 +104,8 @@ public class ChangePasswordDialog extends JDialog {
 
         // Password
         lb_password = new JLabel(textRepository.get("password"));
+        lb_password.setFont(FontKeeper.LABEL);
+        lb_password.setForeground(Color.WHITE);
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
@@ -114,6 +120,8 @@ public class ChangePasswordDialog extends JDialog {
 
         // Password repeat
         lb_password_repeat = new JLabel(textRepository.get("password_repeat"));
+        lb_password_repeat.setFont(FontKeeper.LABEL);
+        lb_password_repeat.setForeground(Color.WHITE);
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
         gridBag.gridwidth = 1;
@@ -126,16 +134,25 @@ public class ChangePasswordDialog extends JDialog {
         gridPanel.add(pf_password_repeat, gridBag);
         gridPanel.setBorder(new LineBorder(Color.GRAY));
 
+        // Update button
         bt_update = new JButton(textRepository.get("save"));
+        bt_update.setFont(FontKeeper.BUTTON);
+        bt_update.setBackground(Color.WHITE);
+        bt_update.setForeground(Color.DARK_GRAY);
         bt_update.addActionListener((ActionEvent e) -> {
             updatePassword();
         });
 
+        // Cancel button
         bt_cancel = new JButton(textRepository.get("cancel"));
+        bt_cancel.setFont(FontKeeper.BUTTON);
+        bt_cancel.setBackground(Color.WHITE);
+        bt_cancel.setForeground(Color.DARK_GRAY);
         bt_cancel.addActionListener((ActionEvent e) -> {
             close();
         });
 
+        // Implement panel
         JPanel bp = new JPanel();
         bp.add(bt_update);
         bp.add(bt_cancel);
