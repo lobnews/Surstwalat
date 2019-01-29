@@ -1,6 +1,5 @@
 package de.fh_dortmund.inf.cw.surstwalat.dispatcher.beans;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -85,8 +84,9 @@ public class DispatcherBean implements DispatcherLocal {
 			}
 			
 			game.setPlayers(players);
-			gameRepository.save(game);
-			for (Player p : players) {
+			game = gameRepository.save(game);
+			for (Player p : game.getPlayers()) {
+				System.out.println("[Dispatcher] Player created with id " + p.getId());
 				eventHelper.triggerAssignPlayerEvent(p.getGame().getId(), p.getAccountId(), p.getId(), p.getPlayerNo());
 			}
 		}
