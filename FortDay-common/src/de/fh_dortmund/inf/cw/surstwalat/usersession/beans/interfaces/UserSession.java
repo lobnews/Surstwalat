@@ -69,6 +69,16 @@ public interface UserSession{
 	 */
 	public void deleteAccount() throws GeneralServiceException;
 	
+        /**
+         * @return email
+         */
+        public String getEMailAddress();
+        
+        /**
+         * @return account name
+         */
+        public String getAccountName();
+        
 	/**
 	 * @param gameID
 	 * @param playerID
