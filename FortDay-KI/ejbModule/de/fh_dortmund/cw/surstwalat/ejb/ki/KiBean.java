@@ -4,11 +4,13 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.ejb.Stateless;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.ki.beans.interfaces.KiRemote;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession;
 
+@Stateless
 public class KiBean implements KiRemote {
 	
 	@EJB
