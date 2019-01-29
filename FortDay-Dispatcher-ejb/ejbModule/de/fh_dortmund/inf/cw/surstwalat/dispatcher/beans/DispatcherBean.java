@@ -87,7 +87,7 @@ public class DispatcherBean implements DispatcherLocal {
 			game.setPlayers(players);
 			gameRepository.save(game);
 			for (Player p : players) {
-				eventHelper.triggerAssignPlayerEvent(p.getGame().getId(), p.getAccountId(), p.getPlayerNo());
+				eventHelper.triggerAssignPlayerEvent(p.getGame().getId(), p.getAccountId(), p.getId(), p.getPlayerNo());
 			}
 		}
 	}

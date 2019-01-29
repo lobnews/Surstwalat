@@ -53,6 +53,8 @@ public class DispatcherTestEventHandlerBean implements MessageListener {
 
 				switch (type) {
 				case MessageType.ASSIGN_PLAYER:
+					
+					
 					if (m.getBody(Integer.class).equals(4)) {
 						//testNoCollision(gameId);
 					}
@@ -77,6 +79,10 @@ public class DispatcherTestEventHandlerBean implements MessageListener {
 		} catch (Exception e) {
 
 		}
+	}
+	
+	private void testCreateToken(int gameId) {
+		
 	}
 	
     private void testNoCollision(int gameId) {

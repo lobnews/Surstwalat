@@ -31,9 +31,10 @@ public class OutgoingEventHelperBean implements EventHelperLocal {
 	 * @see EventHelperLocal#triggerAssignPlayerEvent(Integer, Integer, Integer)
 	 */
 	@Override
-	public void triggerAssignPlayerEvent(Integer gameId, Integer userId, Integer playerNo) {
+	public void triggerAssignPlayerEvent(Integer gameId, Integer userId, Integer playerId, Integer playerNo) {
 		ObjectMessage message = createObjectMessage(gameId, MessageType.ASSIGN_PLAYER);
 		trySetIntProperty(message, PropertyType.USER_ID, userId);
+		trySetIntProperty(message, PropertyType.PLAYER_ID, playerId);
 		trySetObject(message, playerNo);
 		sendMessage(message);
 		System.out.println("[DISPATCHER] Assign Player " + playerNo + " to user with id " + userId);

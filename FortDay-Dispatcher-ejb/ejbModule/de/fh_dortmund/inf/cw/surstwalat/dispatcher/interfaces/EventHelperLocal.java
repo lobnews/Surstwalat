@@ -14,7 +14,7 @@ public interface EventHelperLocal {
 	 * @param userId the id of the user
 	 * @param playerNo the number of the player
 	 */
-	void triggerAssignPlayerEvent(Integer gameId, Integer userId, Integer playerNo);
+	void triggerAssignPlayerEvent(Integer gameId, Integer userId, Integer playerId, Integer playerNo);
 	/**
 	 * Sends a message of type START_ROUND
 	 * @param gameId the id of the game
