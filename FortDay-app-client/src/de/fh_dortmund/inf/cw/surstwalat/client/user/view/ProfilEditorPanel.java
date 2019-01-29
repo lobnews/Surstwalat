@@ -57,10 +57,9 @@ public class ProfilEditorPanel extends JPanel {
      * Default Constructor
      */
     public ProfilEditorPanel() {
+        userManager = UserManagementHandler.getInstance();
         backgroundImage = new ImageIcon(getClass().getResource("/resources/backgrounds/background.png")).getImage();
         initComponent();
-
-        userManager = UserManagementHandler.getInstance();
     }
 
     /**
@@ -108,6 +107,7 @@ public class ProfilEditorPanel extends JPanel {
 
         tf_username = new JTextField(20);
         tf_username.setEnabled(false);
+        tf_username.setText(userManager.getAccountName());
         gridBag.gridx = 1;
         gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
@@ -123,6 +123,7 @@ public class ProfilEditorPanel extends JPanel {
         this.add(lb_email, gridBag);
 
         tf_email = new JTextField(20);
+        tf_email.setText(userManager.getEMailAddress());
         gridBag.gridx = 1;
         gridBag.gridy = gridRow;
         gridBag.gridwidth = 2;
