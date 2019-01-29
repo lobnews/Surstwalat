@@ -16,21 +16,21 @@ import javax.persistence.Table;
 /**
  * 
  * @author Rebekka Michel
- *
  */
 
-@Table(name="Zone")
+@Table(name="DamageZone")
 @Entity
 @NamedQueries({
-	@NamedQuery(name="Zone.getByGameId", query="SELECT z FROM Zone z WHERE z.game_id = :id")
+	@NamedQuery(name="Zone.getByGameId", query="SELECT z FROM Zone z WHERE z.game = :game")
 })
-public class Zone implements Serializable{
+public class DamageZone implements Serializable{
+    
 	@Id
 	@GeneratedValue
 	@Column(name="id")
 	private int id;
-	@OneToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="game_id")
+	@JoinColumn(name="game")
+        @OneToOne(fetch = FetchType.LAZY)
 	private Game game;
 	@Column(name="damage")
 	private int damage;

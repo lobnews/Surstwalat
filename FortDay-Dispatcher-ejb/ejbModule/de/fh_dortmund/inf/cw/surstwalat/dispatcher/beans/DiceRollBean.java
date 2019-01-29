@@ -8,12 +8,15 @@ import java.util.Random;
 import javax.ejb.Stateless;
 
 /**
- * Session Bean implementation class DiceRollBean
+ * Bean for a simple roll functionality based on a @see de.fh_dortmund.inf.cw.surstwalat.common.model.Dice object
  * @author Johannes Heiderich
  */
 @Stateless
 public class DiceRollBean implements DiceRollLocal {
 
+	/**
+	 * @see DiceRollLocal#roll(Dice)
+	 */
 	@Override
 	public int roll(Dice dice) {
 		int size = dice.getNumbers().size();

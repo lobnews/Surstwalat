@@ -8,11 +8,10 @@ import javax.jms.MessageListener;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
-import de.fh_dortmund.inf.cw.surstwalat.common.model.ActionType;
 import de.fh_dortmund.inf.cw.surstwalat.dispatcher.beans.interfaces.DispatcherLocal;
 
 /**
- * Message-Driven Bean implementation class for: TokenEliminatedEventHandler
+ * Message-Driven Bean, which listens on PLAYER_DEATH messages on the FortDayEventTopic
  * @author Johannes Heiderich
  */
 @MessageDriven(
@@ -27,15 +26,15 @@ public class PlayerDeathEventHandler implements MessageListener {
 	@EJB
 	private DispatcherLocal dispatcher;
 
+	/**
+	 * @see MessageListener#onMessage(Message)
+	 * Extracts the PLAYER_ID MessageProperty of the received message and triggers the onPlayerDeath method at the DispatcherBean
+	 * @param message die empfangene Nachricht
+	 */
     public void onMessage(Message message) {
     	try {
-
-			ActionType type = ActionType.values()[message.getIntProperty(PropertyType.ACTION_TYPE)];
-			if (type == ActionType.ROLL) {
-				System.out.println("[DISPATCHER] PLAYER_DEATH received");
-				dispatcher.onPlayerDeath(message.getIntProperty(PropertyType.PLAYER_ID));
-			}
-
+			System.out.println("[DISPATCHER] PLAYER_DEATH received");
+			dispatcher.onPlayerDeath(message.getIntProperty(PropertyType.PLAYER_ID));
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -11,6 +11,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
+ * This Entity represents an item.
  * @author Niklas Sprenger
  *
  */

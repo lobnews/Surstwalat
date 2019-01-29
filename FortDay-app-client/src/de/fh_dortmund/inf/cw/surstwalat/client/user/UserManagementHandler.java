@@ -1,11 +1,14 @@
 package de.fh_dortmund.inf.cw.surstwalat.client.user;
 
+import de.fh_dortmund.inf.cw.surstwalat.client.user.view.RegistryPanel;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordException;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -33,14 +36,14 @@ public class UserManagementHandler {
                     = "java:global/FortDay-ear/FortDay-UserSession-ejb/UserSessionBean!de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote";
             userSessionRemote = (UserSessionRemote) ctx.lookup(lookUpString);
         } catch (NamingException e) {
-            System.err.println(e.getMessage());
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
     /**
      * Get instance UserManagementHandler
      *
-     * @return
+     * @return instance of UserManagementHandler
      */
     public static UserManagementHandler getInstance() {
         if (instance == null) {
@@ -52,7 +55,7 @@ public class UserManagementHandler {
     /**
      * Get new instance UserManagementHandler
      *
-     * @return
+     * @return new instance of UserManagementHandler
      */
     public static UserManagementHandler getNewInstance() {
         return new UserManagementHandler();
@@ -90,14 +93,14 @@ public class UserManagementHandler {
     /**
      * Update account password
      *
-     * @param oldPassword
-     * @param newPassword
+     * @param curPassword current password
+     * @param newPassword new password
      * @throws WrongPasswordException if old password is wrong
      * @throws GeneralServiceException if there is a general service exception
      */
-    public void changePassword(String oldPassword, String newPassword)
+    public void changePassword(String curPassword, String newPassword)
             throws WrongPasswordException, GeneralServiceException {
-        userSessionRemote.changePassword(oldPassword, newPassword);
+        userSessionRemote.changePassword(curPassword, newPassword);
     }
 
     /**
@@ -117,5 +120,23 @@ public class UserManagementHandler {
      */
     public void deleteAccount() throws GeneralServiceException {
         userSessionRemote.deleteAccount();
+    }
+
+    /**
+     * Get account email
+     *
+     * @return email address
+     */
+    public String getEMailAddress() {
+        return userSessionRemote.getEMailAddress();
+    }
+
+    /**
+     * Get account name
+     *
+     * @return name
+     */
+    public String getAccountName() {
+        return userSessionRemote.getAccountName();
     }
 }
