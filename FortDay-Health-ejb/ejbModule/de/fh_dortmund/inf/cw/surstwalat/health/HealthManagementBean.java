@@ -87,7 +87,7 @@ public class HealthManagementBean implements HealthManagementLocal, HealthManage
     }
 
     @Override
-    public void createTokens(int playerId) {
+    public void createTokens(int playerId, int gameId) {
         LinkedList<Integer> list = new LinkedList<>();
         for(int i = 1; i <= 4; i++) {
             Token t = new Token();
@@ -102,6 +102,7 @@ public class HealthManagementBean implements HealthManagementLocal, HealthManage
             ObjectMessage o = jmsContext.createObjectMessage(list);
             o.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.TOKEN_CREATED);
             o.setIntProperty(PropertyType.PLAYER_ID, playerId);
+            o.setIntProperty(PropertyType.GAME_ID, gameId);
             jmsContext.createProducer().send(eventTopic, o);
         } catch (JMSException ex) {
             Logger.getLogger(HealthManagementBean.class.getName()).log(Level.SEVERE, null, ex);
