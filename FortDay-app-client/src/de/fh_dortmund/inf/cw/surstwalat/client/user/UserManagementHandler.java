@@ -1,11 +1,14 @@
 package de.fh_dortmund.inf.cw.surstwalat.client.user;
 
+import de.fh_dortmund.inf.cw.surstwalat.client.user.view.RegistryPanel;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordException;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -33,7 +36,7 @@ public class UserManagementHandler {
                     = "java:global/FortDay-ear/FortDay-UserSession-ejb/UserSessionBean!de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote";
             userSessionRemote = (UserSessionRemote) ctx.lookup(lookUpString);
         } catch (NamingException e) {
-            System.err.println(e.getMessage());
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, e.getMessage(), e);
         }
     }
 
@@ -116,5 +119,23 @@ public class UserManagementHandler {
      */
     public void deleteAccount() throws GeneralServiceException {
         userSessionRemote.deleteAccount();
+    }
+
+    /**
+     * Get account email
+     *
+     * @return email address
+     */
+    public String getEMailAddress() {
+        return userSessionRemote.getEMailAddress();
+    }
+
+    /**
+     * Get account name
+     *
+     * @return name
+     */
+    public String getAccountName() {
+        return userSessionRemote.getAccountName();
     }
 }

@@ -6,7 +6,7 @@ import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralService
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedException;
-import javax.ejb.Stateless;
+import javax.ejb.Singleton;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -15,10 +15,11 @@ import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
 /**
- *
+ * Bean to persist user stuff
+ * 
  * @author Stephan Klimek
  */
-@Stateless
+@Singleton
 public class UserManagementPersistBean implements UserManagementLocal {
 
     @PersistenceContext(unitName = "FortDayDB")

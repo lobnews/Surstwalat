@@ -11,12 +11,16 @@ public class Designer {
 
     private static final String BOXHTML_BEGIN
             = "<html><head><style>"
-            + "html, body { "
+            + "html {"
+            + "margin: 0 0 10px 0;"
+            + "}"
+            + "html, body {"
             + "width: 100%;"
             + "}"
             + "</style></head><body style=\""
+            + "background-color: rgb(250, 250, 250);"
+            + "opacity: 0.8;"
             + "padding: 10px;"
-            + "margin: 0 0 10px 0;"
             + "border-style: solid;"
             + "border-width: 1px;";
     private static final String BOXHTML_MIDDLE = "\">";
