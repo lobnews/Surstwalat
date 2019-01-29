@@ -39,6 +39,7 @@ public class OutgoingEventHelperBean implements EventHelperLocal
         sendMessage(message);
     }
 
+    
     @Override
     public void triggerPlayerOnFieldMessage(Integer gameId, Integer playerId, Integer characterId, Integer fieldId)
     {

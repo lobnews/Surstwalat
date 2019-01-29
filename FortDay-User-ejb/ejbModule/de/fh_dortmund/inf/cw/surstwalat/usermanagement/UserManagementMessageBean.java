@@ -15,8 +15,9 @@ import javax.jms.JMSException;
 import javax.jms.ObjectMessage;
 
 /**
+ * Listen for user managment activities
+ * 
  * @author Stephan Klimek
- *
  */
 @Deprecated
 @MessageDriven(
@@ -31,7 +32,7 @@ public class UserManagementMessageBean implements MessageListener {
     /**
      * Listens to messages
      *
-     * @param incomingMessage Incoming message
+     * @param incomingMessage incomming Objectmessage
      */
     @Override
     public void onMessage(Message incomingMessage) {
@@ -70,13 +71,13 @@ public class UserManagementMessageBean implements MessageListener {
     /**
      * Registered a new user
      *
-     * @param message
-     * @throws Exception
+     * @param message incomming Objectmessage
+     * @throws Exception if there is a exception
      */
     public void register(ObjectMessage message) throws Exception {
         try {
-            Account newAccount = (Account) message.getObject();
-            userManagement.register(newAccount);
+            Account account = (Account) message.getObject();
+            userManagement.register(account);
         } catch (JMSException e) {
             System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementMessageBean.register(): JMSException");
         }
@@ -85,13 +86,13 @@ public class UserManagementMessageBean implements MessageListener {
     /**
      * Login user
      *
-     * @param message
-     * @throws Exception
+     * @param message incomming Objectmessage
+     * @throws Exception if there is a exception
      */
     public void login(ObjectMessage message) throws Exception {
         try {
-            Account newAccount = (Account) message.getObject();
-            userManagement.login(newAccount);
+            Account account = (Account) message.getObject();
+            userManagement.login(account);
         } catch (JMSException e) {
             System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementMessageBean.login(): JMSException");
         }
@@ -100,13 +101,13 @@ public class UserManagementMessageBean implements MessageListener {
     /**
      * Update email address
      *
-     * @param message
-     * @throws Exception
+     * @param message incomming Objectmessage
+     * @throws Exception if there is a exception
      */
     public void updateEmailAddress(ObjectMessage message) throws Exception {
         try {
-            Account newAccount = (Account) message.getObject();
-            userManagement.updateEmailAddress(newAccount);
+            Account account = (Account) message.getObject();
+            userManagement.updateEmailAddress(account);
         } catch (JMSException e) {
             System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementMessageBean.updateEmailAddress(): JMSException");
         }
@@ -115,13 +116,13 @@ public class UserManagementMessageBean implements MessageListener {
     /**
      * Change password
      *
-     * @param message
-     * @throws Exception
+     * @param message incomming Objectmessage
+     * @throws Exception if there is a exception
      */
     public void changePassword(ObjectMessage message) throws Exception {
         try {
-            Account newAccount = (Account) message.getObject();
-            userManagement.changePassword(newAccount);
+            Account account = (Account) message.getObject();
+            userManagement.changePassword(account);
         } catch (JMSException e) {
             System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementMessageBean.changePassword(): JMSException");
         }
@@ -130,13 +131,13 @@ public class UserManagementMessageBean implements MessageListener {
     /**
      * Delete account
      *
-     * @param message
-     * @throws Exception
+     * @param message incomming Objectmessage
+     * @throws Exception if there is a exception
      */
     public void deleteAccount(ObjectMessage message) throws Exception {
         try {
-            Account newAccount = (Account) message.getObject();
-            userManagement.deleteAccount(newAccount);
+            Account account = (Account) message.getObject();
+            userManagement.deleteAccount(account);
         } catch (JMSException e) {
             System.err.println("de.fh_dortmund.inf.cw.surstwalat.usermanagement.UserManagementMessageBean.deleteAccount(): JMSException");
         }

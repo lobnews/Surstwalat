@@ -11,6 +11,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 /**
+ * This entity represents an Token. It is used to give a player object health and a number.
  * @author Niklas Sprenger
  *
  */

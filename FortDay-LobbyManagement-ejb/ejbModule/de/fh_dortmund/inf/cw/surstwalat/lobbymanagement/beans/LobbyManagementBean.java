@@ -30,14 +30,15 @@ import de.fh_dortmund.inf.cw.surstwalat.lobbymanagement.beans.interfaces.LobbyMa
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 
 /**
- * Implementation of the given interfaces (Local/Remote). Implements the logic for the Game-Lobbies (until Game-start)
+ * Implementation of the given interfaces (Local/Remote). Implements the logic for the Game-Lobbies (until Game-start).
+ * Also handles disconnects or timeout of players if they are in the lobby.
  * @author Niklas Sprenger
  *
  */
 @Startup
 @Singleton
 public class LobbyManagementBean implements LobbyManagementLocal{
-	private static int maxNumberOfPlayersInLobby = 4;
+	private static int maxNumberOfPlayersInGame = 4;
 	@Inject
 	private JMSContext jmsContext;
 	@Resource(lookup = "java:global/jms/FortDayEventTopic")
@@ -45,6 +46,9 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	@PersistenceContext(unitName = "FortDayDB")
 	private EntityManager em;
 	
+	/**
+	 * Post Construct method, that runs a test if activated and informs about the start of this bean.
+	 */
 	@PostConstruct
 	public void init() {
 		System.out.println("@@@FortDayLobbyManagementBean started");
@@ -52,7 +56,10 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	}
 	
 
-	
+	/**
+	 * This method gets triggered if a user is logged in. It adds him to the users that are waiting in the lobby.
+	 * @param userID ID of the user that logged in.
+	 */
 	@Override
 	public void userLoggedIn(int userID) {
 		Account user = getAccountByUserID(userID);
@@ -60,6 +67,10 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		em.persist(user);
 	}
 	
+	/**
+	 * This method gets triggered if a user disconnects. It removes him from the lobby-users and every game he is in currently.
+	 * @param userID ID of the user that disconnected.
+	 */
 	@Override
 	public void userDisconnected(int userID) {
 		Account user = getAccountByUserID(userID);
@@ -68,6 +79,10 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		removeHumanPlayerFromGames(userID);
 	}
 	
+	/**
+	 * This method gets triggered if a user times out. It removes him from the lobby-users and every game he is in currently.
+	 * @param userID ID of the user that timed out.
+	 */
 	@Override
 	public void userTimedOut(int userID) {
 		Account user = getAccountByUserID(userID);
@@ -76,6 +91,10 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		removeHumanPlayerFromGames(userID);
 	}
 	
+	/**
+	 * This method gets triggered if a creates a game. It creates a new game entity, initializes it and adds the creator to it.
+	 * @param userID ID of the user that created a game.
+	 */
 	@Override
 	public void userCreatesGame(int userID) {
 		Account user = getAccountByUserID(userID);
@@ -89,11 +108,18 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		sendGameCreatedMessage(game.getId(), user.getId());
 	}
 	
+	/**
+	 * This method gets triggered if a user tries to join a game. It checks if the game is full yet or not.
+	 * Also reduces the number of AI in the game if the user joined successful and removes this user from the lobby.
+	 * @param userID ID of the user that tries to join a game.
+	 * @param gameID ID of the game the user tries to join.
+	 * @exception GameIsFullException Is thrown if the game, the user tries to join, is full with human players yet.
+	 */
 	@Override
 	public void userJoinsGame(int userID, int gameID) throws GameIsFullException{
 		Account user = getAccountByUserID(userID);
 		Game game = getGameByGameID(gameID);
-		if(game.getHumanUsersInGame().size() >= maxNumberOfPlayersInLobby) {
+		if(game.getHumanUsersInGame().size() >= maxNumberOfPlayersInGame) {
 			throw new GameIsFullException();
 		}else {
 			game.addHumanUserToOpenGame(user);
@@ -104,6 +130,11 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		}
 	}
 	
+	/**
+	 * This method gets triggered if a game has been created successful.
+	 * @param userID ID of the user that created the game.
+	 * @param gameID ID of the game that has been created.
+	 */
 	private void sendGameCreatedMessage(int gameId, int userId) {
 		ObjectMessage msg = jmsContext.createObjectMessage();
 		try {
@@ -117,20 +148,30 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		}
 	}
 	
+	/**
+	 * This method gets triggered if the host wants to start his game.
+	 * @param gameID ID of the game to be started.
+	 * @param fieldsize The size of the field the gamehost chose.
+	 */
 	public void startGame(int gameId, int fieldsize) {
 		try {
 			Game g = getGameByGameID(gameId);
 			g.setGameStarted(true);
 			em.persist(g);
 
-			sendGameStartedMessage(g.getId(), g.getHumanUsersInGame(), fieldsize);
+			sendGameStartedMessage(g.getId(), fieldsize);
 		}catch (NullPointerException e) {
 			
 		}
 
 	}
 	
-	private void sendGameStartedMessage(int gameId, List<Account> users, int fieldsize) {
+	/**
+	 * This method is used to send out a message that a game has been started.
+	 * @param gameId The ID of the games that has been started.
+	 * @param fieldsize The fieldsize of the gamefield in this game.
+	 */
+	private void sendGameStartedMessage(int gameId, int fieldsize) {
 		ObjectMessage msg = jmsContext.createObjectMessage();
 		try {
 			msg.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.GAME_STARTED);
@@ -144,17 +185,31 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		}
 	}
 	
+	/**
+	 * This method returns a list of all users that are in the lobby (not in a game right
+	 * now but logged in).
+	 * @return The list of users in the lobby right now.
+	 */
 	public List<Account> getUserInLobby(){
 		TypedQuery<Account> query = em.createNamedQuery("Account.getInLobby",Account.class);
 		return query.getResultList();
 	}
 	
+	/**
+	 * This method returns a list of all open games. Open games are games that are not
+	 * started right now.
+	 * @return The list of open games.
+	 */
 	public List<Game> getOpenGames(){
 		TypedQuery<Game> query = em.createNamedQuery("Game.getOpen",Game.class);
 		return query.getResultList();
 	}
 	
-	//create new game in db and return it (with correct id)
+	/**
+	 * This method creates and initializes a new game. It also persists it to the db
+	 * and get its id.
+	 * @return The created game.
+	 */
 	private Game createNewGame() {
 		Game g = new Game();
 		em.persist(g);
@@ -162,25 +217,45 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		return g;
 	}
 	
+	/**
+	 * This method uses named queries to load a game with a given ID from
+	 * the DB and return it.
+	 * @param gameid The ID of the game to be loaded.
+	 * @return The loaded game.
+	 */
 	private Game getGameByGameID(int gameid) {
 		TypedQuery<Game> query = em.createNamedQuery("Game.getById",Game.class);
 		query.setParameter("id", gameid);
 		return query.getSingleResult();
 	}
 	
+	/**
+	 * This method uses named queries to get all games from the DB and returns them.
+	 * @return A list of all Games in the Database.
+	 */
 	private List<Game> getAllGames(){
 		TypedQuery<Game> query = em.createNamedQuery("Game.getAll",Game.class);
 		return query.getResultList();
 	}
 	
+	/**
+	 * This method uses name queries to load a user with a given id from the DB
+	 * and return it.
+	 * @param userid The id of the user to be loaded.
+	 * @return The loaded user
+	 */
 	private Account getAccountByUserID(int userid) {
 		TypedQuery<Account> query = em.createNamedQuery("Account.getById",Account.class);
 		query.setParameter("id", userid);
 		return query.getSingleResult();
 	}
 	
-	//removes the account with the given id from all games and closes the ones without other
-	//human players, if not started yet
+	/**
+	 * This method is called if a user disconnects or times out for example. It removes him
+	 * from all games he is in and closes them if he was the last human player in this game
+	 * and it didnt start yet.
+	 * @param userid The ID of the user to be removed from games.
+	 */
 	private void removeHumanPlayerFromGames(int userid) {
 		List<Game> allGames = getAllGames();
 		Account account = getAccountByUserID(userid);
@@ -195,7 +270,38 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		}
 	}
 	
+	/**
+	 * This method just runs a few simple tests to check
+	 * general functionality while development. The test results need to be checked
+	 * manually. (no junit)
+	 */
 	private void runTests() {
+		//create two accounts if they dont exist yet
+		Account a1 = null;
+		Account a2 = null;
+		TypedQuery<Account> query = em.createNamedQuery("Account.getByName",Account.class);
+		query.setParameter("name", "a1");
+		try {
+			a1 = query.getSingleResult();
+		}catch (Exception e) {
+			a1 = new Account();
+			a1.setName("a1");
+			a1.setEmail("a1@example.com");
+			a1.setPassword("a1a1a1a1");
+			em.persist(a1);
+		}
+		query = em.createNamedQuery("Account.getByName",Account.class);
+		query.setParameter("name", "a2");
+		try {
+			a2 = query.getSingleResult();
+		}catch (Exception e) {
+			a2 = new Account();
+			a2.setName("a1");
+			a2.setEmail("a1@example.com");
+			a2.setPassword("a1a1a1a1");
+			em.persist(a2);
+		}
+		
 		//test create game
 		Game g = createNewGame();
 		System.out.println("@1 Gameid: "+g);
@@ -204,24 +310,20 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		List<Game> open = getOpenGames();
 		System.out.println("@2 opengamesCount: "+open.size());
 		System.out.println("@2.1 opengamesFirst: "+open.get(0).getId());
-		
-		//create game in name of player
-		Account a = new Account();
-		em.persist(a);
+
 		System.out.println("@3 userinlobby(0): " + getUserInLobby().size());
-		userLoggedIn(a.getId());
+		userLoggedIn(a1.getId());
 		System.out.println("@4 userinlobby(1): " + getUserInLobby().size());
-		userDisconnected(a.getId());
+		userDisconnected(a1.getId());
 		System.out.println("@5 userinlobby(0): " + getUserInLobby().size());
-		userLoggedIn(a.getId());
-		userCreatesGame(a.getId());
+		userLoggedIn(a1.getId());
+		userCreatesGame(a1.getId());
 		System.out.println("@6 userinlobby(0): " + getUserInLobby().size());
 		System.out.println("@7 opengamesCount(2): "+ getOpenGames().size());
 		startGame(g.getId(), 2);
 		System.out.println("@8 opengamesCount(1): "+ getOpenGames().size());
 
-		Account a2 = new Account();
-		em.persist(a2);
+
 		userLoggedIn(a2.getId());
 		userCreatesGame(a2.getId());
 		System.out.println("@9 opengamesCount(2): "+ getOpenGames().size());
