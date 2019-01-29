@@ -15,7 +15,7 @@
 		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Playground</class>
 		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.RollActionResult</class>
 		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Token</class>	
-		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.Zone</class>			
+		<class>de.fh_dortmund.inf.cw.surstwalat.common.model.DamageZone</class>			
 		<properties>
 			<property name="eclipselink.target-database" value="MySQL"/>
 			<property name="eclipselink.ddl-generation" value="create-tables" />
