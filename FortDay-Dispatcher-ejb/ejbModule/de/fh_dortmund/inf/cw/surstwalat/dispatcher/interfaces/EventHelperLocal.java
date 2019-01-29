@@ -27,7 +27,7 @@ public interface EventHelperLocal {
 	 * @param playerId the id of the player
 	 * @param playerNo the number of the player
 	 */
-	void triggerAssignActivePlayerEvent(Integer gameId, Integer playerId, Integer playerNo);
+	void triggerAssignActivePlayerEvent(Integer gameId, Integer playerId, Integer playerNo, Integer timeout);
 	/**
 	 * Sends a message of type PLAYER_ROLL
 	 * @param gameId the id of the game
@@ -49,4 +49,12 @@ public interface EventHelperLocal {
 	 * @param playerNo the number of the player
 	 */
 	void triggerPlayerWinsEvent(Integer gameId, Integer playerId, Integer playerNo);
+	
+	/**
+	 * Sends a message of type PLAYER_TIMEOUT_REMINDER
+	 * @param gameId the id of the game
+	 * @param playerId the id of the player
+	 * @param playerNo the number of the player
+	 */
+	void triggerPlayerTimeoutReminderEvent(Integer gameId, Integer playerId, Integer playerNo, Integer secondsLeft);
 }

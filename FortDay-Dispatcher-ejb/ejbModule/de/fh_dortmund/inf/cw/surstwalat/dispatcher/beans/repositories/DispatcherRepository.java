@@ -39,6 +39,8 @@ public abstract class DispatcherRepository<T, K> implements IDispatcherRepositor
 	public T save(T entity) {
 		return entityManager.merge(entity);
 	}
+	
+	
 
 
 

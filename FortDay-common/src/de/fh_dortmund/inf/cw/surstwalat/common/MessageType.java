@@ -11,6 +11,7 @@ public interface MessageType {
 	public static final int START_ROUND = 6;
 	public static final int PLAYER_ELIMINATED = 8;
 	public static final int PLAYER_WINS = 9;
+	public static final int PLAYER_TIMEOUT_REMINDER = 140;
 	//LOBBY MANAGEMENT
 	public static final int GAME_CREATED = 10;
 	public static final int GAME_STARTED = 11;

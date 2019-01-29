@@ -46,4 +46,7 @@ public interface PropertyType {
     public static final String TOKEN_ID = "TOKEN_ID";
     public static final String ITEM_POS = "ITEM_POS";
     public static final String ROUND_NO = "ROUND_NO";
+    
+    // Timeout
+    public static final String TIMEOUT_SECONDS_LEFT = "TIMEOUT_SECONDS_LEFT";
 }

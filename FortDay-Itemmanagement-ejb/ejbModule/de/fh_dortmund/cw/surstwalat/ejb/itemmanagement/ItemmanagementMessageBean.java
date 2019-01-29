@@ -31,7 +31,7 @@ public class ItemmanagementMessageBean implements MessageListener {
 			int gameId = message.getIntProperty(PropertyType.GAME_ID);
 			int msgType = message.getIntProperty(PropertyType.MESSAGE_TYPE);
 
-			System.out.println(itemBean.name + " Ankommende Nachricht: GameID: " + gameId + ", MESSAGE_TYPE: " + msgType + "; MSG:" + message);
+			//System.out.println(itemBean.name + " Ankommende Nachricht: GameID: " + gameId + ", MESSAGE_TYPE: " + msgType + "; MSG:" + message);
 
 			switch (msgType) {
 				case MessageType.TRIGGER_AIRDROP:
