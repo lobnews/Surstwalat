@@ -30,6 +30,11 @@ public class LobbyManagementMessageReceiver implements MessageListener {
 	@EJB
 	private LobbyManagementLocal lobbyManagement;
 	
+	/**
+	 * This method is called if there is an incoming message. It parses it to an object message and checks the message type.
+	 * Depending on the message type, it calls a method to parse the parameters and forward them to the LobbyManagementBean.
+	 * @param message The incoming message to be parsed
+	 */
     public void onMessage(Message message) {
     	ObjectMessage o = (ObjectMessage) message;
     	int messageType = -1;
@@ -45,12 +50,17 @@ public class LobbyManagementMessageReceiver implements MessageListener {
     	case MessageType.USER_DISCONNECTED:
     	case MessageType.USER_DISCONNECT: userDisconnected(message);break;
     	case MessageType.USER_TIMEOUT: userTimedOut(message);break;
-    	case MessageType.USER_CREATEGAME: userCreatesLobby(message);break;
-    	case MessageType.USER_JOINGAME: userJoinsLobby(message);break;
+    	case MessageType.USER_CREATEGAME: userCreatesGame(message);break;
+    	case MessageType.USER_JOINGAME: userJoinsGame(message);break;
     	}
     	
     }
     
+    /**
+     * This method is called if a user is connected. Parse the incoming message and forward
+     * its parameter to lobbyManagementBean.
+     * @param message The incoming message to be parsed.
+     */
     public void userConnected(Message message) {
     	try {
         	int userid = message.getIntProperty(PropertyType.USER_ID);
@@ -60,6 +70,11 @@ public class LobbyManagementMessageReceiver implements MessageListener {
     	}
     }
     
+    /**
+     * This method is called if a user is disconnects. Parse the incoming message and forward
+     * its parameter to lobbyManagementBean.
+     * @param message The incoming message to be parsed.
+     */
     public void userDisconnected(Message message) {
     	try {
         	int userid = message.getIntProperty(PropertyType.USER_ID);
@@ -69,6 +84,11 @@ public class LobbyManagementMessageReceiver implements MessageListener {
     	}
     }
     
+    /**
+     * This method is called if a user timed out. Parse the incoming message and forward
+     * its parameter to lobbyManagementBean.
+     * @param message The incoming message to be parsed.
+     */
     public void userTimedOut(Message message) {
     	try {
         	int userid = message.getIntProperty(PropertyType.USER_ID);
@@ -78,7 +98,12 @@ public class LobbyManagementMessageReceiver implements MessageListener {
     	}
     }
     
-    public void userCreatesLobby(Message message) {
+    /**
+     * This method is called if a user created a game. Parse the incoming message and forward
+     * its parameter to lobbyManagementBean.
+     * @param message The incoming message to be parsed.
+     */
+    public void userCreatesGame(Message message) {
     	try {
         	int userid = message.getIntProperty(PropertyType.USER_ID);
     		lobbyManagement.userCreatesGame(userid);
@@ -87,7 +112,12 @@ public class LobbyManagementMessageReceiver implements MessageListener {
     	}
     }
     
-    public void userJoinsLobby(Message message) {
+    /**
+     * This method is called if a user tries to join a game. Parse the incoming message and forward
+     * its parameter to lobbyManagementBean.
+     * @param message The incoming message to be parsed.
+     */
+    public void userJoinsGame(Message message) {
     	try {
         	int userid = message.getIntProperty(PropertyType.USER_ID);
         	int gameid = message.getIntProperty(PropertyType.GAME_ID);

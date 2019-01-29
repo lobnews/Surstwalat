@@ -18,7 +18,7 @@ import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Game;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Playground;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Token;
-import de.fh_dortmund.inf.cw.surstwalat.common.model.Zone;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.DamageZone;
 import de.fh_dortmund.inf.cw.surstwalat.globaleventmanagement.beans.interfaces.GlobalEventManagementLocal;
 
 /**
@@ -38,10 +38,10 @@ public class GlobalEventManagementBean implements GlobalEventManagementLocal{
 
 	@Override
 	public void updateZone(int gameId, int roundNo) {
-		Zone zone = getZoneByGameID(gameId);
+                Game game = getGameByGameID(gameId);
+		DamageZone zone = getZoneByGame(game);
 		if(roundNo == 0)
 		{
-			Game game = getGameByGameID(gameId);
 			int fieldsize = getPlaygroundByGameID(gameId).getFields().size();
 			int randomStartingField = (int)(Math.random() * fieldsize);
 			int nextZoneBegin =	randomStartingField;
@@ -82,7 +82,7 @@ public class GlobalEventManagementBean implements GlobalEventManagementLocal{
 			message.setIntProperty(PropertyType.NEXT_ZONE_BEGIN, zone.getNextZoneBegin());
 			message.setIntProperty(PropertyType.NEXT_ZONE_SIZE, zone.getNextZoneSize());
 			message.setIntProperty(PropertyType.DAMAGE, zone.getDamage());
-			message.setStringProperty(PropertyType.DISPLAY_MESSAGE, "Die sichere Zone wurde aktualisiert!");
+			message.setStringProperty(PropertyType.DISPLAY_MESSAGE, "Die Gift-Zone wurde aktualisiert!");
 			jmsContext.createProducer().send(eventTopic, message);
 		} catch (JMSException e) {
 			e.printStackTrace();
@@ -117,7 +117,8 @@ public class GlobalEventManagementBean implements GlobalEventManagementLocal{
 	public void triggerDamage(int gameId, List<Token> token) {
 		ObjectMessage message = jmsContext.createObjectMessage();
 		try {
-			int damage = getZoneByGameID(gameId).getDamage();
+                        Game game = getGameByGameID(gameId);
+			int damage = getZoneByGame(game).getDamage();
 			for (Token hitToken : token) {
 				message.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.TRIGGER_DAMAGE);
 				message.setIntProperty(PropertyType.GAME_ID, gameId);
@@ -142,9 +143,9 @@ public class GlobalEventManagementBean implements GlobalEventManagementLocal{
 		return query.getSingleResult();
 	}
 
-	private Zone getZoneByGameID(int gameId) {
-		TypedQuery<Zone> query = em.createNamedQuery("Zone.getByGameId", Zone.class);
-		query.setParameter("id", gameId);
+	private DamageZone getZoneByGame(Game game) {
+		TypedQuery<DamageZone> query = em.createNamedQuery("Zone.getByGame", DamageZone.class);
+		query.setParameter("game", game);
 		return query.getSingleResult();
 	}
 }
