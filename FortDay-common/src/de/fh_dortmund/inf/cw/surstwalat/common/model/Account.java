@@ -121,7 +121,7 @@ public class Account implements Serializable {
     }
 
     /**
-     * @param inLobby
+     * @param inLobby is user in lobby
      */
     public void setInLobby(boolean inLobby) {
         this.inLobby = inLobby;

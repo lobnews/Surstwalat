@@ -2,6 +2,9 @@ package de.fh_dortmund.inf.cw.surstwalat.client.user.view;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import de.fh_dortmund.inf.cw.surstwalat.client.game.view.MainPanel;
+import de.fh_dortmund.inf.cw.surstwalat.client.util.FontKeeper;
+import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
+import java.util.Map;
 
 /**
  * Start Hub
@@ -10,10 +13,13 @@ import de.fh_dortmund.inf.cw.surstwalat.client.game.view.MainPanel;
  */
 public class StartHubPanel extends javax.swing.JPanel {
 
+    Map<String, String> textRepository;
+
     /**
      * Creates new form StarterPanel
      */
     public StartHubPanel() {
+        textRepository = TextRepository.getInstance().getTextRepository("ui_controls");
         initComponents();
     }
 
@@ -26,31 +32,55 @@ public class StartHubPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLayeredPane1 = new javax.swing.JLayeredPane();
+        background = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        foreground = new javax.swing.JPanel();
         bt_startGame = new javax.swing.JButton();
         bt_editProfil = new javax.swing.JButton();
         bt_close = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
 
-        setMinimumSize(new java.awt.Dimension(600, 400));
+        setMaximumSize(new java.awt.Dimension(600, 438));
+        setMinimumSize(new java.awt.Dimension(600, 438));
+        setPreferredSize(new java.awt.Dimension(600, 438));
+        setLayout(new java.awt.BorderLayout());
 
+        background.setMinimumSize(new java.awt.Dimension(600, 400));
+        background.setLayout(new java.awt.BorderLayout());
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/backgrounds/background-start-hub.png"))); // NOI18N
+        background.add(jLabel1, java.awt.BorderLayout.CENTER);
+
+        foreground.setOpaque(false);
+
+        bt_startGame.setBackground(new java.awt.Color(25, 10, 120));
+        bt_startGame.setFont(FontKeeper.BIG_BUTTON);
+        bt_startGame.setForeground(new java.awt.Color(255, 255, 255));
         bt_startGame.setActionCommand("bt_startGame");
-        bt_startGame.setLabel("Start");
+        bt_startGame.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        bt_startGame.setLabel(textRepository.get("start_game"));
         bt_startGame.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_startGameActionPerformed(evt);
             }
         });
 
+        bt_editProfil.setBackground(new java.awt.Color(44, 15, 148));
+        bt_editProfil.setFont(FontKeeper.BUTTON);
+        bt_editProfil.setForeground(new java.awt.Color(255, 255, 255));
         bt_editProfil.setActionCommand("bt_editProfil");
-        bt_editProfil.setLabel("Profil");
+        bt_editProfil.setLabel(textRepository.get("profil"));
         bt_editProfil.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bt_editProfilActionPerformed(evt);
             }
         });
 
+        bt_close.setBackground(new java.awt.Color(44, 15, 148));
+        bt_close.setFont(FontKeeper.BUTTON);
+        bt_close.setForeground(new java.awt.Color(255, 255, 255));
         bt_close.setActionCommand("bt_close");
-        bt_close.setLabel("Beenden");
+        bt_close.setLabel(textRepository.get("exit"));
         bt_close.setName(""); // NOI18N
         bt_close.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -58,42 +88,66 @@ public class StartHubPanel extends javax.swing.JPanel {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 48)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("FortDay");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(253, 253, 253)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(bt_editProfil, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(bt_close, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(274, 274, 274))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(215, 215, 215)
-                .addComponent(bt_startGame, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(224, 224, 224))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(178, 178, 178)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        javax.swing.GroupLayout foregroundLayout = new javax.swing.GroupLayout(foreground);
+        foreground.setLayout(foregroundLayout);
+        foregroundLayout.setHorizontalGroup(
+            foregroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(foregroundLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(foregroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(bt_close, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bt_editProfil, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bt_startGame, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(73, 73, 73)
-                .addComponent(bt_startGame, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
-                .addGap(47, 47, 47)
-                .addComponent(bt_editProfil)
+        foregroundLayout.setVerticalGroup(
+            foregroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(foregroundLayout.createSequentialGroup()
+                .addGap(141, 141, 141)
+                .addComponent(bt_startGame, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                .addComponent(bt_editProfil, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bt_close)
-                .addGap(23, 23, 23))
+                .addComponent(bt_close, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
+
+        bt_close.getAccessibleContext().setAccessibleName(textRepository.get("exit"));
+
+        jLayeredPane1.setLayer(background, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jLayeredPane1.setLayer(foreground, javax.swing.JLayeredPane.PALETTE_LAYER);
+
+        javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
+        jLayeredPane1.setLayout(jLayeredPane1Layout);
+        jLayeredPane1Layout.setHorizontalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 600, Short.MAX_VALUE)
+            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                    .addContainerGap()
+                    .addComponent(foreground, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(301, Short.MAX_VALUE)))
+        );
+        jLayeredPane1Layout.setVerticalGroup(
+            jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 438, Short.MAX_VALUE)
+            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(background, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jLayeredPane1Layout.createSequentialGroup()
+                    .addContainerGap(35, Short.MAX_VALUE)
+                    .addComponent(foreground, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(36, Short.MAX_VALUE)))
+        );
+
+        add(jLayeredPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_editProfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_editProfilActionPerformed
@@ -110,9 +164,12 @@ public class StartHubPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel background;
     private javax.swing.JButton bt_close;
     private javax.swing.JButton bt_editProfil;
     private javax.swing.JButton bt_startGame;
+    private javax.swing.JPanel foreground;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLayeredPane jLayeredPane1;
     // End of variables declaration//GEN-END:variables
 }

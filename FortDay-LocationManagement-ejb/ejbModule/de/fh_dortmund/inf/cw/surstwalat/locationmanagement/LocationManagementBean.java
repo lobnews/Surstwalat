@@ -19,10 +19,13 @@ import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.interfaces.ItemReposi
 import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.interfaces.PlaygroundRepositoryLocal;
 import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.interfaces.TokenRepositoryLocal;
 
+
+// The Location Management class
 @Stateless
 public class LocationManagementBean implements LocationManagementLocal
 {
 
+    
     @EJB
     private PlaygroundRepositoryLocal playgroundRepository;
 
@@ -41,30 +44,45 @@ public class LocationManagementBean implements LocationManagementLocal
     @EJB
     private EventHelperLocal outgoingEvents;
 
+    //Adding an Item to the Playground
     public void addItemToPlayground(int gameId, int itemId)
     {
+        //get the Playground from database
         Playground p = playgroundRepository.getByGameId(gameId);
+        
+        //get random field
         int field = (int)(Math.random() * p.getFields().size());
+        
+        //while no empty field found, get new random field
         while (p.getField(field).getItem() != null)
         {
             field = (int)(Math.random() * p.getFields().size());
         }
+        
+        //get the item
         Item i = itemRepository.findById(itemId);
 
+        //set the item
         p.getField(field).setItem(i);
 
         playgroundRepository.save(p);
 
     }
 
+    
+    //create the Playground
     public void createPlayground(int gameId, int fieldSize)
     {
         Playground playground = new Playground();
+        
+        //get the game
         Game game = gameRepository.findById(gameId);
+        
         playground.setGameId(game);
 
         List<Field> fields = new ArrayList<>();
 
+        //Generate the Fields
         for (int i = 0; i < fieldSize; i++)
         {
             Field f = new Field();
@@ -76,13 +94,19 @@ public class LocationManagementBean implements LocationManagementLocal
         playgroundRepository.save(playground);
     }
 
+    //Updsate the Zone
     @Override
     public void updateZone(int gameId, int zoneBegin, int zoneSize)
     {
+        //get the playground
         Playground playground = playgroundRepository.getByGameId(gameId);
+        
+        //clear all toxic
         playground.getFields().forEach(f -> {
             f.setToxic(false);
         });
+        
+        //generate new zone
         for (int i = zoneBegin; i < zoneBegin + zoneSize; i++)
         {
             playground.getField(i).setToxic(true);
@@ -93,9 +117,11 @@ public class LocationManagementBean implements LocationManagementLocal
 
     }
 
+    //Check if Tokens are in Toxic
     private void checkForTokensInToxic(Playground playground)
     {
         List<Token> tokens = new ArrayList<Token>();
+        //check, which token is in toxic
         playground.getFields().forEach(f -> {
             if (f.isToxic() || f.getToken() != null)
             {
@@ -103,18 +129,23 @@ public class LocationManagementBean implements LocationManagementLocal
             }
         });
 
+        
         outgoingEvents.triggerCharactersInToxicMessage(playground.getGame().getId(), tokens);
 
     }
 
+    //move the token
     public void moveToken(int gameId, int tokenId, int count)
     {
+        //get the playground
         Playground playground = playgroundRepository.getByGameId(gameId);
         Token token;
+        //find the token
         for (int i = 0; i < playground.getFields().size(); i++)
         {
             if (playground.getField(i).getToken() != null && playground.getField(i).getToken().getId() == tokenId)
             {
+                //get the token
                 token = playground.getFields().get(i).getToken();
                 if (checkForCollisionWithPlayer(playground, token, i, count))
                 {
@@ -123,6 +154,7 @@ public class LocationManagementBean implements LocationManagementLocal
 
                 checkForCollisionWithItem(playground, token, i, count);
 
+                //move the token
                 playground.getField(i + count).setToken(token);
                 playground.getField(i).setToken(null);
 
@@ -132,11 +164,14 @@ public class LocationManagementBean implements LocationManagementLocal
         }
     }
 
+    //check for collision, return true, if own token was hit
     private boolean checkForCollisionWithPlayer(Playground playground, Token token, int pos, int count)
     {
+        //check for collision
         if (playground.getField(pos + count).getToken() != null)
         {
             Token enemy = playground.getField(pos + count).getToken();
+            // check if own token
             if (token.getPlayerId() == enemy.getPlayerId())
             {
                 outgoingEvents
@@ -162,9 +197,12 @@ public class LocationManagementBean implements LocationManagementLocal
 
         return false;
     }
+    
 
+    //check if item was hit.
     private boolean checkForCollisionWithItem(Playground playground, Token token, int pos, int count)
     {
+        //check if item is on field
         if (playground.getField(pos + count).getItem() != null)
         {
             outgoingEvents
@@ -179,10 +217,15 @@ public class LocationManagementBean implements LocationManagementLocal
         return false;
     }
 
+    //add a token to the playground
     public void addTokenToPlayground(int gameId, int playerId, int tokenNumber)
     {
         Playground playground = playgroundRepository.getByGameId(gameId);
 
+        Game game = gameRepository.findById(gameId);
+
+        
+        //randomly set the field for the token
         int field = (int)(Math.random() * playground.getFields().size());
 
         while (playground.getField(field).getToken() != null)
@@ -193,11 +236,29 @@ public class LocationManagementBean implements LocationManagementLocal
 
         playground.getField(field).setToken(token);
 
+        
+        //check if all tokens were set for the game and trigger the message
+        int tokens = game.getAiPlayerCount() + game.getHumanUsersInGame().size();
+        tokens = tokens * 4;
+        int counter = 0;
+        for (Field f : playground.getFields())
+        {
+            if (f.getToken() != null)
+                counter++;
+        }
+
         playgroundRepository.save(playground);
         outgoingEvents.triggerPlayerOnFieldMessage(gameId, playerId, tokenNumber, field);
 
+        if (counter == tokens)
+        {
+            outgoingEvents.triggerNoCollisionMessage(gameId);
+
+        }
+
     }
 
+    //remove an item from playground 
     public void removeItemFromPlayground(int gameId, int itemId)
     {
         if (itemId != -1)

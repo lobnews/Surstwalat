@@ -16,14 +16,14 @@ public class Validator {
     /**
      * Check valid email address
      *
-     * @param email
-     * @return
+     * @param email input email
+     * @return is email or not
      */
     public static boolean checkEmailAddress(String email) {
         try {
             InternetAddress emailAddr = new InternetAddress(email);
             emailAddr.validate();
-        } catch (AddressException ex) {
+        } catch (AddressException e) {
             return false;
         }
         return true;
@@ -32,8 +32,8 @@ public class Validator {
     /**
      * Check input string lenght
      *
-     * @param input
-     * @return
+     * @param input input string
+     * @return is in range
      */
     public static boolean checkStringLength(String input) {
         return (input.length() >= MINIMALINPUTLENGTH && input.length() <= MAXIMALINPUTLENGTH);
@@ -42,8 +42,8 @@ public class Validator {
     /**
      * Is empty string
      * 
-     * @param str
-     * @return 
+     * @param str string
+     * @return is empty or not
      */
     public static boolean isEmptyString(String str) {
         return (str != null && !str.isEmpty());

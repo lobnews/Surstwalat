@@ -1,6 +1,7 @@
 package de.fh_dortmund.cw.surstwalat.ejb.itemmanagement;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -121,9 +122,20 @@ public class ItemmanagementBean {
 		}
 	}
 	
-	public void sendUserInventar(int gameId, int playerId, Destination dest) {
+	public void sendUserInventar(int gameId, int playerId) {
 		Player player = entitymanager.find(Player.class, playerId);
 		sender.sendInventar(gameId, player);
+	}
+	
+	public void removeItem(int playerId, int itemId) {
+		Player player = entitymanager.find(Player.class, playerId);
+		for (Item item : player.getItems()) {
+			if(item.getId() == itemId) {
+				player.getItems().remove(item);
+				entitymanager.merge(player);
+				return;
+			}
+		}
 	}
 	
 	public void spawnAirDrop(int gameId) {
