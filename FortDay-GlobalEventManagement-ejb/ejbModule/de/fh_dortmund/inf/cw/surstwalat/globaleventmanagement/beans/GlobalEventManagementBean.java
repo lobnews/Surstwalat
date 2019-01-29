@@ -144,7 +144,7 @@ public class GlobalEventManagementBean implements GlobalEventManagementLocal{
 	}
 
 	private DamageZone getZoneByGame(Game game) {
-		TypedQuery<DamageZone> query = em.createNamedQuery("Zone.getByGame", DamageZone.class);
+		TypedQuery<DamageZone> query = em.createNamedQuery("DamageZone.getByGame", DamageZone.class);
 		query.setParameter("game", game);
 		return query.getSingleResult();
 	}

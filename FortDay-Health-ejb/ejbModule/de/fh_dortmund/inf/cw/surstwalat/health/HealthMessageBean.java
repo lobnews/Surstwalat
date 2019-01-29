@@ -46,6 +46,9 @@ public class HealthMessageBean implements MessageListener {
                 case MessageType.TRIGGER_DAMAGE:
                     healthManagement.damageToken(o.getIntProperty(PropertyType.GAME_ID), o.getIntProperty(PropertyType.CHARACTER_ID), o.getIntProperty(PropertyType.DAMAGE));
                     break;
+                case MessageType.ASSIGN_PLAYER:
+                    healthManagement.createTokens(o.getIntProperty(PropertyType.PLAYER_ID));
+                    break;
                 
             }
         } catch (JMSException ex) {
