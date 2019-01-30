@@ -5,12 +5,14 @@ import de.fh_dortmund.inf.cw.surstwalat.client.user.view.RegistryPanel;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
+import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordException;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.jms.Message;
@@ -30,11 +32,14 @@ public class UserManagementHandler implements MessageListener {
 
     private Context ctx;
     private UserSessionRemote userSessionRemote;
+    private final Map<String, String> textRepository;
 
     /**
      * Handler constructor for UserManagement
      */
     public UserManagementHandler() {
+    textRepository = TextRepository.getInstance().getTextRepository("messages");
+    
 	// LookUp to UserSessionRemote
 	try {
 	    ctx = new InitialContext();
@@ -227,5 +232,21 @@ public class UserManagementHandler implements MessageListener {
      */
     public boolean compareAccountById(int accountId) {
 	return userSessionRemote.compareAccountById(accountId);
+    }
+
+    /**
+     * Logout account
+     */
+    public void logout() {
+	Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("logout_short"));
+	userSessionRemote.logout();
+    }
+
+    /**
+     * Disconnect account
+     */
+    public void disconnect() {
+	Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("disconnect_short"));
+	userSessionRemote.disconnect();
     }
 }

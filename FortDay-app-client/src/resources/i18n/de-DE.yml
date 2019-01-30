@@ -23,6 +23,8 @@ messages:
     Warning: Warnung!
     Success: Erfolgreich!
     input_error_short: Eingabefehler!
+    logout_short: Benutzer wurde ausgeloggt.
+    disconnect_short: Client wurde abgemeldet.
     # Action
     signin_success_short: Registrierung erfolgreich
     signin_success: Glückwunsch, %s! Erfolgreich bei FortDay registriert.

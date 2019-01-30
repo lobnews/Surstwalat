@@ -20,6 +20,7 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Action;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.ActionType;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
+import de.fh_dortmund.inf.cw.surstwalat.lobbymanagement.beans.interfaces.LobbyManagementLocal;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces.UserManagementLocal;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
@@ -37,12 +38,15 @@ import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession
 @Stateful
 public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 
-	private boolean LOGGING = true;
+    private final boolean LOGGING = true;
     @Inject
     private JMSContext jmsContext;
 
     @EJB
     private UserManagementLocal userManagement;
+    
+    @EJB
+    private LobbyManagementLocal lobbyManagement;
 
     @Resource(lookup = "java:global/jms/FortDayEventTopic")
     private Topic eventTopic;
@@ -178,22 +182,19 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 	return userManagement.getAccountById(accountId);
     }
 
-
     /**
      * Send logout message and clean saved user
      */
     @Override
     public void logout() {
-        ObjectMessage msg = createObjectMessage(2, MessageType.USER_LOGOUT);
-        trySetObject(msg, user);
-        sendMessage(msg);
-        
-        if (LOGGING)
-        {
-        	System.out.println("[USERSESSION] User logged out: Username: " + user.getName());
-        }
-    }
+	ObjectMessage msg = createObjectMessage(2, MessageType.USER_LOGOUT);
+	trySetObject(msg, user);
+	sendMessage(msg);
 
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] User logged out: Username: " + user.getName());
+	}
+    }
 
     /**
      * Send disconnect message
@@ -201,14 +202,13 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
     @Remove
     @Override
     public void disconnect() {
-        ObjectMessage msg = createObjectMessage(-1, MessageType.USER_DISCONNECT);
-        trySetObject(msg, user);
-        sendMessage(msg);
-        
-        if (LOGGING)
-        {
-        	System.out.println("[USERSESSION] User disconnected: Username: " + user.getName());
-        }
+	ObjectMessage msg = createObjectMessage(-1, MessageType.USER_DISCONNECT);
+	trySetObject(msg, user);
+	sendMessage(msg);
+
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] Client disconnected");
+	}
     }
 
     /**
@@ -228,14 +228,13 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
     @Remove
     @Override
     public void timeout() {
-        ObjectMessage msg = createObjectMessage(-1, MessageType.USER_TIMEOUT);
-        trySetObject(msg, user);
-        sendMessage(msg);
-        
-        if (LOGGING)
-        {
-        	System.out.println("[USERSESSION] User timed out: Username: " + user.getName());
-        }
+	ObjectMessage msg = createObjectMessage(-1, MessageType.USER_TIMEOUT);
+	trySetObject(msg, user);
+	sendMessage(msg);
+
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] User timed out: Username: " + user.getName());
+	}
     }
 
     /* (non-Javadoc)
@@ -243,19 +242,18 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
      */
     @Override
     public void playerRolls(int gameID, int playerID, Dice dice) {
-        ObjectMessage msg = createObjectMessage(gameID, MessageType.PLAYER_ACTION);
-        Action a = new Action();
-        a.setActionType(ActionType.ROLL);
-        trySetIntProperty(msg, PropertyType.ACTION_TYPE, a.getActionType().ordinal());
-        trySetIntProperty(msg, PropertyType.PLAYER_NO, playerID);
-        trySetObject(msg, dice);
+	ObjectMessage msg = createObjectMessage(gameID, MessageType.PLAYER_ACTION);
+	Action a = new Action();
+	a.setActionType(ActionType.ROLL);
+	trySetIntProperty(msg, PropertyType.ACTION_TYPE, a.getActionType().ordinal());
+	trySetIntProperty(msg, PropertyType.PLAYER_NO, playerID);
+	trySetObject(msg, dice);
 
-        sendMessage(msg);
-        
-        if (LOGGING)
-        {
-        	System.out.println("[USERSESSION] Player rolls: GameID: " + gameID + ", Username: " + user.getName() + ", PlayerID: " + playerID);
-        }
+	sendMessage(msg);
+
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] Player rolls: GameID: " + gameID + ", Username: " + user.getName() + ", PlayerID: " + playerID);
+	}
     }
 
     /* (non-Javadoc)
@@ -263,35 +261,28 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
      */
     @Override
     public void useItem(int gameID, int playerID, Item item) {
-        ObjectMessage msg = createObjectMessage(gameID, MessageType.PLAYER_ACTION);
-        Action a = new Action();
-        a.setActionType(ActionType.USE_ITEM);
-        trySetIntProperty(msg, PropertyType.ACTION_TYPE, a.getActionType().ordinal());
-        trySetIntProperty(msg, PropertyType.PLAYER_NO, playerID);
-        trySetObject(msg, item);
+	ObjectMessage msg = createObjectMessage(gameID, MessageType.PLAYER_ACTION);
+	Action a = new Action();
+	a.setActionType(ActionType.USE_ITEM);
+	trySetIntProperty(msg, PropertyType.ACTION_TYPE, a.getActionType().ordinal());
+	trySetIntProperty(msg, PropertyType.PLAYER_NO, playerID);
+	trySetObject(msg, item);
 
-        sendMessage(msg);
-        
-        if (LOGGING)
-        {
-        	System.out.println("[USERSESSION] Player uses Item: GameID: " + gameID + ", Username: " + user.getName() + ", PlayerID: " + playerID);
-        }
+	sendMessage(msg);
+
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] Player uses Item: GameID: " + gameID + ", Username: " + user.getName() + ", PlayerID: " + playerID);
+	}
     }
 
     /* (non-Javadoc)
 	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#startRound(int, int)
      */
     @Override
-    public void startRound(int gameID, int number) {
-        ObjectMessage msg = createObjectMessage(gameID, MessageType.START_ROUND);
-        trySetIntProperty(msg, PropertyType.ROUND_NO, number);
-        sendMessage(msg);
-        
-        if (LOGGING)
-        {
-        	System.out.println("[USERSESSION] Round started: GameID: " + gameID + ", Round: " + number);
-        }
+    public void startGame(int gameID, int fieldSize) {
+    	lobbyManagement.startGame(gameID, fieldSize);
     }
+    
 
     /* (non-Javadoc)
 	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#userJoinedGame(int)
@@ -302,11 +293,10 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 	trySetObject(msg, user);
 
 	sendMessage(msg);
-        
-        if (LOGGING)
-        {
-        	System.out.println("[USERSESSION] User joined game: GameID: " + gameID + ", Username: " + user.getName());
-        }
+
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] User joined game: GameID: " + gameID + ", Username: " + user.getName());
+	}
     }
 
     /* (non-Javadoc)
@@ -314,31 +304,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
      */
     @Override
     public void userCreatedGame() {
-	ObjectMessage msg = createObjectMessage(0, MessageType.USER_CREATEGAME);
-	trySetObject(msg, user);
-
-        sendMessage(msg);
-        
-        if (LOGGING)
-        {
-        	System.out.println("[USERSESSION] User created game: Username: " + user.getName());
-        }
-    }
-
-    /* (non-Javadoc)
-	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#endRound(int, int)
-     */
-    @Override
-    public void endRound(int gameID, int number) {
-	ObjectMessage msg = createObjectMessage(gameID, MessageType.END_ROUND);
-	trySetIntProperty(msg, PropertyType.ROUND_NO, number);
-
-        sendMessage(msg);
-        
-        if (LOGGING)
-        {
-        	System.out.println("[USERSESSION] Round ends: GameID: " + gameID + ", Round: " + number);
-        }
+        lobbyManagement.userCreatesGame(user.getId());
     }
 
     /* (non-Javadoc)
@@ -350,29 +316,27 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 	trySetIntProperty(msg, PropertyType.PLAYER_NO, playerID);
 	trySetObject(msg, item);
 
-        sendMessage(msg);
-        
-        if (LOGGING)
-        {
-        	System.out.println("[USERSESSION] Add item to Player: GameID: " + gameID + ", Username: " + user.getName() + ", PlayerID: " + playerID);
-        }
+	sendMessage(msg);
+
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] Add item to Player: GameID: " + gameID + ", Username: " + user.getName() + ", PlayerID: " + playerID);
+	}
     }
-    
+
     /* (non-Javadoc)
  	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#moveToken(int, int, int)
-    */
+     */
     @Override
     public void moveToken(int gameID, int tokenID, int number) {
-    	ObjectMessage msg = createObjectMessage(gameID, MessageType.MOVE_TOKEN);
-    	trySetIntProperty(msg, PropertyType.TOKEN_ID, tokenID);
-    	trySetObject(msg, number);
-    	
-    	sendMessage(msg);
+	ObjectMessage msg = createObjectMessage(gameID, MessageType.MOVE_TOKEN);
+	trySetIntProperty(msg, PropertyType.TOKEN_ID, tokenID);
+	trySetObject(msg, number);
 
-        if (LOGGING)
-        {
-        	System.out.println("[USERSESSION] Move Token: GameID: " + gameID + ", tokenID: " + tokenID + ", number: " + number);
-        }
+	sendMessage(msg);
+
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] Move Token: GameID: " + gameID + ", tokenID: " + tokenID + ", number: " + number);
+	}
     }
 
     // General methods for generating and sending messages below //
