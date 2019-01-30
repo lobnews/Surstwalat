@@ -296,11 +296,7 @@ public class LobbyOverviewPanel extends JPanel {
         private List<Account> accounts;
         
         public PlayerTableModel() {
-            if(MainFrame.getInstance().getGameId() > 0) {
-                accounts = userManager.getUsersInOpenGame(MainFrame.getInstance().getGameId());
-            } else {
-                accounts = new LinkedList<>();
-            }
+            accounts = MainFrame.getInstance().getUserManager().getUserInLobby();
             MainFrame.getInstance().getEventManager().registerListener(this);
         }
         
@@ -359,11 +355,7 @@ public class LobbyOverviewPanel extends JPanel {
         
         @EventHandler
         public void onUserJoin(UserEvent e) {
-            if(MainFrame.getInstance().getGameId() > 0) {
-                accounts = userManager.getUsersInOpenGame(MainFrame.getInstance().getGameId());
-            } else {
-                accounts = new LinkedList<>();
-            }
+            accounts = MainFrame.getInstance().getUserManager().getUserInLobby();
             LobbyOverviewPanel.this.revalidate();
         }
         
