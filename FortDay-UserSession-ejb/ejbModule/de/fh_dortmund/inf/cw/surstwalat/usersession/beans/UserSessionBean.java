@@ -67,12 +67,21 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
      */
     @Override
     public void login(String username, String password)
-	    throws AccountNotFoundException, LoginFailedException, GeneralServiceException {
-	Account localAccount = new Account();
-	localAccount.setName(username);
-	password = HashManager.hashPassword(password);
-	localAccount.setPassword(password);
-	user = userManagement.login(localAccount);
+            throws AccountNotFoundException, LoginFailedException, GeneralServiceException {
+        Account localAccount = new Account();
+        localAccount.setName(username);
+        password = HashManager.hashPassword(password);
+        localAccount.setPassword(password);
+        user = userManagement.login(localAccount);
+        
+        ObjectMessage msg = createObjectMessage(0, MessageType.USER_LOGIN);
+        trySetObject(msg, user);
+        sendMessage(msg);
+        
+        if (LOGGING)
+        {
+        	System.out.println("[USERSESSION] User login: Username: " + user.getName());
+        }
     }
 
     /**
@@ -108,13 +117,23 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
      */
     @Override
     public void register(String username, String password, String email)
-	    throws AccountAlreadyExistException, GeneralServiceException {
-	Account localAccount = new Account();
-	localAccount.setName(username);
-	password = HashManager.hashPassword(password);
-	localAccount.setPassword(password);
-	localAccount.setEmail(email);
-	userManagement.register(localAccount);
+            throws AccountAlreadyExistException, GeneralServiceException {
+        Account localAccount = new Account();
+        localAccount.setName(username);
+        password = HashManager.hashPassword(password);
+        localAccount.setPassword(password);
+        localAccount.setEmail(email);
+        userManagement.register(localAccount);
+        
+        
+        ObjectMessage msg = createObjectMessage(2, MessageType.USER_REGISTER);
+        trySetObject(msg, user);
+        sendMessage(msg);
+        
+        if (LOGGING)
+        {
+        	System.out.println("[USERSESSION] User registered: Username: " + user.getName());
+        }
     }
 
     /**
@@ -136,7 +155,16 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
      */
     @Override
     public void deleteAccount() throws GeneralServiceException {
-	userManagement.deleteAccount(user);
+        userManagement.deleteAccount(user);
+        
+        ObjectMessage msg = createObjectMessage(2, MessageType.USER_DELETE);
+        trySetObject(msg, user);
+        sendMessage(msg);
+        
+        if (LOGGING)
+        {
+        	System.out.println("[USERSESSION] User deleted: Username: " + user.getName());
+        }
     }
 
     /**
