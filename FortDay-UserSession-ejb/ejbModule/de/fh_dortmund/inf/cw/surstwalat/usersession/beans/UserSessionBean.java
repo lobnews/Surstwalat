@@ -67,21 +67,20 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
      */
     @Override
     public void login(String username, String password)
-            throws AccountNotFoundException, LoginFailedException, GeneralServiceException {
-        Account localAccount = new Account();
-        localAccount.setName(username);
-        password = HashManager.hashPassword(password);
-        localAccount.setPassword(password);
-        user = userManagement.login(localAccount);
-        
-        ObjectMessage msg = createObjectMessage(0, MessageType.USER_LOGIN);
-        trySetObject(msg, user);
-        sendMessage(msg);
-        
-        if (LOGGING)
-        {
-        	System.out.println("[USERSESSION] User login: Username: " + user.getName());
-        }
+	    throws AccountNotFoundException, LoginFailedException, GeneralServiceException {
+	Account localAccount = new Account();
+	localAccount.setName(username);
+	password = HashManager.hashPassword(password);
+	localAccount.setPassword(password);
+	user = userManagement.login(localAccount);
+
+	ObjectMessage msg = createObjectMessage(0, MessageType.USER_LOGIN);
+	trySetObject(msg, user);
+	sendMessage(msg);
+
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] User login: Username: " + user.getName());
+	}
     }
 
     /**
@@ -117,23 +116,21 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
      */
     @Override
     public void register(String username, String password, String email)
-            throws AccountAlreadyExistException, GeneralServiceException {
-        Account localAccount = new Account();
-        localAccount.setName(username);
-        password = HashManager.hashPassword(password);
-        localAccount.setPassword(password);
-        localAccount.setEmail(email);
-        userManagement.register(localAccount);
-        
-        
-        ObjectMessage msg = createObjectMessage(2, MessageType.USER_REGISTER);
-        trySetObject(msg, user);
-        sendMessage(msg);
-        
-        if (LOGGING)
-        {
-        	System.out.println("[USERSESSION] User registered: Username: " + user.getName());
-        }
+	    throws AccountAlreadyExistException, GeneralServiceException {
+	Account localAccount = new Account();
+	localAccount.setName(username);
+	password = HashManager.hashPassword(password);
+	localAccount.setPassword(password);
+	localAccount.setEmail(email);
+	userManagement.register(localAccount);
+
+	ObjectMessage msg = createObjectMessage(2, MessageType.USER_REGISTER);
+	trySetObject(msg, localAccount);
+	sendMessage(msg);
+
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] User registered: Username: " + localAccount.getName());
+	}
     }
 
     /**
@@ -160,11 +157,10 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
         ObjectMessage msg = createObjectMessage(2, MessageType.USER_DELETE);
         trySetObject(msg, user);
         sendMessage(msg);
-        
-        if (LOGGING)
-        {
-        	System.out.println("[USERSESSION] User deleted: Username: " + user.getName());
-        }
+
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] User deleted: Username: " + user.getName());
+	}
     }
 
     /**
@@ -223,7 +219,6 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
     public boolean compareAccountById(int accountId) {
 	return user.getId() == accountId;
     }
-
 
     /* (non-Javadoc)
 	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#logout()
@@ -449,5 +444,4 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
     private void sendMessage(ObjectMessage msg) {
 	jmsContext.createProducer().send(eventTopic, msg);
     }
-
 }
