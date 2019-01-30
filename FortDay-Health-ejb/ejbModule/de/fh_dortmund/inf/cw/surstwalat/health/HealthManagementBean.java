@@ -44,30 +44,6 @@ public class HealthManagementBean implements HealthManagementLocal, HealthManage
     @PersistenceContext(unitName = "FortDayDB")
     private EntityManager em;
     
-    @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void createTokens(int playerId, int gameId) {
-        LinkedList<Integer> list = new LinkedList<>();
-        for(int i = 1; i <= 4; i++) {
-            Token t = new Token();
-            t.setPlayerId(playerId);
-            t.setNr(i);
-            t.setMaxHealth(MAX_HEALTH);
-            t.setHealth(MAX_HEALTH);
-            em.persist(t);
-            list.add(t.getId());
-        }
-        try {
-            ObjectMessage o = jmsContext.createObjectMessage(list);
-            o.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.TOKEN_CREATED);
-            o.setIntProperty(PropertyType.PLAYER_ID, playerId);
-            o.setIntProperty(PropertyType.GAME_ID, gameId);
-            jmsContext.createProducer().send(eventTopic, o);
-            System.out.println("[HEALTHMANAGEMENT] Tokens for Player with ID " + playerId + " created" );
-        } catch (JMSException ex) {
-            Logger.getLogger(HealthManagementBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
       
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -106,7 +82,8 @@ public class HealthManagementBean implements HealthManagementLocal, HealthManage
         return query.getSingleResult().intValue();
     }
     
-    private void damageToken(int gameId, int tokenId, int damage) {
+    @Override
+    public void damageToken(int gameId, int tokenId, int damage) {
         Token t = getToken(tokenId);
         if(t == null) {
         	return;
@@ -155,4 +132,31 @@ public class HealthManagementBean implements HealthManagementLocal, HealthManage
             Logger.getLogger(HealthManagementBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public void createTokens(int playerId, int gameId, int playerNr) {
+        LinkedList<Integer> list = new LinkedList<>();
+        for(int i = 1; i <= 4; i++) {
+            Token t = new Token();
+            t.setPlayerId(playerId);
+            t.setNr(i);
+            t.setMaxHealth(MAX_HEALTH);
+            t.setHealth(MAX_HEALTH);
+            em.persist(t);
+            list.add(t.getId());
+        }
+        try {
+            ObjectMessage o = jmsContext.createObjectMessage(list);
+            o.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.TOKEN_CREATED);
+            o.setIntProperty(PropertyType.PLAYER_ID, playerId);
+            o.setIntProperty(PropertyType.PLAYER_NO, playerNr);
+            o.setIntProperty(PropertyType.GAME_ID, gameId);
+            jmsContext.createProducer().send(eventTopic, o);
+            System.out.println("[HEALTHMANAGEMENT] Tokens for Player with ID " + playerId + " created" );
+        } catch (JMSException ex) {
+            Logger.getLogger(HealthManagementBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
 }

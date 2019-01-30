@@ -29,9 +29,11 @@ public class MainPanel extends javax.swing.JPanel {
      * Creates new form MainPanel
      */
     public MainPanel() {
-        System.out.println("test");
+//        System.out.println("test");
         initComponents();
+        mapModel = new MapModel(mapsFile);
         mapModel.addObserver(gamePanel1);
+        mapModel.setSelectedItem("jungle");
     }
 
     /**
@@ -43,25 +45,28 @@ public class MainPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        mapModel = new MapModel(mapsFile);
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jSplitPane1 = new javax.swing.JSplitPane();
         gamePanel1 = new de.fh_dortmund.inf.cw.surstwalat.client.game.view.GamePanel();
+        inventoryPanel1 = new de.fh_dortmund.inf.cw.surstwalat.client.game.view.InventoryPanel();
 
         setMinimumSize(new java.awt.Dimension(200, 200));
         setLayout(new java.awt.BorderLayout());
 
-        jComboBox1.setModel(mapModel);
-        jComboBox1.setSelectedIndex(1);
-        add(jComboBox1, java.awt.BorderLayout.NORTH);
+        gamePanel1.setPreferredSize(new java.awt.Dimension(210, 210));
+        jSplitPane1.setLeftComponent(gamePanel1);
 
-        gamePanel1.setMinimumSize(new java.awt.Dimension(200, 200));
-        add(gamePanel1, java.awt.BorderLayout.CENTER);
+        inventoryPanel1.setMinimumSize(new java.awt.Dimension(150, 150));
+        inventoryPanel1.setPreferredSize(new java.awt.Dimension(160, 160));
+        jSplitPane1.setRightComponent(inventoryPanel1);
+
+        add(jSplitPane1, java.awt.BorderLayout.CENTER);
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.fh_dortmund.inf.cw.surstwalat.client.game.view.GamePanel gamePanel1;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private de.fh_dortmund.inf.cw.surstwalat.client.game.view.InventoryPanel inventoryPanel1;
+    private javax.swing.JSplitPane jSplitPane1;
     // End of variables declaration//GEN-END:variables
 
     private class MapModel extends Observable implements ComboBoxModel<String> {

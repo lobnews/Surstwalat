@@ -14,8 +14,9 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Token;
  * @author Lars
  */
 public interface HealthManagement {
-	
-    public void createTokens(int playerId, int gameId);
+    
+    public void damageToken(int gameId, int characterId, int damage);
+    public void createTokens(int playerId, int gameId, int playerNr);
     
     public Token getToken(int tokenId);
     public int getTokenCount(int playerId);

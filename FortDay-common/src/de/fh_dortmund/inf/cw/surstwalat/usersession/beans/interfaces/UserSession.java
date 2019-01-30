@@ -1,5 +1,6 @@
 package de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces;
 
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
@@ -87,61 +88,75 @@ public interface UserSession{
      * @return account name
      */
     public String getAccountName();
-        
-	/**
-	 * Action when the Player rolls
-	 * 
-	 * @param gameID
-	 * @param playerID
-	 * @param dice
-	 */
-	public void playerRolls(int gameID, int playerID, Dice dice);
-	
-	/**
-	 * Starts the given Round
-	 * 
-	 * @param gameID
-	 * @param number
-	 */
-	public void startRound(int gameID, int number);
-	
-	/**
-	 * User joined the given game
-	 * 
-	 * @param gameID
-	 */
-	public void userJoinedGame(int gameID);
-	
-	/**
-	 * User created a game
-	 */
-	public void userCreatedGame();
-	
-	/**
-	 * End the given round
-	 * 
-	 * @param gameID
-	 * @param number
-	 */
-	public void endRound(int gameID,int number);
-	
-	/**
-	 * Add the given Item to the Player
-	 * 
-	 * @param gameID
-	 * @param playerID
-	 * @param item
-	 */
-	public void addItemToPlayer(int gameID, int playerID, Item item);
-	
-	/**
-	 * Use the given Item
-	 * 
-	 * @param gameID
-	 * @param playerID
-	 * @param item
-	 */
-	public void useItem(int gameID, int playerID, Item item);
+
+    /**
+     * Compare id with logged in account id
+     *
+     * @param accountId account id
+     * @return is id same as current account id
+     */
+    public boolean compareAccountById(int accountId);
+
+    /**
+     * @param accountName
+     * @return account
+     * @throws AccountNotFoundException if account not exist
+     * @throws GeneralServiceException  if there is a general service exception
+     */
+    public Account getAccountByName(String accountName)
+	    throws AccountNotFoundException, GeneralServiceException;
+
+    /**
+     * @param accountId
+     * @return account
+     * @throws AccountNotFoundException if account not exist
+     * @throws GeneralServiceException  if there is a general service exception
+     */
+    public Account getAccountById(int accountId)
+	    throws AccountNotFoundException, GeneralServiceException;
+
+    /**
+     * @param gameID
+     * @param playerID
+     * @param dice
+     */
+    public void playerRolls(int gameID, int playerID, Dice dice);
+
+    /**
+     * @param gameID
+     * @param number
+     */
+    public void startRound(int gameID, int number);
+
+    /**
+     * @param gameID
+     */
+    public void userJoinedGame(int gameID);
+
+    /**
+     *
+     */
+    public void userCreatedGame();
+
+    /**
+     * @param gameID
+     * @param number
+     */
+    public void endRound(int gameID, int number);
+
+    /**
+     * @param gameID
+     * @param playerID
+     * @param item
+     */
+    public void addItemToPlayer(int gameID, int playerID, Item item);
+
+    /**
+     * @param gameID
+     * @param playerID
+     * @param item
+     */
+    public void useItem(int gameID, int playerID, Item item);
 	
 	/**
 	 * Moves a Token by the given number

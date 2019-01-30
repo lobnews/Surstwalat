@@ -54,7 +54,7 @@ public class HealthMessageBean implements MessageListener {
                     break;
                 case MessageType.ASSIGN_PLAYER:
                 	System.out.println("[HEALTHMANAGEMENT] ASSIGN_PLAYER received");
-                    healthManagement.createTokens(o.getIntProperty(PropertyType.PLAYER_ID), o.getIntProperty(PropertyType.GAME_ID));
+                    healthManagement.createTokens(o.getIntProperty(PropertyType.PLAYER_ID), o.getIntProperty(PropertyType.GAME_ID), o.getBody(Integer.class));
                     break;
                 case MessageType.COLLISION_WITH_PLAYER:
                 	System.out.println("[HEALTHMANAGEMENT] COLLISION_WITH_PLAYER received");
