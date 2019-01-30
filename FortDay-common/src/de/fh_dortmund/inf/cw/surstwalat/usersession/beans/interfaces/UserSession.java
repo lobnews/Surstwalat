@@ -92,6 +92,32 @@ public interface UserSession{
      * @return account name
      */
     public String getAccountName();
+
+    /**
+     * Compare id with logged in account id
+     *
+     * @param accountId account id
+     * @return is id same as current account id
+     */
+    public boolean compareAccountById(int accountId);
+
+    /**
+     * @param accountName
+     * @return account
+     * @throws AccountNotFoundException if account not exist
+     * @throws GeneralServiceException  if there is a general service exception
+     */
+    public Account getAccountByName(String accountName)
+	    throws AccountNotFoundException, GeneralServiceException;
+
+    /**
+     * @param accountId
+     * @return account
+     * @throws AccountNotFoundException if account not exist
+     * @throws GeneralServiceException  if there is a general service exception
+     */
+    public Account getAccountById(int accountId)
+	    throws AccountNotFoundException, GeneralServiceException;
         
 	/**
 	 * Action when the Player rolls
@@ -173,28 +199,4 @@ public interface UserSession{
 	 * @return List<Account>
 	 */
 	public List<Account> getUsersInOpenGame(int gameid);
-	
-	/**
-	 * Gets the account by name
-	 * 
-	 * @param id
-	 * @return Account
-	 */
-	public Account getAccountByName(String accountName) throws AccountNotFoundException, GeneralServiceException;
-	
-	/**
-	 * Gets the account by ID
-	 * 
-	 * @param id
-	 * @return Account
-	 */
-	public Account getAccountById(int id) throws AccountNotFoundException, GeneralServiceException;
-	
-    /**
-     * Compare id with logged in account id
-     *
-     * @param accountId account id
-     * @return is id same as current account id
-     */
-	public boolean compareAccountById(int accountId);
 }
