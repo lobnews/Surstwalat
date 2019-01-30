@@ -292,6 +292,8 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
     	trySetObject(msg, number);
     	
     	sendMessage(msg);
+
+    	System.out.println("[USERSESSION] Move Token: GameID: " + gameID + ", tokenID: " + tokenID + ", number: " + number);
     }
 
     
