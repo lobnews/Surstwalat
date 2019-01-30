@@ -31,9 +31,10 @@ public class OutgoingEventHelperBean implements EventHelperLocal {
 	 * @see EventHelperLocal#triggerAssignPlayerEvent(Integer, Integer, Integer)
 	 */
 	@Override
-	public void triggerAssignPlayerEvent(Integer gameId, Integer userId, Integer playerNo) {
+	public void triggerAssignPlayerEvent(Integer gameId, Integer userId, Integer playerId, Integer playerNo) {
 		ObjectMessage message = createObjectMessage(gameId, MessageType.ASSIGN_PLAYER);
 		trySetIntProperty(message, PropertyType.USER_ID, userId);
+		trySetIntProperty(message, PropertyType.PLAYER_ID, playerId);
 		trySetObject(message, playerNo);
 		sendMessage(message);
 		System.out.println("[DISPATCHER] Assign Player " + playerNo + " to user with id " + userId);
@@ -48,20 +49,21 @@ public class OutgoingEventHelperBean implements EventHelperLocal {
 		trySetStringProperty(message, PropertyType.DISPLAY_MESSAGE, "Runde " + roundNo);
 		trySetObject(message, roundNo);
 		sendMessage(message);
-		System.out.println("[DISPATCHER] : Runde " + roundNo);
+		System.out.println("[DISPATCHER] Started round " + roundNo);
 	}
 	
 	/**
 	 * @see EventHelperLocal#triggerAssignActivePlayerEvent(Integer, Integer, Integer)
 	 */
 	@Override
-	public void triggerAssignActivePlayerEvent(Integer gameId, Integer playerId, Integer playerNo) {
+	public void triggerAssignActivePlayerEvent(Integer gameId, Integer playerId, Integer playerNo, Integer timeout) {
 		ObjectMessage message = createObjectMessage(gameId, MessageType.ASSIGN_ACTIVE_PLAYER);
 		trySetStringProperty(message, PropertyType.DISPLAY_MESSAGE, "Spieler " + playerNo + " ist an der Reihe");
 		trySetIntProperty(message, PropertyType.PLAYER_ID, playerId);
+		trySetIntProperty(message, PropertyType.TIMEOUT_SECONDS_LEFT, timeout);
 		trySetObject(message, playerNo);
 		sendMessage(message);
-		System.out.println("[DISPATCHER] Spieler " + playerNo + " ist an der Reihe");
+		System.out.println("[DISPATCHER] Player " + playerNo + "'s turn");
 	}
 	
 	/**
@@ -74,7 +76,7 @@ public class OutgoingEventHelperBean implements EventHelperLocal {
 		trySetStringProperty(message, PropertyType.DISPLAY_MESSAGE, "Spieler " + playerNo + " wuerfelt eine " + value);
 		trySetObject(message, value);
 		sendMessage(message);
-		System.out.println("[DISPATCHER] Spieler " + playerNo + " wuerfelt eine " + value );
+		System.out.println("[DISPATCHER] Player " + playerNo + " rolls a " + value );
 	}
 	
 	/**
@@ -87,7 +89,7 @@ public class OutgoingEventHelperBean implements EventHelperLocal {
 		trySetIntProperty(message, PropertyType.PLAYER_NO, playerNo);
 		trySetStringProperty(message, PropertyType.DISPLAY_MESSAGE, "Spieler " + playerNo + " gewinnt");
 		sendMessage(message);
-		System.out.println("[DISPATCHER] Spieler " + playerNo + " gewinnt" );
+		System.out.println("[DISPATCHER] Player " + playerNo + " wins" );
 	}
 
 	/**
@@ -100,9 +102,24 @@ public class OutgoingEventHelperBean implements EventHelperLocal {
 		trySetIntProperty(message, PropertyType.PLAYER_ID, playerId);
 		trySetObject(message, playerNo);
 		sendMessage(message);
-		System.out.println("[DISPATCHER] Spieler " + playerNo + " scheidet aus" );
+		System.out.println("[DISPATCHER] Player " + playerNo + " eliminated" );
 	}
 	
+	
+	/**
+	 * @see EventHelperLocal#triggerEliminatePlayerEvent(Integer, Integer, Integer)
+	 */
+	@Override
+	public void triggerPlayerTimeoutReminderEvent(Integer gameId, Integer playerId, Integer playerNo, Integer secondsLeft) {
+		ObjectMessage message = createObjectMessage(gameId, MessageType.ELIMINATE_PLAYER);
+		trySetStringProperty(message, PropertyType.DISPLAY_MESSAGE, "Zug endet in " + secondsLeft + " Sekunden");
+		trySetIntProperty(message, PropertyType.PLAYER_ID, playerId);
+		trySetIntProperty(message, PropertyType.PLAYER_NO, playerNo);
+		trySetObject(message, secondsLeft);
+		sendMessage(message);
+		System.out.println("[DISPATCHER] Timeout reminder for player " + playerNo + " (" + secondsLeft +" seconds left)" );
+	}
+
 	/**
 	 * Produces an ObjectMessage object and sets a GAME_ID MessageProperty and given MessageType
 	 * @param gameId ID of the game
@@ -115,6 +132,8 @@ public class OutgoingEventHelperBean implements EventHelperLocal {
 		trySetIntProperty(message, PropertyType.GAME_ID, gameId);
 		return message;
 	}
+	
+	
 	
 	/**
 	 * Wrapper method for setting MessageProperties of type Integer

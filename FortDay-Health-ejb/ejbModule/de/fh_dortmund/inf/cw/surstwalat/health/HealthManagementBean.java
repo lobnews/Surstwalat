@@ -42,8 +42,8 @@ public class HealthManagementBean implements HealthManagementLocal, HealthManage
     private EntityManager em;
 
     @Override
-    public void damageToken(int gameId, int characterId, int damage) {
-        Token t = getToken(characterId);
+    public void damageToken(int gameId, int tokenId, int damage) {
+        Token t = getToken(tokenId);
         t.setHealth(t.getHealth() - damage);
         if(t.getHealth() <= 0) {
             //Token is dead
@@ -53,7 +53,7 @@ public class HealthManagementBean implements HealthManagementLocal, HealthManage
                     ObjectMessage o = jmsContext.createObjectMessage();
                     o.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.TOKEN_DEATH);
                     o.setIntProperty(PropertyType.GAME_ID, gameId);
-                    o.setIntProperty(PropertyType.CHARACTER_ID, characterId);
+                    o.setIntProperty(PropertyType.TOKEN_ID, tokenId);
                     jmsContext.createProducer().send(eventTopic, o);
                 } catch (JMSException ex) {
                     Logger.getLogger(HealthManagementBean.class.getName()).log(Level.SEVERE, null, ex);
@@ -78,7 +78,7 @@ public class HealthManagementBean implements HealthManagementLocal, HealthManage
             ObjectMessage o = jmsContext.createObjectMessage();
             o.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.SET_TOKEN_HEALTH);
             o.setIntProperty(PropertyType.GAME_ID, gameId);
-            o.setIntProperty(PropertyType.CHARACTER_ID, characterId);
+            o.setIntProperty(PropertyType.TOKEN_ID, tokenId);
             o.setIntProperty(PropertyType.HEALTH, t.getHealth());
             jmsContext.createProducer().send(eventTopic, o);
         } catch (JMSException ex) {
@@ -87,7 +87,7 @@ public class HealthManagementBean implements HealthManagementLocal, HealthManage
     }
 
     @Override
-    public void createTokens(int playerId) {
+    public void createTokens(int playerId, int gameId) {
         LinkedList<Integer> list = new LinkedList<>();
         for(int i = 1; i <= 4; i++) {
             Token t = new Token();
@@ -102,6 +102,7 @@ public class HealthManagementBean implements HealthManagementLocal, HealthManage
             ObjectMessage o = jmsContext.createObjectMessage(list);
             o.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.TOKEN_CREATED);
             o.setIntProperty(PropertyType.PLAYER_ID, playerId);
+            o.setIntProperty(PropertyType.GAME_ID, gameId);
             jmsContext.createProducer().send(eventTopic, o);
         } catch (JMSException ex) {
             Logger.getLogger(HealthManagementBean.class.getName()).log(Level.SEVERE, null, ex);

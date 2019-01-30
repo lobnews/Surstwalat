@@ -5,13 +5,19 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.TreeSet;
 
+import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.Timeout;
+import javax.ejb.Timer;
+import javax.ejb.TimerConfig;
+import javax.ejb.TimerService;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Action;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.ActionType;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.DispatcherTimerInfo;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Game;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Player;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.RollActionResult;
@@ -30,6 +36,9 @@ import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.PlayerRepositoryLo
  */
 @Stateless
 public class DispatcherBean implements DispatcherLocal {
+	
+	private static final String REMINDER_TIMER = "REMINDER_TIMER";
+	private static final String TIMEOUT_TIMER = "TIMEOUT_TIMER";
 
 	@EJB
 	private ActionRepositoryLocal actionRepository;
@@ -41,6 +50,12 @@ public class DispatcherBean implements DispatcherLocal {
 	private EventHelperLocal eventHelper;
 	@EJB
 	private DiceRollLocal diceRoll;
+	
+	@Resource
+	private TimerService timerService;
+	
+	@Resource(name = "playerTimeoutSeconds")
+	private Integer playerTimeoutSeconds;
 
 	/**
 	 * Default constructor.
@@ -69,9 +84,10 @@ public class DispatcherBean implements DispatcherLocal {
 			}
 			
 			game.setPlayers(players);
-			gameRepository.save(game);
-			for (Player p : players) {
-				eventHelper.triggerAssignPlayerEvent(p.getGame().getId(), p.getAccountId(), p.getPlayerNo());
+			game = gameRepository.save(game);
+			for (Player p : game.getPlayers()) {
+				System.out.println("[Dispatcher] Player created with id " + p.getId());
+				eventHelper.triggerAssignPlayerEvent(p.getGame().getId(), p.getAccountId(), p.getId(), p.getPlayerNo());
 			}
 		}
 	}
@@ -83,7 +99,7 @@ public class DispatcherBean implements DispatcherLocal {
 	public void playerRoll(int playerId, Dice dice) {
 		Player player = playerRepository.findById(playerId);
 		if (player != null) {
-			
+			resetPlayerTimeout(player.getGame().getId());
 			if(dice == null) {
 				dice = new Dice();
 				dice.setLabel("Default Dice");
@@ -146,7 +162,8 @@ public class DispatcherBean implements DispatcherLocal {
 					eventHelper.triggerStartRoundEvent(gameId, game.getCurrentRound());
 				} else {
 					Player nextPlayer = alivePlayers.first();
-					eventHelper.triggerAssignActivePlayerEvent(gameId, nextPlayer.getId(), nextPlayer.getPlayerNo());
+					createPlayerTimeout(gameId, nextPlayer.getId(), nextPlayer.getPlayerNo());
+					eventHelper.triggerAssignActivePlayerEvent(gameId, nextPlayer.getId(), nextPlayer.getPlayerNo(), playerTimeoutSeconds);
 				}
 			}
 		}
@@ -197,5 +214,64 @@ public class DispatcherBean implements DispatcherLocal {
 		}
 		return filtered;
 	}
+	
+	
+	/**
+	 * Creates a timeout for the players turn
+	 * @param gameId the id of the game
+	 * @param playerId the id of the player
+	 * @param playerNo the number of the player (1-4)
+	 */
+	private void createPlayerTimeout(int gameId, int playerId, int playerNo) {
+		if(playerTimeoutSeconds >= 45) {
+			TimerConfig reminderTimerConfig = new TimerConfig();
+			reminderTimerConfig.setInfo(new DispatcherTimerInfo(REMINDER_TIMER, gameId, playerId, playerNo, 30));
+			reminderTimerConfig.setPersistent(true);
+			timerService.createSingleActionTimer((playerTimeoutSeconds-30)*1000, reminderTimerConfig);
+		}
+		
+		TimerConfig timeoutTimerConfig = new TimerConfig();
+		timeoutTimerConfig.setInfo(new DispatcherTimerInfo(TIMEOUT_TIMER, gameId, playerId, playerNo, 0));
+		timeoutTimerConfig.setPersistent(true);
+		timerService.createSingleActionTimer(playerTimeoutSeconds*1000, timeoutTimerConfig);
+	}
+	
+	/**
+	 * Resets the Timeout for the players turn
+	 * @param gameId the ID of the game
+	 */
+	private void resetPlayerTimeout(int gameId) {	
+		for (Timer timer : timerService.getTimers()) {
+			if(timer.getInfo() != null && timer.getInfo() instanceof DispatcherTimerInfo) {
+				DispatcherTimerInfo info = (DispatcherTimerInfo)timer.getInfo();
+				if ((TIMEOUT_TIMER.equals(info.getId()) || REMINDER_TIMER.equals(info.getId())) && info.getGameId() == gameId) {
+					timer.cancel();
+				}
+			}
+		}		
+	}
+	
+	/**
+	 * handles the timeout for the players turn
+	 */
+	@Timeout
+	private void handlePlayerTimeout(Timer timer) {
+		if(timer.getInfo() != null && timer.getInfo() instanceof DispatcherTimerInfo) {
+			DispatcherTimerInfo info = (DispatcherTimerInfo)timer.getInfo();
+			if(TIMEOUT_TIMER.equals(info.getId())) {
+				Player player = playerRepository.findById(info.getPlayerId());
+				Action action = new Action();
+				action.setActionType(ActionType.ROLL);
+				player.getActions().add(action);
+				playerRepository.save(player);
+				dispatch(info.getGameId());
+			}
+			if(REMINDER_TIMER.equals(info.getId())) {
+				eventHelper.triggerPlayerTimeoutReminderEvent(info.getGameId(), info.getPlayerId(), info.getPlayerNo(), info.getSecondsLeft());
+			}
+		}
+		
+	}
+	
 
 }

@@ -6,13 +6,14 @@
     <jdbc-connection-pool
         name="FortDayDBPool"
         res-type="javax.sql.ConnectionPoolDataSource"
-        datasource-classname="com.mysql.cj.jdbc.MysqlDataSource">
+        datasource-classname="com.mysql.cj.jdbc.MysqlDataSource" max-pool-size="50">
         <property name="serverName" value="localhost" />
         <property name="port" value="3306" />
         <property name="databaseName" value="fortdaydb" />
         <property name="user" value="root" />
         <property name="password" value="root" />
         <property name="serverTimezone" value="UTC" />
+       	
     </jdbc-connection-pool>
     <jdbc-resource
         enabled="true"

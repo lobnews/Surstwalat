@@ -53,21 +53,23 @@ public class DispatcherTestEventHandlerBean implements MessageListener {
 
 				switch (type) {
 				case MessageType.ASSIGN_PLAYER:
+					
+					
 					if (m.getBody(Integer.class).equals(4)) {
-						testNoCollision(gameId);
+						//testNoCollision(gameId);
 					}
 					break;
 				case MessageType.START_ROUND:
-					testNoCollision(gameId);
+					//testNoCollision(gameId);
 					break;
 				case MessageType.ASSIGN_ACTIVE_PLAYER:
-					testPlayerAction(m.getIntProperty(PropertyType.PLAYER_ID));
+					//testPlayerAction(m.getIntProperty(PropertyType.PLAYER_ID));
 					break;
 				case MessageType.PLAYER_ROLL:
-					testNoCollision(gameId);
+					//testNoCollision(gameId);
 					break;
 				case MessageType.ELIMINATE_PLAYER:
-					testPlayerDeath(m.getIntProperty(PropertyType.PLAYER_ID));
+					//testPlayerDeath(m.getIntProperty(PropertyType.PLAYER_ID));
 					break;
 				default:
 					break;
@@ -77,6 +79,10 @@ public class DispatcherTestEventHandlerBean implements MessageListener {
 		} catch (Exception e) {
 
 		}
+	}
+	
+	private void testCreateToken(int gameId) {
+		
 	}
 	
     private void testNoCollision(int gameId) {
@@ -118,7 +124,7 @@ public class DispatcherTestEventHandlerBean implements MessageListener {
 	}
     private void triggerPlayerDeathEvent(Player player) {
     	System.out.println("DISPATCHER (Test): Send PLAYER_DEATH message with GameId " + player.getGame().getId());
-		ObjectMessage message = createObjectMessage(MessageType.GAME_STARTED);
+		ObjectMessage message = createObjectMessage(MessageType.PLAYER_DEATH);
 		trySetIntProperty(message, PropertyType.GAME_ID, player.getGame().getId());
 		trySetIntProperty(message, PropertyType.PLAYER_ID, player.getId());
 		sendMessage(message);

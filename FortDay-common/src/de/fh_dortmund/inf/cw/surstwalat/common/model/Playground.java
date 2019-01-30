@@ -42,7 +42,7 @@ public class Playground implements Serializable
         return game;
     }
 
-    public void setGameId(Game game)
+    public void setGame(Game game)
     {
         this.game = game;
     }
