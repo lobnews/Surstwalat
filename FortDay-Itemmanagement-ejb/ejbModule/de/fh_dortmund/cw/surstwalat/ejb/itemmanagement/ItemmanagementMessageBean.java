@@ -66,7 +66,7 @@ public class ItemmanagementMessageBean implements MessageListener {
 			}
 
 		} catch (JMSException e) {
-			// e.printStackTrace();
+			e.printStackTrace();
 		}
 	}
 }

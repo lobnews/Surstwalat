@@ -84,7 +84,7 @@ public class ItemmanagementBean {
 		TypedQuery<Playground> q = entitymanager.createNamedQuery("Playground.getByGameId", Playground.class);
 		q.setParameter("gameId", gameId);
 		try {
-			int feldSize = q.getSingleResult().getFields().size();
+			int feldSize = 40;
 
 			Random rnd = new Random();
 			for (int i = 0; i < feldSize; i++) {
@@ -94,6 +94,7 @@ public class ItemmanagementBean {
 				}
 			}
 		} catch (NoResultException e) {
+			System.out.println("[ITEMMANAGEMENT]: Playground of game with ID " + gameId);
 		}
 
 	}
@@ -112,6 +113,7 @@ public class ItemmanagementBean {
 	    int number = random.nextInt((int)count);
 	    
 	    TypedQuery<Item> selectQuery = entitymanager.createNamedQuery("Item.getBySpecial", Item.class);
+	    selectQuery.setParameter("special", special);
 	    selectQuery.setFirstResult(number);
 	    selectQuery.setMaxResults(1);
 	    return (Item)selectQuery.getSingleResult();
