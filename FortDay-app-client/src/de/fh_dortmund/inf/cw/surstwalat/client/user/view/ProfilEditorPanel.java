@@ -69,8 +69,8 @@ public class ProfilEditorPanel extends JPanel {
      */
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponents(g);
-        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+	super.paintComponents(g);
+	g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
 
     /**
@@ -186,29 +186,31 @@ public class ProfilEditorPanel extends JPanel {
      * Update email address
      */
     private void updateEmailAddress() {
-        Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
-        String email = tf_email.getText();
+	Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
+	String email = tf_email.getText();
 
-        // Validation check
-        if (!checkEmailAddress(email)) {
-            return;
-        }
+	// Validation check
+	if (!checkEmailAddress(email)) {
+	    return;
+	}
 
-        // update call
-        try {
-            userManager.updateEmailAddress(email);
-            tf_email.setText("");
-            lb_infoBox.setText(Designer.successBox(textRepository.get("change_email_success")));
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("change_email_success"));
-        } catch (GeneralServiceException e) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_ex"), e);
-            JOptionPane.showMessageDialog(
-                    MainFrame.getInstance(),
-                    textRepository.get("generalServiceException"),
-                    textRepository.get("generalServiceException_short"),
-                    JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
-        }
+	// update call
+	try {
+	    userManager.updateEmailAddress(email);
+	    tf_email.setText("");
+	    lb_infoBox.setText(Designer.successBox(textRepository.get("change_email_success")));
+	    Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("change_email_success"));
+	} catch (GeneralServiceException e) {
+	    Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_ex"), e);
+	    JOptionPane.showMessageDialog(
+		    MainFrame.getInstance(),
+		    textRepository.get("generalServiceException"),
+		    textRepository.get("generalServiceException_short"),
+		    JOptionPane.ERROR_MESSAGE);
+	    System.exit(1);
+	}
+
+	tf_email.setText(userManager.getEMailAddress());
     }
 
     /**
@@ -218,79 +220,81 @@ public class ProfilEditorPanel extends JPanel {
      * @return
      */
     private boolean checkEmailAddress(String email) {
-        Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
-        LinkedList<String> errorMsgList = new LinkedList<>();
+	Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
+	LinkedList<String> errorMsgList = new LinkedList<>();
 
-        // Check email address
-        if (!Validator.checkEmailAddress(email)) {
-            errorMsgList.add(textRepository.get("email_not_valid"));
-        }
+	// Check email address
+	if (!Validator.checkEmailAddress(email)) {
+	    errorMsgList.add(textRepository.get("email_not_valid"));
+	}
 
-        // Error dialog
-        if (errorMsgList.size() > 0) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("input_error_short"), errorMsgList.toString());
-            lb_infoBox.setText(Designer.errorBox(errorMsgList));
-            errorMsgList.clear();
-            return false;
-        }
-        return true;
+	// Error dialog
+	if (errorMsgList.size() > 0) {
+	    Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("input_error_short"), errorMsgList.toString());
+	    lb_infoBox.setText(Designer.errorBox(errorMsgList));
+	    errorMsgList.clear();
+	    return false;
+	}
+	return true;
     }
 
     /**
      * Open modal change password dialog
      */
     private void openChangePasswordDialog() {
-        ChangePasswordDialog changePasswordDialog = new ChangePasswordDialog(this);
-        changePasswordDialog.setVisible(true);
+	ChangePasswordDialog changePasswordDialog = new ChangePasswordDialog(this);
+	changePasswordDialog.setVisible(true);
     }
 
     /**
      * Delete account
      */
     private void deleteAccount() {
-        Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
+	Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
 
-        int dialogResult = JOptionPane.showConfirmDialog(
-                MainFrame.getInstance(),
-                textRepository.get("delete_check"),
-                textRepository.get("Warning"),
-                JOptionPane.YES_NO_OPTION);
+	int dialogResult = JOptionPane.showConfirmDialog(
+		MainFrame.getInstance(),
+		textRepository.get("delete_check"),
+		textRepository.get("Warning"),
+		JOptionPane.YES_NO_OPTION);
 
-        if (dialogResult == JOptionPane.YES_OPTION) {
-            try {
-                userManager.deleteAccount();
+	if (dialogResult == JOptionPane.YES_OPTION) {
+	    try {
+		userManager.deleteAccount();
 
-                // Success dialog
-                JOptionPane.showMessageDialog(
-                        this,
-                        textRepository.get("delete_success"),
-                        textRepository.get("Success"),
-                        JOptionPane.INFORMATION_MESSAGE);
-                Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("delete_success"));
-                close();
-            } catch (GeneralServiceException e) {
-                Logger.getLogger(ProfilEditorPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_ex"), e);
-                JOptionPane.showMessageDialog(
-                        MainFrame.getInstance(),
-                        textRepository.get("generalServiceException"),
-                        textRepository.get("generalServiceException_short"),
-                        JOptionPane.ERROR_MESSAGE);
-                System.exit(1);
-            }
-        }
+		// Success dialog
+		JOptionPane.showMessageDialog(
+			this,
+			textRepository.get("delete_success"),
+			textRepository.get("Success"),
+			JOptionPane.INFORMATION_MESSAGE);
+		Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("delete_success"));
+		exit();
+	    } catch (GeneralServiceException e) {
+		Logger.getLogger(ProfilEditorPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_ex"), e);
+		JOptionPane.showMessageDialog(
+			MainFrame.getInstance(),
+			textRepository.get("generalServiceException"),
+			textRepository.get("generalServiceException_short"),
+			JOptionPane.ERROR_MESSAGE);
+		exit();
+	    }
+	}
     }
 
     /**
      * Get a site back
      */
     private void back() {
-        MainFrame.getInstance().setFrame(new StartHubPanel(), false);
+	MainFrame.getInstance().setFrame(new StartHubPanel(), false, false);
     }
 
     /**
      * Exit program
      */
-    private void close() {
-        System.exit(0);
+    private void exit() {
+	userManager.logout();
+	userManager.disconnect();
+	System.exit(0);
     }
 }

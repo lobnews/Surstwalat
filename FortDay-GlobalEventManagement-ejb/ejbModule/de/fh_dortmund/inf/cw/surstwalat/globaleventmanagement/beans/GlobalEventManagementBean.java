@@ -21,6 +21,8 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Playground;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Token;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.DamageZone;
 import de.fh_dortmund.inf.cw.surstwalat.globaleventmanagement.beans.interfaces.GlobalEventManagementLocal;
+import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  *
@@ -36,7 +38,16 @@ public class GlobalEventManagementBean implements GlobalEventManagementLocal {
 	private Topic eventTopic;
 	@PersistenceContext(unitName = "FortDayDB")
 	private EntityManager em;
-
+        
+        
+        /**
+         * Updates the damage zone:
+         * increases the damage and size of the zone and updates its position
+         * sets the values position and size of the next zone
+         * 
+         * @param gameId
+         * @param roundNo 
+         */
 	@Override
 	public void updateZone(int gameId, int roundNo) {
 		Game game = em.find(Game.class, gameId);
@@ -88,7 +99,13 @@ public class GlobalEventManagementBean implements GlobalEventManagementLocal {
 			e.printStackTrace();
 		}
 	}
-
+        
+        /**
+         * Sends the message that an airdrop should happen
+         * Gets called, if a player rolled a 6
+         * 
+         * @param gameId 
+         */
 	@Override
 	public void triggerAirdrop(int gameId) {
 		ObjectMessage message = jmsContext.createObjectMessage();
@@ -101,7 +118,12 @@ public class GlobalEventManagementBean implements GlobalEventManagementLocal {
 			e.printStackTrace();
 		}
 	}
-
+        
+        /**
+         * Sends the message that the starting items for a game should be placed
+         * 
+         * @param gameId 
+         */
 	@Override
 	public void triggerStartingItems(int gameId) {
 		ObjectMessage message = jmsContext.createObjectMessage();
@@ -115,31 +137,51 @@ public class GlobalEventManagementBean implements GlobalEventManagementLocal {
 		}
 	}
 
+        /**
+         * Sends the message which tokens have to suffer damage from the zone
+         * 
+         * @param gameId
+         * @param token 
+         */
 	@Override
 	public void triggerDamage(int gameId, List<Token> token) {
 		ObjectMessage message = jmsContext.createObjectMessage();
 		try {
 			Game game = em.find(Game.class, gameId);
+                        List<Integer> tokenIds = new ArrayList<>();
+                        for (Token t : token) { 
+                            tokenIds.add(t.getId());
+                        }
 			int damage = getZoneByGame(game).getDamage();
-			for (Token hitToken : token) {
 				message.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.TRIGGER_DAMAGE);
 				message.setIntProperty(PropertyType.GAME_ID, gameId);
-				message.setIntProperty(PropertyType.TOKEN_ID, hitToken.getId());
 				message.setIntProperty(PropertyType.DAMAGE, damage);
+                                message.setObject((Serializable) tokenIds);
 				jmsContext.createProducer().send(eventTopic, message);
-				System.out.println("[GLOBALEVENTMANAGEMENT] Token " + hitToken.getId() + " gets " + damage + " from zone");
-			}
+				System.out.println("[GLOBALEVENTMANAGEMENT] " + token.size() + " Token get " + damage + " from zone");
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}
 	}
 
+        /**
+         * Gets the Playground of the given game by using a NamedQuery
+         * 
+         * @param gameId
+         * @return 
+         */
 	private Playground getPlaygroundByGameID(int gameId) {
 		TypedQuery<Playground> query = em.createNamedQuery("Playground.getByGameId", Playground.class);
 		query.setParameter("gameId", gameId);
 		return query.getSingleResult();
 	}
 
+        /**
+         * Gets the DamageZone of the given game by using a NamedQuery
+         * 
+         * @param game
+         * @return 
+         */
 	private DamageZone getZoneByGame(Game game) {
 		try {
 			TypedQuery<DamageZone> query = em.createNamedQuery("DamageZone.getByGame", DamageZone.class);

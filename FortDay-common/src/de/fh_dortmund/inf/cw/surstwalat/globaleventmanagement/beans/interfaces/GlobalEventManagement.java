@@ -5,6 +5,7 @@ import java.util.List;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Token;
 
 /**
+ * GlobalEventManagement interface
  * 
  * @author Rebekka Michel
  */

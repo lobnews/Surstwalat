@@ -120,6 +120,7 @@ public class UserManagementPersistBean implements UserManagementLocal {
      * @throws AccountNotFoundException if there is no result
      * @throws GeneralServiceException if there is a general service exception
      */
+    @Override
     public Account getAccountById(int id) throws AccountNotFoundException, GeneralServiceException {
         try {
             TypedQuery<Account> accountQuery = entityManager.createNamedQuery("Account.getById", Account.class);
@@ -141,6 +142,7 @@ public class UserManagementPersistBean implements UserManagementLocal {
      * @throws AccountNotFoundException if there is no result
      * @throws GeneralServiceException if there is a general service exception
      */
+    @Override
     public Account getAccountByName(String name) throws AccountNotFoundException, GeneralServiceException {
         try {
             TypedQuery<Account> accountQuery = entityManager.createNamedQuery("Account.getByName", Account.class);

@@ -2,7 +2,10 @@ package de.fh_dortmund.inf.cw.surstwalat.health;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Token;
 import de.fh_dortmund.inf.cw.surstwalat.healthmanagement.beans.interfaces.HealthManagementLocal;
+
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.ActivationConfigProperty;
@@ -12,6 +15,7 @@ import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
+
 
 /**
  * Message-Driven Bean implementation class for: HealthMessageBean
@@ -44,12 +48,19 @@ public class HealthMessageBean implements MessageListener {
         try {
             switch (messageType) {
                 case MessageType.TRIGGER_DAMAGE:
-                    healthManagement.damageToken(o.getIntProperty(PropertyType.GAME_ID), o.getIntProperty(PropertyType.TOKEN_ID), o.getIntProperty(PropertyType.DAMAGE));
+                	System.out.println("[HEALTHMANAGEMENT] TRIGGER_DAMAGE received");
+                	List<Integer> tokenIds = o.getBody(List.class);
+                	healthManagement.bulkDamage(o.getIntProperty(PropertyType.GAME_ID), tokenIds, o.getIntProperty(PropertyType.DAMAGE));                 
                     break;
                 case MessageType.ASSIGN_PLAYER:
-                    healthManagement.createTokens(o.getIntProperty(PropertyType.PLAYER_ID), o.getIntProperty(PropertyType.GAME_ID));
+                	System.out.println("[HEALTHMANAGEMENT] ASSIGN_PLAYER received");
+                    healthManagement.createTokens(o.getIntProperty(PropertyType.PLAYER_ID), o.getIntProperty(PropertyType.GAME_ID), o.getBody(Integer.class));
                     break;
-                
+                case MessageType.COLLISION_WITH_PLAYER:
+                	System.out.println("[HEALTHMANAGEMENT] COLLISION_WITH_PLAYER received");
+                	healthManagement.killToken(o.getIntProperty(PropertyType.GAME_ID), o.getIntProperty(PropertyType.ENEMY_CHARACTER_ID));
+                	break;
+                	                
             }
         } catch (JMSException ex) {
             Logger.getLogger(HealthMessageBean.class.getName()).log(Level.SEVERE, null, ex);
