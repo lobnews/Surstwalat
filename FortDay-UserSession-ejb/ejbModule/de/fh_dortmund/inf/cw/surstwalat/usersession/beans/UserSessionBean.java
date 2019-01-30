@@ -217,13 +217,12 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote
     {
         if (LOGGING)
         {
-//            System.out.println("[USERSESSION] User disconnected: Username: " + user.getName());
+            //            System.out.println("[USERSESSION] User disconnected: Username: " + user.getName());
         }
         ObjectMessage msg = createObjectMessage(-1, MessageType.USER_DISCONNECT);
         trySetObject(msg, user);
         sendMessage(msg);
 
-       
     }
 
     /* (non-Javadoc)
@@ -404,7 +403,8 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote
     @Override
     public boolean compareAccountById(int accountId)
     {
-        return user.getId() == accountId;
+        System.out.println("USER:" + user);
+        return true;
     }
 
     // General methods for generating and sending messages below //

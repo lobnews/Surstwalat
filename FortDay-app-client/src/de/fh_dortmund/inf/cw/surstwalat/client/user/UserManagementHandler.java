@@ -41,7 +41,7 @@ public final class UserManagementHandler implements MessageListener {
     /**
      * Handler constructor for UserManagement
      */
-    public UserManagementHandler() {
+    private UserManagementHandler() {
 	textRepository = TextRepository.getInstance().getTextRepository("messages");
 
 	// LookUp to UserSessionRemote
@@ -67,6 +67,7 @@ public final class UserManagementHandler implements MessageListener {
      */
     public static UserManagementHandler getInstance() {
 	if (instance == null) {
+	    System.out.println("Neuer Handler !!! ");
 	    instance = new UserManagementHandler();
 	}
 	return instance;
