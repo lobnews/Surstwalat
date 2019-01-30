@@ -1,6 +1,7 @@
 package de.fh_dortmund.inf.cw.surstwalat.client.user;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.FortDayEventMessageListener;
+import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.view.RegistryPanel;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
@@ -267,6 +268,7 @@ public final class UserManagementHandler implements MessageListener {
 
     public void joinGame(int gameId) throws GameIsFullException {
 	userSessionRemote.userJoinedGame(gameId);
+        MainFrame.getInstance().setGameId(gameId);
     }
     
     public void startGame(int gameID, int fieldsize) {

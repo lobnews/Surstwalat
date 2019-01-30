@@ -95,6 +95,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		em.persist(user);
 		
 		sendGameCreatedMessage(game.getId(), user.getId());
+                sendUserJoinedGameMessage(user.getId(), game.getId());
 	}
 	
 	@Override
