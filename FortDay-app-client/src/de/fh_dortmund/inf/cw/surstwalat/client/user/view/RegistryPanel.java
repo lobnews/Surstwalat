@@ -236,6 +236,7 @@ public class RegistryPanel extends JPanel {
                     textRepository.get("generalServiceException"),
                     textRepository.get("generalServiceException_short"),
                     JOptionPane.ERROR_MESSAGE);
+            exit();
         }
     }
 
@@ -277,6 +278,14 @@ public class RegistryPanel extends JPanel {
      * Get a site back
      */
     private void back() {
-        MainFrame.getInstance().setFrame(new LoginPanel(), false);
+        MainFrame.getInstance().setFrame(new LoginPanel(), false, false);
+    }
+
+    /**
+     * Exit program
+     */
+    private void exit() {
+	userManager.disconnect();
+        System.exit(0);
     }
 }
