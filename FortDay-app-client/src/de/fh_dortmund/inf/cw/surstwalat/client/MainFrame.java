@@ -300,6 +300,14 @@ public class MainFrame extends javax.swing.JFrame implements EventListener {
     public int getGameId() {
 	return gameId;
     }
+    
+    public void startGame() {
+        userManager.startGame(gameId, 40);
+    }
+
+    public UserManagementHandler getUserManager() {
+        return userManager;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.fh_dortmund.inf.cw.surstwalat.client.user.view.LoginPanel loginPanel1;

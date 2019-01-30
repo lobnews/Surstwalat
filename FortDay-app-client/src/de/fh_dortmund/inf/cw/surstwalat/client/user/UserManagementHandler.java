@@ -248,4 +248,8 @@ public class UserManagementHandler implements MessageListener {
     public void joinGame(int gameId) {
 	userSessionRemote.userJoinedGame(gameId);
     }
+    
+    public void startGame(int gameID, int fieldsize) {
+        
+    }
 }
