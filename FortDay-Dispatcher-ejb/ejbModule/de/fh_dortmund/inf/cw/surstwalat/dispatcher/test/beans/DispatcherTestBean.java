@@ -41,7 +41,8 @@ public class DispatcherTestBean implements DispatcherTestLocal {
     
     @PostConstruct
 	public void runTests() {
-//    	this.gameId = testGameStarted();    
+    	if(this.gameId == 0)
+    		this.gameId = testGameStarted();    
     }
     
     @Override
@@ -53,7 +54,11 @@ public class DispatcherTestBean implements DispatcherTestLocal {
     	Game game = new Game();
     	game.setAiPlayerCount(2);
     	for (int i = 0; i < 2; i++) {
-    		game.getHumanUsersInGame().add(new Account());
+    		Account a = new Account();
+    		a.setName("" + i);
+    		a.setEmail("test");
+    		a.setPassword("p");
+    		game.getHumanUsersInGame().add(a);
     		System.out.println("DISPATCHER (Test): Create Account with id " + game.getHumanUsersInGame().get(i).getId());
 		}
     	game.setGameStarted(true);
