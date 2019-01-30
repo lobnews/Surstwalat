@@ -15,7 +15,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
+import javax.ejb.LockType;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.JMSException;
@@ -32,7 +35,7 @@ import javax.persistence.TypedQuery;
 @Stateless
 public class HealthManagementBean implements HealthManagementLocal, HealthManagementRemote{
     
-    private static final int MAX_HEALTH = 25;
+    private static final int MAX_HEALTH = 7;
     
     @Inject
     private JMSContext jmsContext;
@@ -42,11 +45,15 @@ public class HealthManagementBean implements HealthManagementLocal, HealthManage
     private EntityManager em;
 
     @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void damageToken(int gameId, int tokenId, int damage) {
         Token t = getToken(tokenId);
+        if(t == null) {
+        	return;
+        }
         t.setHealth(t.getHealth() - damage);
         if(t.getHealth() <= 0) {
-            //Token is dead
+            //Token is dead   	
             em.remove(t);
             if(getTokenCount(t.getPlayerId()) > 0) {
                 try {
@@ -55,6 +62,7 @@ public class HealthManagementBean implements HealthManagementLocal, HealthManage
                     o.setIntProperty(PropertyType.GAME_ID, gameId);
                     o.setIntProperty(PropertyType.TOKEN_ID, tokenId);
                     jmsContext.createProducer().send(eventTopic, o);
+                    System.out.println("[HEALTHMANAGEMENT] Token with ID " + tokenId + " died" );
                 } catch (JMSException ex) {
                     Logger.getLogger(HealthManagementBean.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -64,6 +72,7 @@ public class HealthManagementBean implements HealthManagementLocal, HealthManage
                     o.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.PLAYER_DEATH);
                     o.setIntProperty(PropertyType.PLAYER_ID, t.getPlayerId());
                     jmsContext.createProducer().send(eventTopic, o);
+                    System.out.println("[HEALTHMANAGEMENT] Player with ID " + t.getPlayerId() + " died" );
                 } catch (JMSException ex) {
                     Logger.getLogger(HealthManagementBean.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -81,12 +90,14 @@ public class HealthManagementBean implements HealthManagementLocal, HealthManage
             o.setIntProperty(PropertyType.TOKEN_ID, tokenId);
             o.setIntProperty(PropertyType.HEALTH, t.getHealth());
             jmsContext.createProducer().send(eventTopic, o);
+            System.out.println("[HEALTHMANAGEMENT] Health of Token with ID " + tokenId + " set to " + t.getHealth());
         } catch (JMSException ex) {
             Logger.getLogger(HealthManagementBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
     @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void createTokens(int playerId, int gameId) {
         LinkedList<Integer> list = new LinkedList<>();
         for(int i = 1; i <= 4; i++) {
@@ -104,6 +115,7 @@ public class HealthManagementBean implements HealthManagementLocal, HealthManage
             o.setIntProperty(PropertyType.PLAYER_ID, playerId);
             o.setIntProperty(PropertyType.GAME_ID, gameId);
             jmsContext.createProducer().send(eventTopic, o);
+            System.out.println("[HEALTHMANAGEMENT] Tokens for Player with ID " + playerId + " created" );
         } catch (JMSException ex) {
             Logger.getLogger(HealthManagementBean.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -113,16 +125,15 @@ public class HealthManagementBean implements HealthManagementLocal, HealthManage
     
     @Override
     public Token getToken(int tokenId) {
-        TypedQuery<Token> query = em.createNamedQuery("Token.getById", Token.class);
-        query.setParameter("id", tokenId);
-        return query.getSingleResult();
+        Token token = em.find(Token.class, tokenId);
+        return token;
     }
 
     @Override
     public int getTokenCount(int playerId) {
-        TypedQuery<Integer> query = em.createNamedQuery("Token.getTokensByPlayerId", Integer.class);
+        TypedQuery<Long> query = em.createNamedQuery("Token.getTokensByPlayerId", Long.class);
         query.setParameter("playerId", playerId);
-        return query.getSingleResult();
+        return query.getSingleResult().intValue();
     }
     
 }

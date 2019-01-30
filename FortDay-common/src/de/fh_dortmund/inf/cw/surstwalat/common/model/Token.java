@@ -2,12 +2,15 @@ package de.fh_dortmund.inf.cw.surstwalat.common.model;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
@@ -39,6 +42,10 @@ public class Token implements Serializable{
 	
     @Column(name="maxHealth")
 	private int maxHealth;
+    
+	@JoinColumn(name="FIELD_ID")
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Field field;
 
 	public int getId() {
 		return id;
@@ -69,5 +76,11 @@ public class Token implements Serializable{
 	}
 	public void setMaxHealth(int maxHealth) {
 		this.maxHealth = maxHealth;
+	}
+	public Field getField() {
+		return field;
+	}
+	public void setField(Field field) {
+		this.field = field;
 	}
 }

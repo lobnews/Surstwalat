@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,7 +39,7 @@ public class Player implements Serializable{
 	private boolean isHuman;
 	@ManyToOne
 	private Game game;
-	@OneToMany(mappedBy="player")
+	@OneToMany(mappedBy="player", cascade=CascadeType.ALL)
 	private List<Action> actions;
 	private int playerNo;
 	private boolean alive;
