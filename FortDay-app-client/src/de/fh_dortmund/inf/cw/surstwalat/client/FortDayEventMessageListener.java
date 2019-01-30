@@ -19,6 +19,7 @@ import de.fh_dortmund.inf.cw.surstwalat.client.event.events.StartRoundEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.TokenCreatedEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.TokenDeathEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.UpdateZoneEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.UserJoinGameEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
@@ -101,6 +102,9 @@ public class FortDayEventMessageListener implements MessageListener {
                     break;
                 case MessageType.PLAYER_ON_FIELD:
                     e = new PlayerOnFieldMessage(message);
+                    break;
+                case MessageType.USER_JOINGAME:
+                    e = new UserJoinGameEvent(message);
                     break;
                 case MessageType.SET_TOKEN_HEALTH:
                     e = new SetTokenHealthEvent(message);
