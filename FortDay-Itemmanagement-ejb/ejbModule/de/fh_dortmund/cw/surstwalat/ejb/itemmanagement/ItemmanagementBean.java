@@ -113,6 +113,7 @@ public class ItemmanagementBean {
 		if (player != null && item != null) {
 			player.addItem(item);
 			entitymanager.merge(player);
+			sender.sendAddItemToPlayer(player.getGame().getId(), player.getId(), item);
 			System.out.println(name + " Item(" + itemID + ") wurd Player(" + player.getId() + ") hinzugefuegt");
 		} else {
 			System.out.println(name + " Player(" + playerID + ") oder Item(" + itemID + ") ungueltig");
