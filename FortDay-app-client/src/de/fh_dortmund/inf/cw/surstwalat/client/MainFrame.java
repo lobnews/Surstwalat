@@ -17,6 +17,7 @@ import de.fh_dortmund.inf.cw.surstwalat.client.event.events.SetTokenHealthEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.StartRoundEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.TokenCreatedEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.UpdateZoneEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.game.view.MainPanel;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.Pawn;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.PawnColor;
 import javax.swing.JOptionPane;
@@ -97,6 +98,7 @@ public class MainFrame extends javax.swing.JFrame implements EventListener {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
             getInstance().setVisible(true);
+            getInstance().setFrame(new MainPanel(), false);
         });
     }
 
