@@ -6,9 +6,11 @@ import javax.ejb.MessageDriven;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
+import javax.jms.ObjectMessage;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 
 /**
  * @author Marvin Wölk
@@ -25,22 +27,32 @@ public class ItemmanagementMessageBean implements MessageListener {
 
 	public void onMessage(Message message) {
 		try {
-			int gameId = message.getIntProperty(PropertyType.GAME_ID);
+			//int gameId = message.getIntProperty(PropertyType.GAME_ID);
 			int msgType = message.getIntProperty(PropertyType.MESSAGE_TYPE);
 
-			System.out.println(itemBean.name + " Ankommende Nachricht: GameID: " + gameId + ", MESSAGE_TYPE: " + msgType + "; MSG:" + message);
+			//System.out.println(itemBean.name + " Ankommende Nachricht: GameID: " + gameId + ", MESSAGE_TYPE: " + msgType + "; MSG:" + message);
 
 			switch (msgType) {
 				case MessageType.TRIGGER_AIRDROP:
-					itemBean.spawnAirDrop(gameId);
+					itemBean.spawnAirDrop(message.getIntProperty(PropertyType.GAME_ID));
 					break;
 				case MessageType.TRIGGER_STARTING_ITEMS:
-					itemBean.spawnItems(gameId, dichte);
+					itemBean.spawnItems(message.getIntProperty(PropertyType.GAME_ID), dichte);
 					break;
 				case MessageType.COLLISION_WITH_ITEM:
 					int playerID = message.getIntProperty(PropertyType.PLAYER_ID);
 					int itemID = message.getIntProperty(PropertyType.ITEM_ID);
 					itemBean.addItemToUser(playerID, itemID);
+					break;
+				case MessageType.SEND_PLAYER_INVENTAR:
+					playerID = message.getIntProperty(PropertyType.PLAYER_ID);
+					itemBean.sendUserInventar(message.getIntProperty(PropertyType.GAME_ID), playerID);
+					break;
+				case MessageType.PLAYER_ACTION :
+					playerID = message.getIntProperty(PropertyType.PLAYER_ID);
+					ObjectMessage objectMessage = (ObjectMessage) message;
+					Item item = objectMessage.getBody(Item.class);
+					itemBean.removeItem(playerID, item.getId());
 					break;
 				case MessageType.ELIMINATE_PLAYER:
 					//ITEMS werden nach dem Tod nicht gespawnt
@@ -48,7 +60,7 @@ public class ItemmanagementMessageBean implements MessageListener {
 			}
 
 		} catch (JMSException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 }

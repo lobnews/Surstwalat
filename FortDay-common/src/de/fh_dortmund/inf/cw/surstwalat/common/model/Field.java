@@ -1,6 +1,9 @@
 package de.fh_dortmund.inf.cw.surstwalat.common.model;
 
 import java.io.Serializable;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -9,6 +12,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Table(name = "Field")
@@ -25,13 +30,15 @@ public class Field implements Serializable
     @GeneratedValue
     @Column(name = "id")
     private int id;
+    
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Playground playground;
 
     @JoinColumn
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Item item;
-
-    @JoinColumn
-    @ManyToOne
+    
+    @OneToOne(mappedBy = "field")
     private Token token;
 
     @Column
@@ -70,6 +77,14 @@ public class Field implements Serializable
     public int getId()
     {
         return id;
+    }
+    
+    public Playground getPlayground() {
+    	return this.playground;
+    }
+    
+    public void setPlayground(Playground playground) {
+    	this.playground = playground;
     }
 
 }
