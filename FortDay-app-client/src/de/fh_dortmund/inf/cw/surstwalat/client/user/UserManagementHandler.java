@@ -271,5 +271,10 @@ public final class UserManagementHandler implements MessageListener {
     
     public void startGame(int gameID, int fieldsize) {
         userSessionRemote.startGame(gameID, fieldsize);
+        userSessionRemote.getUsersInOpenGame(gameID);
+    }
+
+    public List<Account> getUsersInOpenGame(int gameID) {
+        return userSessionRemote.getUsersInOpenGame(gameID);
     }
 }
