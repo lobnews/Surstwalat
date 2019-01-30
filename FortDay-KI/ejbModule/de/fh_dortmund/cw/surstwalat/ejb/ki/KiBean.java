@@ -103,6 +103,7 @@ public class KiBean implements KiLocal {
 
 	public void moveToken(int playerid, int count) {
 		List<Token> tokelist = this.getTokens(playerid);
-		sender.sendTokenMove(gameid, tokenid, count);;
+		Token token = tokelist.get(0);
+		sender.sendTokenMove(gameid, token.getId(), count);;
 	}
 }
