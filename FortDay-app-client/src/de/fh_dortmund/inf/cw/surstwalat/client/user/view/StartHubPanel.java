@@ -1,7 +1,7 @@
 package de.fh_dortmund.inf.cw.surstwalat.client.user.view;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
-import de.fh_dortmund.inf.cw.surstwalat.client.game.view.MainPanel;
+import de.fh_dortmund.inf.cw.surstwalat.client.lobby.LobbyOverviewPanel;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.FontKeeper;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
 import java.util.Map;
@@ -19,8 +19,8 @@ public class StartHubPanel extends javax.swing.JPanel {
      * Creates new form StarterPanel
      */
     public StartHubPanel() {
-        textRepository = TextRepository.getInstance().getTextRepository("ui_controls");
-        initComponents();
+	textRepository = TextRepository.getInstance().getTextRepository("ui_controls");
+	initComponents();
     }
 
     /**
@@ -151,15 +151,15 @@ public class StartHubPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_editProfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_editProfilActionPerformed
-        MainFrame.getInstance().setFrame(new ProfilEditorPanel(), false);
+	MainFrame.getInstance().setFrame(new ProfilEditorPanel(), false);
     }//GEN-LAST:event_bt_editProfilActionPerformed
 
     private void bt_closeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_closeActionPerformed
-        MainFrame.getInstance().dispose();
+	MainFrame.getInstance().dispose();
     }//GEN-LAST:event_bt_closeActionPerformed
 
     private void bt_startGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_startGameActionPerformed
-        MainFrame.getInstance().setFrame(new MainPanel(), false);
+	MainFrame.getInstance().setFrame(new LobbyOverviewPanel(), false);
     }//GEN-LAST:event_bt_startGameActionPerformed
 
 

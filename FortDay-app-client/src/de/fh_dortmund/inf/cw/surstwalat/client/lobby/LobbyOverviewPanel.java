@@ -9,59 +9,27 @@ import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Game;
-import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
+import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author Stephan Klimek
  */
-public class Screen1 extends javax.swing.JDialog {
+public class LobbyOverviewPanel extends JPanel {
 
     private final UserManagementHandler userManager;
 
     /**
-     * Creates new form Screen1
-     *
-     * @param parent
-     * @param modal
+     * Creates new form LobbyOverviewPanel
      */
-    public Screen1(java.awt.Frame parent, boolean modal) {
-	super(parent, modal);
-
+    public LobbyOverviewPanel() {
 	userManager = UserManagementHandler.getInstance();
-	List<Account> playerList = userManager.getUserInLobby();
-	List<Game> openGamesList = userManager.getOpenGames();
-
-	String[] playerColName = new String[]{"Name", "EMail"};
-	String[][] playerRow = new String[playerList.size()][playerColName.length];
-
-	for (int i = 0; i < playerList.size(); i++) {
-	    String[] playerArray = new String[playerColName.length];
-	    playerArray[0] = playerList.get(i).getName();
-	    playerArray[0] = playerList.get(i).getEmail();
-	    playerRow[i] = playerArray;
-	}
-
-	DefaultTableModel playerTableModel = new DefaultTableModel(playerRow, playerColName);
-
-//	
-//	String[] playerColName = new String[]{"Name", "EMail"};
-//	String[][] playerRow = new String[playerList.size()][playerColName.length];
-//
-//	for (int i = 0; i < playerList.size(); i++) {
-//	    String[] playerArray = new String[playerColName.length];
-//	    playerArray[0] = playerList.get(i).getName();
-//	    playerArray[0] = playerList.get(i).getEmail();
-//	    playerRow[i] = playerArray;
-//	}
-//
-//	DefaultTableModel playerTableModel = new DefaultTableModel(playerRow, playerColName);
 
 	initComponents();
+	fillPlayerTable();
+	fillOpenGamesTable();
     }
 
     /**
@@ -75,18 +43,16 @@ public class Screen1 extends javax.swing.JDialog {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        playerTable = new javax.swing.JTable();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        openGamesTable = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        playerTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -97,9 +63,9 @@ public class Screen1 extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(playerTable);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        openGamesTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -110,7 +76,7 @@ public class Screen1 extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable2);
+        jScrollPane2.setViewportView(openGamesTable);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
         jLabel1.setText("FortDay - Game Lobby");
@@ -135,8 +101,8 @@ public class Screen1 extends javax.swing.JDialog {
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -172,7 +138,7 @@ public class Screen1 extends javax.swing.JDialog {
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -180,60 +146,17 @@ public class Screen1 extends javax.swing.JDialog {
                     .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE))
                 .addGap(17, 17, 17))
         );
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-	userManager.createGame();
-    }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 	int gameId = MainFrame.getInstance().getGameId();
 	userManager.joinGame(gameId);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-	/* Set the Nimbus look and feel */
-	//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-	/* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-	 */
-	try {
-	    for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-		if ("Nimbus".equals(info.getName())) {
-		    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-		    break;
-		}
-	    }
-	} catch (ClassNotFoundException ex) {
-	    java.util.logging.Logger.getLogger(Screen1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-	} catch (InstantiationException ex) {
-	    java.util.logging.Logger.getLogger(Screen1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-	} catch (IllegalAccessException ex) {
-	    java.util.logging.Logger.getLogger(Screen1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-	} catch (javax.swing.UnsupportedLookAndFeelException ex) {
-	    java.util.logging.Logger.getLogger(Screen1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-	}
-	//</editor-fold>
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+	userManager.createGame();
+    }//GEN-LAST:event_jButton2ActionPerformed
 
-	/* Create and display the dialog */
-	java.awt.EventQueue.invokeLater(new Runnable() {
-	    public void run() {
-		Screen1 dialog = new Screen1(new javax.swing.JFrame(), true);
-		dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-		    @Override
-		    public void windowClosing(java.awt.event.WindowEvent e) {
-			System.exit(0);
-		    }
-		});
-		dialog.setVisible(true);
-	    }
-	});
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -243,7 +166,50 @@ public class Screen1 extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTable openGamesTable;
+    private javax.swing.JTable playerTable;
     // End of variables declaration//GEN-END:variables
+
+    /**
+     * Fill PlayerTable
+     */
+    private void fillPlayerTable() {
+	List<Account> playerList = userManager.getUserInLobby();
+
+	String[] playerColName = new String[]{"Spieler-ID", "Name", "E-Mail"};
+	String[][] playerRow = new String[playerList.size()][playerColName.length];
+
+	for (int i = 0; i < playerList.size(); i++) {
+	    String[] playerArray = new String[playerColName.length];
+	    playerArray[0] = Integer.toString(playerList.get(i).getId());
+	    playerArray[1] = playerList.get(i).getName();
+	    playerArray[2] = playerList.get(i).getEmail();
+	    playerRow[i] = playerArray;
+	}
+
+	DefaultTableModel playerTableModel = new DefaultTableModel(playerRow, playerColName);
+	playerTable.setModel(playerTableModel);
+
+    }
+
+    /**
+     * Fill open games table
+     */
+    private void fillOpenGamesTable() {
+	List<Game> openGamesList = userManager.getOpenGames();
+
+	String[] openGamesColName = new String[]{"Spiel-ID", "AI-Spieler", "Aktuelle Runde"};
+	String[][] openGamesRow = new String[openGamesList.size()][openGamesColName.length];
+
+	for (int i = 0; i < openGamesList.size(); i++) {
+	    String[] openGameArray = new String[openGamesColName.length];
+	    openGameArray[0] = Integer.toString(openGamesList.get(i).getId());
+	    openGameArray[1] = Integer.toString(openGamesList.get(i).getAiPlayerCount());
+	    openGameArray[2] = Integer.toString(openGamesList.get(i).getCurrentRound());
+	    openGamesRow[i] = openGameArray;
+	}
+
+	DefaultTableModel openGamesTableModel = new DefaultTableModel(openGamesRow, openGamesColName);
+	openGamesTable.setModel(openGamesTableModel);
+    }
 }
