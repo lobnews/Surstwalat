@@ -18,13 +18,67 @@ import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedExc
  */
 public interface UserManagement {
 
-    public Account login(Account account) throws AccountNotFoundException, LoginFailedException, GeneralServiceException;
-
-    public void changePassword(Account account) throws GeneralServiceException;
-
+    /**
+     * Registration
+     *
+     * @param account
+     * @throws AccountAlreadyExistException if there is no result
+     * @throws GeneralServiceException if there is a general service exception
+     */
     public void register(Account account) throws AccountAlreadyExistException, GeneralServiceException;
 
+    /**
+     * Login account
+     *
+     * @param account account to login
+     * @return logged in user account
+     * @throws AccountNotFoundException if account not exist
+     * @throws LoginFailedException if input datas not match the account
+     * @throws GeneralServiceException if there is a general service exception
+     */
+    public Account login(Account account) throws AccountNotFoundException, LoginFailedException, GeneralServiceException;
+
+    /**
+     * Update account email address
+     *
+     * @param account account to update
+     * @throws GeneralServiceException if there is a general service exception
+     */
+    public void changePassword(Account account) throws GeneralServiceException;
+
+    /**
+     * Update account password
+     *
+     * @param account account to update
+     * @throws GeneralServiceException if there is a general service exception
+     */
     public void updateEmailAddress(Account account) throws GeneralServiceException;
 
+    /**
+     * Remove account
+     *
+     * @param account account to delete
+     * @throws GeneralServiceException if there is a general service exception
+     */
     public void deleteAccount(Account account) throws GeneralServiceException;
+
+    /**
+     * Get account data by account id
+     *
+     * @param accountName account name
+     * @return account
+     * @throws AccountNotFoundException if there is no result
+     * @throws GeneralServiceException if there is a general service exception
+     */
+    public Account getAccountByName(String accountName) throws AccountNotFoundException, GeneralServiceException;
+
+    /**
+     * Get account data by account id
+     *
+     * @param accountId account id
+     * @return account
+     * @throws AccountNotFoundException if there is no result
+     * @throws GeneralServiceException if there is a general service exception
+     */
+    public Account getAccountById(int accountId) throws AccountNotFoundException, GeneralServiceException;
 }
