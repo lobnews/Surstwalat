@@ -210,6 +210,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	 * started right now.
 	 * @return The list of open games.
 	 */
+	@Override
 	public List<Game> getOpenGames(){
 		TypedQuery<Game> query = em.createNamedQuery("Game.getOpen",Game.class);
 		return query.getResultList();

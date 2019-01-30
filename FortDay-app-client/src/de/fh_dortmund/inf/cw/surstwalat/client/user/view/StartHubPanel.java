@@ -1,7 +1,7 @@
 package de.fh_dortmund.inf.cw.surstwalat.client.user.view;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
-import de.fh_dortmund.inf.cw.surstwalat.client.game.view.MainPanel;
+import de.fh_dortmund.inf.cw.surstwalat.client.lobby.LobbyOverviewPanel;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
 import java.awt.Graphics;
@@ -26,6 +26,7 @@ public class StartHubPanel extends JPanel {
      * Creates new form StarterPanel
      */
     public StartHubPanel() {
+
 	userManager = UserManagementHandler.getInstance();
 	textRepository = TextRepository.getInstance().getTextRepository("ui_controls");
 	backgroundImage = new ImageIcon(getClass().getResource("/resources/backgrounds/background-start-hub.png")).getImage();
@@ -159,7 +160,7 @@ public class StartHubPanel extends JPanel {
     }//GEN-LAST:event_bt_closeActionPerformed
 
     private void bt_startGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_startGameActionPerformed
-	MainFrame.getInstance().setFrame(new MainPanel(), false, false);
+	MainFrame.getInstance().setFrame(new LobbyOverviewPanel(), false);
     }//GEN-LAST:event_bt_startGameActionPerformed
 
     /**

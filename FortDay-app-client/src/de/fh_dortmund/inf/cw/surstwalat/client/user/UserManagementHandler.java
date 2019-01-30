@@ -4,8 +4,10 @@ import de.fh_dortmund.inf.cw.surstwalat.client.FortDayEventMessageListener;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.view.RegistryPanel;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Game;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
+import de.fh_dortmund.inf.cw.surstwalat.common.exceptions.GameIsFullException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
@@ -13,6 +15,7 @@ import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedExc
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordException;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
 import java.util.Map;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.jms.Message;
@@ -26,7 +29,7 @@ import javax.naming.NamingException;
  *
  * @author Stephan Klimek
  */
-public class UserManagementHandler implements MessageListener {
+public final class UserManagementHandler implements MessageListener {
 
     private static UserManagementHandler instance;
 
@@ -38,8 +41,8 @@ public class UserManagementHandler implements MessageListener {
      * Handler constructor for UserManagement
      */
     public UserManagementHandler() {
-    textRepository = TextRepository.getInstance().getTextRepository("messages");
-    
+	textRepository = TextRepository.getInstance().getTextRepository("messages");
+
 	// LookUp to UserSessionRemote
 	try {
 	    ctx = new InitialContext();
@@ -192,10 +195,10 @@ public class UserManagementHandler implements MessageListener {
 
     /**
      * player rolls the dice
-     * 
+     *
      * @param gameID
      * @param playerID
-     * @param dice 
+     * @param dice
      */
     public void playerRolls(int gameID, int playerID, Dice dice) {
 	userSessionRemote.playerRolls(gameID, playerID, dice);
@@ -203,10 +206,10 @@ public class UserManagementHandler implements MessageListener {
 
     /**
      * use an item
-     * 
+     *
      * @param gameID
      * @param playerID
-     * @param item 
+     * @param item
      */
     public void useItem(int gameID, int playerID, Item item) {
 	userSessionRemote.useItem(gameID, playerID, item);
@@ -214,13 +217,13 @@ public class UserManagementHandler implements MessageListener {
 
     /**
      * Move Token
-     * 
+     *
      * @param gameID
      * @param token
      * @param number
      */
     public void moveToken(int gameID, int token, int number) {
-        userSessionRemote.moveToken(gameID, token, number);
+	userSessionRemote.moveToken(gameID, token, number);
 
     }
 
@@ -248,5 +251,25 @@ public class UserManagementHandler implements MessageListener {
     public void disconnect() {
 	Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("disconnect_short"));
 	userSessionRemote.disconnect();
+    }
+
+    public List<Account> getUserInLobby() {
+	return userSessionRemote.getUserInLobby();
+    }
+
+    public List<Game> getOpenGames() {
+	return userSessionRemote.getOpenGames();
+    }
+
+    public void createGame() {
+	userSessionRemote.userCreatedGame();
+    }
+
+    public void joinGame(int gameId) throws GameIsFullException {
+	userSessionRemote.userJoinedGame(gameId);
+    }
+    
+    public void startGame(int gameID, int fieldsize) {
+        userSessionRemote.startGame(gameID, fieldsize);
     }
 }

@@ -23,6 +23,7 @@ import javax.persistence.Table;
 {
   @NamedQuery(name = "Token.getById", query = "SELECT t FROM Token t WHERE t.id = :id"),
   @NamedQuery(name = "Token.getByPlayerIdAndTokenNumber", query = "SELECT t FROM Token t WHERE t.playerId = :playerId AND t.nr=:nr"),
+  @NamedQuery(name = "Token.getTokenList", query = "SELECT t FROM Token t WHERE t.playerId = :id"),
   @NamedQuery(name = "Token.getTokensByPlayerId", query = "SELECT count(t) FROM Token t WHERE t.playerId = :playerId")
 })
 @Entity
