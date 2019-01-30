@@ -35,8 +35,7 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
  * @author Niklas Sprenger
  *
  */
-@Startup
-@Singleton
+@Stateless
 public class LobbyManagementBean implements LobbyManagementLocal{
 	private static int maxNumberOfPlayersInGame = 4;
 	@Inject
@@ -49,7 +48,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	/**
 	 * Post Construct method, that runs a test if activated and informs about the start of this bean.
 	 */
-	@PostConstruct
+	//@PostConstruct
 	public void init() {
 		System.out.println("@@@FortDayLobbyManagementBean started");
 		//runTests();
@@ -138,6 +137,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	private void sendGameCreatedMessage(int gameId, int userId) {
 		ObjectMessage msg = jmsContext.createObjectMessage();
 		try {
+            System.out.println("[LOBBYMANAGEMENT] Game with ID " + gameId + " created by user with id " + userId + "." );    
 			msg.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.GAME_CREATED);
 			msg.setIntProperty(PropertyType.GAME_ID, gameId);
 			msg.setIntProperty(PropertyType.USER_ID, userId);
@@ -174,6 +174,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	private void sendGameStartedMessage(int gameId, int fieldsize) {
 		ObjectMessage msg = jmsContext.createObjectMessage();
 		try {
+            System.out.println("[LOBBYMANAGEMENT] Game with ID " + gameId + " started." );    
 			msg.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.GAME_STARTED);
 			msg.setIntProperty(PropertyType.GAME_ID, gameId);
 			msg.setIntProperty(PropertyType.GAME_FIELDSIZE, fieldsize);

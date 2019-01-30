@@ -28,6 +28,7 @@ public class SpawnItemEventHandlerBean implements MessageListener
     @Override
     public void onMessage(Message message)
     {
+    	System.out.println("[LOCATIONMANAGEMENT] SPAWN_ITEM received");
         try
         {
             locationManagement

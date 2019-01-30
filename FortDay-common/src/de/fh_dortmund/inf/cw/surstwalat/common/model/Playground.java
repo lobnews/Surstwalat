@@ -30,7 +30,7 @@ public class Playground implements Serializable
     @Column(name = "id")
     private int id;
 
-    @OneToMany
+    @OneToMany(mappedBy="playground")
     private List<Field> fields;
 
     @JoinColumn
@@ -42,7 +42,7 @@ public class Playground implements Serializable
         return game;
     }
 
-    public void setGameId(Game game)
+    public void setGame(Game game)
     {
         this.game = game;
     }

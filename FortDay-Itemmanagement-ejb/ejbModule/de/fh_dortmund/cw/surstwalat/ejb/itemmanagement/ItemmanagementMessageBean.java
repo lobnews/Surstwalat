@@ -10,7 +10,6 @@ import javax.jms.ObjectMessage;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
-import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 
 /**
@@ -28,7 +27,7 @@ public class ItemmanagementMessageBean implements MessageListener {
 
 	public void onMessage(Message message) {
 		try {
-			int gameId = message.getIntProperty(PropertyType.GAME_ID);
+			//int gameId = message.getIntProperty(PropertyType.GAME_ID);
 			int msgType = message.getIntProperty(PropertyType.MESSAGE_TYPE);
 			
 			
@@ -50,7 +49,7 @@ public class ItemmanagementMessageBean implements MessageListener {
 				case MessageType.SEND_PLAYER_INVENTAR:
 					System.out.println("[ITEMMANGE] SEND_PLAYER_INVENTAR received");
 					playerID = message.getIntProperty(PropertyType.PLAYER_ID);
-					itemBean.sendUserInventar(gameId, playerID);
+					itemBean.sendUserInventar(message.getIntProperty(PropertyType.GAME_ID), playerID);
 					break;
 				case MessageType.PLAYER_ACTION :
 					System.out.println("[ITEMMANGE] PLAYER_ACTION received");
@@ -66,7 +65,7 @@ public class ItemmanagementMessageBean implements MessageListener {
 			}
 
 		} catch (JMSException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 }
