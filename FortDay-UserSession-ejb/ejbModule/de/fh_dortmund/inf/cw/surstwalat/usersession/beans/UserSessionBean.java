@@ -132,7 +132,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
         
         if (LOGGING)
         {
-        	System.out.println("[USERSESSION] User registered: Username: " + user.getName());
+//        	System.out.println("[USERSESSION] User registered: Username: " + user.getName());
         }
     }
 
