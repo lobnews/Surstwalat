@@ -3,6 +3,8 @@ package de.fh_dortmund.inf.cw.surstwalat.usersession.beans;
 import java.io.Serializable;
 
 import javax.annotation.Resource;
+import javax.ejb.EJB;
+import javax.ejb.Remove;
 import javax.ejb.Stateful;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
@@ -21,13 +23,12 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces.UserManagementLocal;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
-import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedException;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.util.HashManager;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionLocal;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
-import javax.ejb.EJB;
 
 /**
  * @author Daniel Buschmann
@@ -36,6 +37,7 @@ import javax.ejb.EJB;
 @Stateful
 public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 
+	private boolean LOGGING = true;
     @Inject
     private JMSContext jmsContext;
 
@@ -159,29 +161,43 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
         ObjectMessage msg = createObjectMessage(2, MessageType.USER_LOGOUT);
         trySetObject(msg, user);
         sendMessage(msg);
-		System.out.println("[USERSESSION] User logged out: Username: " + user.getName());
+        
+        if (LOGGING)
+        {
+        	System.out.println("[USERSESSION] User logged out: Username: " + user.getName());
+        }
     }
 
     /* (non-Javadoc)
 	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#disconnect()
      */
+    @Remove
     @Override
     public void disconnect() {
         ObjectMessage msg = createObjectMessage(-1, MessageType.USER_DISCONNECT);
         trySetObject(msg, user);
         sendMessage(msg);
-		System.out.println("[USERSESSION] User disconnected: Username: " + user.getName());
+        
+        if (LOGGING)
+        {
+        	System.out.println("[USERSESSION] User disconnected: Username: " + user.getName());
+        }
     }
 
     /* (non-Javadoc)
 	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#timeout()
      */
+    @Remove
     @Override
     public void timeout() {
         ObjectMessage msg = createObjectMessage(-1, MessageType.USER_TIMEOUT);
         trySetObject(msg, user);
         sendMessage(msg);
-		System.out.println("[USERSESSION] User timed out: Username: " + user.getName());
+        
+        if (LOGGING)
+        {
+        	System.out.println("[USERSESSION] User timed out: Username: " + user.getName());
+        }
     }
 
     /* (non-Javadoc)
@@ -198,7 +214,10 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 
         sendMessage(msg);
         
-		System.out.println("[USERSESSION] Player rolls: GameID: " + gameID + ", Username: " + user.getName() + ", PlayerID: " + playerID);
+        if (LOGGING)
+        {
+        	System.out.println("[USERSESSION] Player rolls: GameID: " + gameID + ", Username: " + user.getName() + ", PlayerID: " + playerID);
+        }
     }
 
     /* (non-Javadoc)
@@ -214,7 +233,11 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
         trySetObject(msg, item);
 
         sendMessage(msg);
-		System.out.println("[USERSESSION] Player uses Item: GameID: " + gameID + ", Username: " + user.getName() + ", PlayerID: " + playerID);
+        
+        if (LOGGING)
+        {
+        	System.out.println("[USERSESSION] Player uses Item: GameID: " + gameID + ", Username: " + user.getName() + ", PlayerID: " + playerID);
+        }
     }
 
     /* (non-Javadoc)
@@ -226,7 +249,10 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
         trySetIntProperty(msg, PropertyType.ROUND_NO, number);
         sendMessage(msg);
         
-		System.out.println("[USERSESSION] Round started: GameID: " + gameID + ", Round: " + number);
+        if (LOGGING)
+        {
+        	System.out.println("[USERSESSION] Round started: GameID: " + gameID + ", Round: " + number);
+        }
     }
 
     /* (non-Javadoc)
@@ -239,7 +265,10 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 
         sendMessage(msg);
         
-		System.out.println("[USERSESSION] User joined game: GameID: " + gameID + ", Username: " + user.getName());
+        if (LOGGING)
+        {
+        	System.out.println("[USERSESSION] User joined game: GameID: " + gameID + ", Username: " + user.getName());
+        }
     }
 
     /* (non-Javadoc)
@@ -252,7 +281,10 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 
         sendMessage(msg);
         
-		System.out.println("[USERSESSION] User created game: Username: " + user.getName());
+        if (LOGGING)
+        {
+        	System.out.println("[USERSESSION] User created game: Username: " + user.getName());
+        }
     }
 
     /* (non-Javadoc)
@@ -265,7 +297,10 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 
         sendMessage(msg);
         
-		System.out.println("[USERSESSION] Round ends: GameID: " + gameID + ", Round: " + number);
+        if (LOGGING)
+        {
+        	System.out.println("[USERSESSION] Round ends: GameID: " + gameID + ", Round: " + number);
+        }
     }
 
     /* (non-Javadoc)
@@ -279,12 +314,15 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 
         sendMessage(msg);
         
-		System.out.println("[USERSESSION] Add item to Player: GameID: " + gameID + ", Username: " + user.getName() + ", PlayerID: " + playerID);
+        if (LOGGING)
+        {
+        	System.out.println("[USERSESSION] Add item to Player: GameID: " + gameID + ", Username: " + user.getName() + ", PlayerID: " + playerID);
+        }
     }
     
     /* (non-Javadoc)
  	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#moveToken(int, int, int)
-      */
+    */
     @Override
     public void moveToken(int gameID, int tokenID, int number) {
     	ObjectMessage msg = createObjectMessage(gameID, MessageType.MOVE_TOKEN);
@@ -293,7 +331,10 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
     	
     	sendMessage(msg);
 
-    	System.out.println("[USERSESSION] Move Token: GameID: " + gameID + ", tokenID: " + tokenID + ", number: " + number);
+        if (LOGGING)
+        {
+        	System.out.println("[USERSESSION] Move Token: GameID: " + gameID + ", tokenID: " + tokenID + ", number: " + number);
+        }
     }
 
     
