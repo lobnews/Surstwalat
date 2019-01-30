@@ -17,16 +17,26 @@ import javax.imageio.ImageIO;
  */
 public enum PawnColor {
     
-    BLUE("blue.png"),
-    GREEN("green.png"),
-    RED("red.png"),
-    YELLOW("yellow.png");
+    BLUE("blue.png", 1),
+    GREEN("green.png", 2),
+    RED("red.png", 3),
+    YELLOW("yellow.png", 4);
     
     private static final String RESOURCE_FOLDER = "resources/pawns/";
     
     private final BufferedImage pawnImage;
+    private final int playerNR;
     
-    private PawnColor(String filename) {
+    public static PawnColor getByPlayerNR(int playerNR) {
+        for(PawnColor c:values()) {
+            if(c.playerNR == playerNR) {
+                return c;
+            }
+        }
+        return BLUE;
+    }
+    
+    private PawnColor(String filename, int playerNR) {
         BufferedImage imageCache = null;
         try {
             imageCache = ImageIO.read(PawnColor.class.getClassLoader().getResourceAsStream(RESOURCE_FOLDER + filename));
@@ -35,10 +45,15 @@ public enum PawnColor {
         } finally {
             pawnImage = imageCache;
         }
+        this.playerNR = playerNR;
     }
 
     public BufferedImage getPawnImage() {
         return pawnImage;
+    }
+
+    public int getPlayerNR() {
+        return playerNR;
     }
     
 }
