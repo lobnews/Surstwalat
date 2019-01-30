@@ -98,12 +98,14 @@ public interface UserSession{
 	public void playerRolls(int gameID, int playerID, Dice dice);
 	
 	/**
-	 * Starts the given Round
+	 * Starts the given Game
+	 * 
+	 * Gets forwarded to LobbyManagement
 	 * 
 	 * @param gameID
-	 * @param number
+	 * @param fieldSize
 	 */
-	public void startRound(int gameID, int number);
+	public void startGame(int gameID, int fieldSize);
 	
 	/**
 	 * User joined the given game
@@ -114,16 +116,9 @@ public interface UserSession{
 	
 	/**
 	 * User created a game
+	 * Gets forwarded to LobbyManagement
 	 */
 	public void userCreatedGame();
-	
-	/**
-	 * End the given round
-	 * 
-	 * @param gameID
-	 * @param number
-	 */
-	public void endRound(int gameID,int number);
 	
 	/**
 	 * Add the given Item to the Player
