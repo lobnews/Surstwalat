@@ -342,6 +342,11 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
     {
     	return userManagement.getAccountByName(accountName);
     }
+    
+    @Override
+    public boolean compareAccountById(int accountId) {
+    	return user.getId() == accountId;
+    }
 
     
     

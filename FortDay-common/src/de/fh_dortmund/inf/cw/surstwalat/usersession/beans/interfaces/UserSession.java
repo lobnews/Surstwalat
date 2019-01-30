@@ -189,4 +189,12 @@ public interface UserSession{
 	 * @return Account
 	 */
 	public Account getAccountById(int id) throws AccountNotFoundException, GeneralServiceException;
+	
+    /**
+     * Compare id with logged in account id
+     *
+     * @param accountId account id
+     * @return is id same as current account id
+     */
+	public boolean compareAccountById(int accountId);
 }
