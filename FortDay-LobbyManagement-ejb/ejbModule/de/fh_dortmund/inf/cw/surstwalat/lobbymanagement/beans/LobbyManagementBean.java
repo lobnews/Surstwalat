@@ -2,10 +2,8 @@ package de.fh_dortmund.inf.cw.surstwalat.lobbymanagement.beans;
 
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.ObjectMessage;
