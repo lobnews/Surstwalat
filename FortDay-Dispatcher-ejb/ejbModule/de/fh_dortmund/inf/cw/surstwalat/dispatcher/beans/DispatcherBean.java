@@ -12,6 +12,11 @@ import javax.ejb.Timeout;
 import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.persistence.EntityManager;
+import javax.persistence.LockModeType;
+import javax.persistence.PersistenceContext;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Action;
@@ -22,11 +27,8 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Game;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Player;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.RollActionResult;
 import de.fh_dortmund.inf.cw.surstwalat.dispatcher.beans.interfaces.DispatcherLocal;
-import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.ActionRepositoryLocal;
 import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.DiceRollLocal;
 import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.EventHelperLocal;
-import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.GameRepositoryLocal;
-import de.fh_dortmund.inf.cw.surstwalat.dispatcher.interfaces.PlayerRepositoryLocal;
 
 /**
  * Bean for various dispatcher functions
@@ -41,15 +43,12 @@ public class DispatcherBean implements DispatcherLocal {
 	private static final String TIMEOUT_TIMER = "TIMEOUT_TIMER";
 
 	@EJB
-	private ActionRepositoryLocal actionRepository;
-	@EJB
-	private GameRepositoryLocal gameRepository;
-	@EJB
-	private PlayerRepositoryLocal playerRepository;
-	@EJB
 	private EventHelperLocal eventHelper;
 	@EJB
 	private DiceRollLocal diceRoll;
+	
+	@PersistenceContext(unitName = "FortDayDB")
+	protected EntityManager entityManager;
 	
 	@Resource
 	private TimerService timerService;
@@ -68,9 +67,10 @@ public class DispatcherBean implements DispatcherLocal {
 	 * @see DispatcherLocal#createPlayers(int)
 	 */
 	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void createPlayers(int gameId) {
 		// TODO Auto-generated method stub
-		Game game = gameRepository.findById(gameId);
+		Game game = entityManager.find(Game.class, gameId, LockModeType.PESSIMISTIC_READ);
 		if (game != null && (game.getPlayers() == null || game.getPlayers().size() == 0)) {
 			List<Player> players = new ArrayList<>();
 			int playerNumber = 1;
@@ -84,9 +84,7 @@ public class DispatcherBean implements DispatcherLocal {
 			}
 			
 			game.setPlayers(players);
-			game = gameRepository.save(game);
 			for (Player p : game.getPlayers()) {
-				System.out.println("[Dispatcher] Player created with id " + p.getId());
 				eventHelper.triggerAssignPlayerEvent(p.getGame().getId(), p.getAccountId(), p.getId(), p.getPlayerNo());
 			}
 		}
@@ -96,8 +94,9 @@ public class DispatcherBean implements DispatcherLocal {
 	 * @see DispatcherLocal#playerRoll(int, Dice)
 	 */
 	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void playerRoll(int playerId, Dice dice) {
-		Player player = playerRepository.findById(playerId);
+		Player player = entityManager.find(Player.class, playerId, LockModeType.PESSIMISTIC_READ);
 		if (player != null) {
 			resetPlayerTimeout(player.getGame().getId());
 			if(dice == null) {
@@ -113,7 +112,6 @@ public class DispatcherBean implements DispatcherLocal {
 			result.setValue(diceRoll.roll(dice));
 			action.setResult(result);
 			player.getActions().add(action);
-			playerRepository.save(player);
 			eventHelper.triggerPlayerRollEvent(player.getGame().getId(), player.getPlayerNo(), result.getValue());
 		}
 	}
@@ -129,8 +127,9 @@ public class DispatcherBean implements DispatcherLocal {
 	 * If the list of alive players equals 1 a PLAYER_WINS message is triggered
 	 */
 	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void dispatch(int gameId) {
-		Game game = gameRepository.findById(gameId);
+		Game game = entityManager.find(Game.class, gameId, LockModeType.PESSIMISTIC_READ);
 		TreeSet<Player> alivePlayers = new TreeSet<>(new Comparator<Player>() {
 			@Override
 			public int compare(Player p1, Player p2) {
@@ -158,7 +157,6 @@ public class DispatcherBean implements DispatcherLocal {
 
 				if (firstPlayerRollsCount == game.getCurrentRound()) {
 					game.setCurrentRound(game.getCurrentRound() + 1);
-					gameRepository.save(game);
 					eventHelper.triggerStartRoundEvent(gameId, game.getCurrentRound());
 				} else {
 					Player nextPlayer = alivePlayers.first();
@@ -173,11 +171,11 @@ public class DispatcherBean implements DispatcherLocal {
 	 * @see DispatcherLocal#onPlayerDeath(int)
 	 */
 	@Override
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void onPlayerDeath(int playerId) {
-		Player p = playerRepository.findById(playerId);
+		Player p = entityManager.find(Player.class, playerId, LockModeType.PESSIMISTIC_READ);
 		if (p != null) {
 			p.setAlive(false);
-			p = playerRepository.save(p);
 			eventHelper.triggerEliminatePlayerEvent(p.getGame().getId(), p.getId(), p.getPlayerNo());
 		}
 	}
@@ -197,7 +195,8 @@ public class DispatcherBean implements DispatcherLocal {
 		p.setGame(game);
 		p.setAlive(true);
 		p.setPlayerNo(no);
-		return playerRepository.save(p);
+		entityManager.persist(p);
+		return p;
 	}
 
 	/**
@@ -255,15 +254,17 @@ public class DispatcherBean implements DispatcherLocal {
 	 * handles the timeout for the players turn
 	 */
 	@Timeout
+	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	private void handlePlayerTimeout(Timer timer) {
 		if(timer.getInfo() != null && timer.getInfo() instanceof DispatcherTimerInfo) {
 			DispatcherTimerInfo info = (DispatcherTimerInfo)timer.getInfo();
 			if(TIMEOUT_TIMER.equals(info.getId())) {
-				Player player = playerRepository.findById(info.getPlayerId());
+				Player player = entityManager.find(Player.class, info.getPlayerId());
 				Action action = new Action();
 				action.setActionType(ActionType.ROLL);
+				action.setPlayer(player);
 				player.getActions().add(action);
-				playerRepository.save(player);
+				entityManager.merge(player);
 				dispatch(info.getGameId());
 			}
 			if(REMINDER_TIMER.equals(info.getId())) {

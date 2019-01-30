@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,7 +40,7 @@ public class Game implements Serializable{
 	@JoinTable(name="game_account")
 	private List<Account> humanUsersInGame;
 	
-	@OneToMany(mappedBy="game")
+	@OneToMany(mappedBy="game", cascade=CascadeType.ALL)
 	private List<Player> players;
 	
 	@Column(name="gameStarted")

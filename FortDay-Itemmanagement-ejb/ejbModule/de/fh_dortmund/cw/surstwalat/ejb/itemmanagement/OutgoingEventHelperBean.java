@@ -29,7 +29,7 @@ public class OutgoingEventHelperBean {
 	private Topic eventTopic;
 
 	public void sendAddItemToPlayground(Integer gameId, Item item, int pos) {
-		ObjectMessage message = createObjectMessage(gameId, MessageType.ITEM_SPAWN);
+		ObjectMessage message = createObjectMessage(gameId, MessageType.SPAWN_ITEM);
 		trySetIntProperty(message, PropertyType.ITEM_ID, item.getId());
 		trySetIntProperty(message, PropertyType.ITEM_POS, pos);
 		sendMessage(message);
@@ -40,6 +40,13 @@ public class OutgoingEventHelperBean {
 		ObjectMessage message = createObjectMessage(gameId, MessageType.PLAYER_INVENTAR);
 		trySetIntProperty(message, PropertyType.PLAYER_ID, player.getId());
 		trySetObject(message, (Serializable) player.getItems());
+		sendMessage(message);
+	}
+	
+	public void sendAddItemToPlayer(Integer gameId, Integer playerId, Item item) {
+		ObjectMessage message = createObjectMessage(gameId, MessageType.ADD_ITEM_TO_PLAYER);
+		trySetIntProperty(message, PropertyType.PLAYER_ID, playerId);
+		trySetObject(message, item);
 		sendMessage(message);
 	}
 

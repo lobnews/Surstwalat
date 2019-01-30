@@ -81,6 +81,7 @@ public class UserManagementHandler implements MessageListener {
      */
     public void register(String name, String email, String password)
             throws AccountAlreadyExistException, GeneralServiceException {
+    	System.out.println(userSessionRemote == null);
         userSessionRemote.register(name, password, email);
     }
 

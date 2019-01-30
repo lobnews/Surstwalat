@@ -1,7 +1,6 @@
 package de.fh_dortmund.cw.surstwalat.ejb.itemmanagement;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -9,11 +8,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.ejb.Stateful;
-import javax.ejb.Stateless;
 import javax.inject.Inject;
-import javax.jms.Destination;
 import javax.jms.JMSContext;
 import javax.jms.Topic;
 import javax.persistence.EntityManager;
@@ -21,12 +16,12 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.HealthItem;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.HealthItem.Level;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Player;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Playground;
-import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
 
 /**
  * @author Marvin Wölk
@@ -55,7 +50,7 @@ public class ItemmanagementBean {
 
 	@PostConstruct
 	public void init() {
-		System.out.println("Itemmanagement wurde gestartet");
+		System.out.println("[ITEMMANAGEMENT] Singleton bean gestartet");
 		fillDefaultItems();
 
 		fillAirDropItems();
@@ -118,9 +113,10 @@ public class ItemmanagementBean {
 		if (player != null && item != null) {
 			player.addItem(item);
 			entitymanager.merge(player);
-			System.out.println(name + " Item(" + itemID + ") wurd Player(" + player.getId() + ") hinzugefügt");
+			sender.sendAddItemToPlayer(player.getGame().getId(), player.getId(), item);
+			System.out.println(name + " Item(" + itemID + ") wurd Player(" + player.getId() + ") hinzugefuegt");
 		} else {
-			System.out.println(name + " Player(" + playerID + ") oder Item(" + itemID + ") ungültig");
+			System.out.println(name + " Player(" + playerID + ") oder Item(" + itemID + ") ungueltig");
 		}
 	}
 
