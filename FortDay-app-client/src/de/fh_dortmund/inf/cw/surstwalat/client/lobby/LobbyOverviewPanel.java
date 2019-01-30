@@ -16,6 +16,7 @@ import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.common.exceptions.GameIsFullException;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Game;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -141,6 +142,7 @@ public class LobbyOverviewPanel extends JPanel {
         int gameId = (int) openGamesTable.getModel().getValueAt(row, 0);
 	try {
 	    userManager.joinGame(gameId);
+            MainFrame.getInstance().setFrame(new LobbyDetailPanel());
 	} catch (GameIsFullException ex) {
 	    Logger.getLogger(LobbyOverviewPanel.class.getName()).log(Level.SEVERE, "Das Spiel ist bereits voll.");
 	}
@@ -148,6 +150,7 @@ public class LobbyOverviewPanel extends JPanel {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 	userManager.createGame();
+        MainFrame.getInstance().setFrame(new LobbyDetailPanel());
     }//GEN-LAST:event_jButton2ActionPerformed
 
 
@@ -293,7 +296,11 @@ public class LobbyOverviewPanel extends JPanel {
         private List<Account> accounts;
         
         public PlayerTableModel() {
-            accounts = userManager.getUsersInOpenGame(MainFrame.getInstance().getGameId());
+            if(MainFrame.getInstance().getGameId() > 0) {
+                accounts = userManager.getUsersInOpenGame(MainFrame.getInstance().getGameId());
+            } else {
+                accounts = new LinkedList<>();
+            }
             MainFrame.getInstance().getEventManager().registerListener(this);
         }
         
@@ -352,7 +359,11 @@ public class LobbyOverviewPanel extends JPanel {
         
         @EventHandler
         public void onUserJoin(UserEvent e) {
-            accounts = userManager.getUsersInOpenGame(MainFrame.getInstance().getGameId());
+            if(MainFrame.getInstance().getGameId() > 0) {
+                accounts = userManager.getUsersInOpenGame(MainFrame.getInstance().getGameId());
+            } else {
+                accounts = new LinkedList<>();
+            }
             LobbyOverviewPanel.this.revalidate();
         }
         
