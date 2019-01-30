@@ -63,7 +63,7 @@ public class LobbyManagementMessageReceiver implements MessageListener {
      */
     public void userConnected(Message message) {
     	try {
-			System.out.println("LobbyMangement: Incoming Message of Type USER_CONNECTED");
+    		System.out.println("[LOBBYMANAGEMENT] USER_CONNECTED received");
         	int userid = message.getIntProperty(PropertyType.USER_ID);
     		lobbyManagement.userLoggedIn(userid);
     	}catch(Exception e) {
@@ -78,7 +78,7 @@ public class LobbyManagementMessageReceiver implements MessageListener {
      */
     public void userDisconnected(Message message) {
     	try {
-			System.out.println("LobbyMangement: Incoming Message of Type USER_DISCONNECTED or USER_DISCONNECT");
+    		System.out.println("[LOBBYMANAGEMENT] USER_DISCONNECTED or USER_DISCONNECT received");
         	int userid = message.getIntProperty(PropertyType.USER_ID);
     		lobbyManagement.userDisconnected(userid);
     	}catch(Exception e) {
@@ -93,7 +93,7 @@ public class LobbyManagementMessageReceiver implements MessageListener {
      */
     public void userTimedOut(Message message) {
     	try {
-			System.out.println("LobbyMangement: Incoming Message of Type USER_TIMEOUT");
+    		System.out.println("[LOBBYMANAGEMENT] USER_TIMEOUT received");
         	int userid = message.getIntProperty(PropertyType.USER_ID);
     		lobbyManagement.userTimedOut(userid);
     	}catch(Exception e) {
@@ -108,7 +108,7 @@ public class LobbyManagementMessageReceiver implements MessageListener {
      */
     public void userCreatesGame(Message message) {
     	try {
-			System.out.println("LobbyMangement: Incoming Message of Type USER_CREATEGAME");
+    		System.out.println("[LOBBYMANAGEMENT] USER_CREATEGAME received");
         	int userid = message.getIntProperty(PropertyType.USER_ID);
     		lobbyManagement.userCreatesGame(userid);
     	}catch(Exception e) {
@@ -123,7 +123,7 @@ public class LobbyManagementMessageReceiver implements MessageListener {
      */
     public void userJoinsGame(Message message) {
     	try {
-			System.out.println("LobbyMangement: Incoming Message of Type USER_JOINGAME");
+           	System.out.println("[LOBBYMANAGEMENT] USER_JOINGAME received");
         	int userid = message.getIntProperty(PropertyType.USER_ID);
         	int gameid = message.getIntProperty(PropertyType.GAME_ID);
     		lobbyManagement.userJoinsGame(userid,gameid);

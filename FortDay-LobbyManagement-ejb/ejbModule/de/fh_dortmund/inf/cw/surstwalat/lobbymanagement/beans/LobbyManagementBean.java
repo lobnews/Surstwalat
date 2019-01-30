@@ -137,7 +137,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	private void sendGameCreatedMessage(int gameId, int userId) {
 		ObjectMessage msg = jmsContext.createObjectMessage();
 		try {
-			System.out.println("LobbyMangement: Outgoing Message of Type GAME_CREATED");
+            System.out.println("[LOBBYMANAGEMENT] Game with ID " + gameId + " created by user with id " + userId + "." );    
 			msg.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.GAME_CREATED);
 			msg.setIntProperty(PropertyType.GAME_ID, gameId);
 			msg.setIntProperty(PropertyType.USER_ID, userId);
@@ -174,7 +174,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	private void sendGameStartedMessage(int gameId, int fieldsize) {
 		ObjectMessage msg = jmsContext.createObjectMessage();
 		try {
-			System.out.println("LobbyMangement: Outgoing Message of Type GAME_STARTED");
+            System.out.println("[LOBBYMANAGEMENT] Game with ID " + gameId + " started." );    
 			msg.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.GAME_STARTED);
 			msg.setIntProperty(PropertyType.GAME_ID, gameId);
 			msg.setIntProperty(PropertyType.GAME_FIELDSIZE, fieldsize);
