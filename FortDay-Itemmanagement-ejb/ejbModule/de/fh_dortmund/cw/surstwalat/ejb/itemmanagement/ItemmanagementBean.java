@@ -7,7 +7,7 @@ import java.util.Random;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
-import javax.ejb.Stateful;
+import javax.ejb.Singleton;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
 import javax.jms.Topic;
@@ -27,7 +27,7 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Playground;
  * @author Marvin Wölk
  *
  */
-@Stateful
+@Singleton
 public class ItemmanagementBean
 {
 
