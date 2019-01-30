@@ -41,7 +41,7 @@ import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession
 @Stateful
 public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 
-    private boolean LOGGING = true;
+    private final boolean LOGGING = true;
     @Inject
     private JMSContext jmsContext;
 
@@ -250,7 +250,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 	sendMessage(msg);
 
 	if (LOGGING) {
-	    System.out.println("[USERSESSION] User disconnected: Username: " + user.getName());
+	    System.out.println("[USERSESSION] Client disconnected");
 	}
     }
 
@@ -411,7 +411,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 	try {
 	    msg.setIntProperty(propertyType, value);
 	} catch (JMSException e) {
-	    System.out.println("Failed to set" + propertyType.toString() + "to " + value);
+	    System.out.println("Failed to set" + propertyType + "to " + value);
 	}
     }
 
@@ -425,7 +425,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 	try {
 	    msg.setStringProperty(propertyType, value);
 	} catch (JMSException e) {
-	    System.out.println("Failed to set" + propertyType.toString() + "to " + value);
+	    System.out.println("Failed to set" + propertyType + "to " + value);
 	}
     }
 
