@@ -50,6 +50,8 @@ public interface MessageType {
     public static final int TOKENS_IN_TOXIC = 115;
     public static final int COLLISION_WITH_OWN_CHARACTER = 116;
     public static final int TOXIC_CHANGE = 117;
+    public static final int PLAYGROUND_CREATED = 119;
+
     
     //HealthManagement
     public static final int PLAYER_DEATH = 121;

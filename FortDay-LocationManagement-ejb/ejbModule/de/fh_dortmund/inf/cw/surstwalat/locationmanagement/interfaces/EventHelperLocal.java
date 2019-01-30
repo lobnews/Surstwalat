@@ -19,4 +19,5 @@ public interface EventHelperLocal {
 	void triggerCollisionWithOwnCharacterMessage(Integer gameId, Integer playerId, Integer tokenId);
 	void triggerToxicChangedMessage(Integer gameId, Integer startZone, Integer endZone);
     void triggerCharactersInToxicMessage(Integer gameId, List<Token> tokens);
+    void triggerPlayGroundCeatedMessage(Integer gameId);
 }

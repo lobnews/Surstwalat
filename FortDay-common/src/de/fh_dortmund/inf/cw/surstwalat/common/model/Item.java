@@ -18,7 +18,10 @@ import javax.persistence.Table;
 @Table(name="Item")
 @Entity
 @NamedQueries({
-	@NamedQuery(name="Item.getById", query="SELECT i FROM Item i WHERE i.id = :id")
+	@NamedQuery(name="Item.countBySpecial", query="SELECT count(i) FROM Item i WHERE i.special = :special"),
+	@NamedQuery(name="Item.getBySpecial", query="SELECT i FROM Item i WHERE i.special = :special"),
+	@NamedQuery(name="Item.getById", query="SELECT i FROM Item i WHERE i.id = :id"),
+	@NamedQuery(name="Item.count", query="SELECT count(i) FROM Item i")
 })
 public class Item implements Serializable{
 
@@ -26,6 +29,8 @@ public class Item implements Serializable{
 	@GeneratedValue
 	@Column(name="id")
 	private int id;
+	
+	private boolean special;
 
 	public int getId() {
 		return id;
@@ -35,5 +40,12 @@ public class Item implements Serializable{
 		this.id = id;
 	}
 
+	public boolean isSpecial() {
+		return special;
+	}
+
+	public void setSpecial(boolean special) {
+		this.special = special;
+	}
 
 }

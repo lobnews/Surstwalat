@@ -7,6 +7,7 @@ package de.fh_dortmund.inf.cw.surstwalat.client.util;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -22,6 +23,7 @@ public class Pawn {
     private static final String HEALTH_EMPTY_NAME = "Healthbar_empty.png";
     public static final BufferedImage HEALTH_FULL;
     public static final BufferedImage HEALTH_EMPTY;
+    public static HashMap<Integer, Pawn> pawns;
     
     static {
         BufferedImage imageCache = null;
@@ -45,11 +47,24 @@ public class Pawn {
     private PawnColor color;
     private double health;
     private double maxHealth;
+    private final int playerID;
+    private final int tokenID;
+    
+    public static Pawn getInstance(int tokenID) {
+        return pawns.get(tokenID);
+    }
 
-    public Pawn(PawnColor color, double maxHealth) {
+    public Pawn(PawnColor color, double maxHealth, int playerID, int tokenID) {
         this.color = color;
         this.maxHealth = maxHealth;
         this.health = maxHealth;
+        this.playerID = playerID;
+        this.tokenID = tokenID;
+        pawns.put(tokenID, this);
+    }
+
+    public int getTokenID() {
+        return tokenID;
     }
 
     public PawnColor getColor() {
@@ -74,6 +89,10 @@ public class Pawn {
 
     public void setMaxHealth(double maxHealth) {
         this.maxHealth = maxHealth;
+    }
+
+    public int getPlayerID() {
+        return playerID;
     }
     
 }

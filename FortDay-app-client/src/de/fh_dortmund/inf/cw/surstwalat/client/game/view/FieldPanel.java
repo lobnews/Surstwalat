@@ -5,30 +5,59 @@
  */
 package de.fh_dortmund.inf.cw.surstwalat.client.game.view;
 
+import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.EventHandler;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.EventListener;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.EliminatePlayerEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.ItemAddToUserEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.ItemSpawnEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.PawnInteractEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.PlayerOnFieldMessage;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.UpdateZoneEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.Pawn;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.PawnColor;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.Random;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 /**
  *
  * @author Lars
  */
-public class FieldPanel extends javax.swing.JPanel {
-
+public class FieldPanel extends javax.swing.JPanel implements EventListener {
+    
+    public static final BufferedImage ITEM_IMAGE;
     public static final int MIN_WIDTH = 25;
     public static final int MIN_HEIGHT = 25;
     public static final double HEALTH_HEIGHT_FACTOR = 0.1;
+    private static final String RESOURCE_FOLDER = "resources/items/";
 
     private final int x;
     private final int y;
     private final int value;
 
-    private final Pawn pawn;
+    private Pawn pawn;
+    private boolean zone = false;
+    private boolean nextZone = false;
+    private int itemID = -1;
+    
+    static {
+        BufferedImage imageCache = null;
+        try {
+            imageCache = ImageIO.read(PawnColor.class.getClassLoader().getResourceAsStream(RESOURCE_FOLDER + "drop.png"));
+        } catch (IOException ex) {
+            Logger.getLogger(PawnColor.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            ITEM_IMAGE = imageCache;
+        }
+    }
 
     /**
      * Creates new form FieldPanel
@@ -36,19 +65,12 @@ public class FieldPanel extends javax.swing.JPanel {
     public FieldPanel(int x, int y, int value) {
         this.x = x;
         this.y = y;
-        this.value = value;
-        if (value > 0) {
-            Random r = new Random();
-            if (r.nextBoolean()) {
-                pawn = new Pawn(PawnColor.values()[r.nextInt(PawnColor.values().length)], r.nextInt(10) + 1);
-                pawn.setHealth(r.nextInt((int) pawn.getMaxHealth()));
-            } else {
-                pawn = null;
-            }
-        } else {
-            pawn = null;
-        }
+        this.value = value - 1;
+        pawn = null;
         initComponents();
+        if(value != 0) {
+            MainFrame.getInstance().getEventManager().registerListener(this);
+        }
     }
 
     /**
@@ -65,6 +87,10 @@ public class FieldPanel extends javax.swing.JPanel {
         backgroundLabel = new javax.swing.JLabel();
         foregroundLayer = new javax.swing.JPanel();
         foregroundLabel = new javax.swing.JLabel();
+        zoneLayer = new javax.swing.JPanel();
+        zoneLabel = new javax.swing.JLabel();
+        itemLayer = new javax.swing.JPanel();
+        itemLable = new javax.swing.JLabel();
 
         setMinimumSize(new Dimension(MIN_WIDTH, MIN_HEIGHT));
         setOpaque(false);
@@ -84,8 +110,18 @@ public class FieldPanel extends javax.swing.JPanel {
         foregroundLayer.setLayout(new java.awt.BorderLayout());
         foregroundLayer.add(foregroundLabel, java.awt.BorderLayout.CENTER);
 
+        zoneLayer.setOpaque(false);
+        zoneLayer.setLayout(new java.awt.BorderLayout());
+        zoneLayer.add(zoneLabel, java.awt.BorderLayout.CENTER);
+
+        itemLayer.setOpaque(false);
+        itemLayer.setLayout(new java.awt.BorderLayout());
+        itemLayer.add(itemLable, java.awt.BorderLayout.CENTER);
+
         jLayeredPane1.setLayer(backgroundLayer, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jLayeredPane1.setLayer(foregroundLayer, javax.swing.JLayeredPane.PALETTE_LAYER);
+        jLayeredPane1.setLayer(zoneLayer, javax.swing.JLayeredPane.POPUP_LAYER);
+        jLayeredPane1.setLayer(itemLayer, javax.swing.JLayeredPane.MODAL_LAYER);
 
         javax.swing.GroupLayout jLayeredPane1Layout = new javax.swing.GroupLayout(jLayeredPane1);
         jLayeredPane1.setLayout(jLayeredPane1Layout);
@@ -102,6 +138,16 @@ public class FieldPanel extends javax.swing.JPanel {
                     .addGap(0, 0, Short.MAX_VALUE)
                     .addComponent(foregroundLayer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(zoneLayer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(itemLayer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         jLayeredPane1Layout.setVerticalGroup(
             jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -116,6 +162,16 @@ public class FieldPanel extends javax.swing.JPanel {
                     .addGap(0, 0, Short.MAX_VALUE)
                     .addComponent(foregroundLayer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(zoneLayer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
+            .addGroup(jLayeredPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jLayeredPane1Layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(itemLayer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
 
         add(jLayeredPane1, java.awt.BorderLayout.CENTER);
@@ -123,7 +179,10 @@ public class FieldPanel extends javax.swing.JPanel {
 
     private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
         if (value != 0) {
-            System.out.println(String.format("clicked X: %3d Y: %3d Value: %2d", x, y, value));
+            System.out.println(String.format("clicked X: %3d Y: %3d Value: %2d Zone: %b NextZone: %b", x, y, value, zone, nextZone));
+        }
+        if(pawn != null) {
+            MainFrame.getInstance().getEventManager().fireEvent(new PawnInteractEvent(pawn.getTokenID()));
         }
     }//GEN-LAST:event_formMouseClicked
 
@@ -134,11 +193,84 @@ public class FieldPanel extends javax.swing.JPanel {
     public int getValue() {
         return value;
     }
+    
+    @EventHandler
+    public void onPlayerEliminate(EliminatePlayerEvent e) {
+        if(pawn == null) {
+            return;
+        }
+        if(pawn.getPlayerID() == e.getPlayerID()) {
+            pawn = null;
+            revalidate();
+        }
+    }
+    
+    @EventHandler
+    public void onItemAddToUser(ItemAddToUserEvent e) {
+        if(itemID == e.getItem().getId()) {
+            itemID = -1;
+        }
+    }
+    
+    @EventHandler
+    public void onZoneUpdate(UpdateZoneEvent e) {
+        zone = false;
+        nextZone = false;
+        if(e.getZoneSize() >= 0) {
+            int zoneEnd = e.getZoneBegin() + e.getZoneSize() - 1;
+            if(value >= e.getZoneBegin() && value <= zoneEnd) {
+                zone = true;
+                revalidate();
+                return;
+            } else if(value + 40 >= e.getZoneBegin() && value + 40 <= zoneEnd) {
+                zone = true;
+                revalidate();
+                return;
+            }
+        }
+        if(e.getNextZoneSize() >= 0) {
+            int zoneEnd = e.getNextZoneBegin() + e.getNextZoneSize() - 1;
+            if(value >= e.getNextZoneBegin() && value <= zoneEnd) {
+                nextZone = true;
+                revalidate();
+                return;
+            } else if(value + 40 >= e.getNextZoneBegin() && value + 40 <= zoneEnd) {
+                nextZone = true;
+                revalidate();
+                return;
+            }
+        }
+        revalidate();
+    }
+    
+    @EventHandler
+    public void onPlayerOnField(PlayerOnFieldMessage e) {
+        if(pawn == null) {
+            if(e.getField() == value) {
+                pawn = Pawn.getInstance(e.getTokenID());
+                itemID = -1;
+            }
+        } else {
+            if (pawn.getTokenID() == e.getTokenID() && value != e.getField()) {
+                pawn = null;
+            }
+        }
+    }
+    
+    @EventHandler
+    public void onSpawnItem(ItemSpawnEvent e) {
+        if(e.getItemPos() != value) {
+            return;
+        }
+        itemID = e.getItemID();
+    }
 
     @Override
     public void paint(Graphics g) {
         backgroundLayer.setSize(jLayeredPane1.getSize());
         foregroundLayer.setSize(jLayeredPane1.getSize());
+        itemLayer.setSize(jLayeredPane1.getSize());
+        zoneLayer.setSize(jLayeredPane1.getSize());
         if (pawn != null) {
             BufferedImage newBackground = new BufferedImage(backgroundLayer.getWidth(), backgroundLayer.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
             Graphics2D g2D = (Graphics2D) newBackground.getGraphics();
@@ -152,6 +284,28 @@ public class FieldPanel extends javax.swing.JPanel {
             foregroundLabel.setIcon(new ImageIcon(newBackground));
             foregroundLayer.repaint();
         }
+        if(itemID >= 0) {
+            BufferedImage newBackground = new BufferedImage(itemLayer.getWidth(), itemLayer.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+            Graphics2D g2D = (Graphics2D) newBackground.getGraphics();
+            g2D.drawImage(ITEM_IMAGE, 0, 0, newBackground.getWidth(), newBackground.getHeight(), 0, 0, ITEM_IMAGE.getWidth(), ITEM_IMAGE.getHeight(), null);
+            itemLable.setIcon(new ImageIcon(newBackground));
+            itemLayer.repaint();
+        }
+        if(zone) {
+            BufferedImage zone = new BufferedImage(zoneLayer.getWidth(), zoneLayer.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+            Graphics2D g2D = (Graphics2D) zone.getGraphics();
+            g2D.setColor(new Color(136, 0, 21, 128));
+            g2D.fillRect(0, 0, zone.getWidth(), zone.getHeight());
+            zoneLabel.setIcon(new ImageIcon(zone));
+            zoneLayer.repaint();
+        } else if(nextZone) {
+            BufferedImage zone = new BufferedImage(zoneLayer.getWidth(), zoneLayer.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
+            Graphics2D g2D = (Graphics2D) zone.getGraphics();
+            g2D.setColor(new Color(136, 0, 21, 32));
+            g2D.fillRect(0, 0, zone.getWidth(), zone.getHeight());
+            zoneLabel.setIcon(new ImageIcon(zone));
+            zoneLayer.repaint();
+        }
         super.paint(g);
     }
 
@@ -161,6 +315,10 @@ public class FieldPanel extends javax.swing.JPanel {
     private javax.swing.JPanel backgroundLayer;
     private javax.swing.JLabel foregroundLabel;
     private javax.swing.JPanel foregroundLayer;
+    private javax.swing.JLabel itemLable;
+    private javax.swing.JPanel itemLayer;
     private javax.swing.JLayeredPane jLayeredPane1;
+    private javax.swing.JLabel zoneLabel;
+    private javax.swing.JPanel zoneLayer;
     // End of variables declaration//GEN-END:variables
 }
