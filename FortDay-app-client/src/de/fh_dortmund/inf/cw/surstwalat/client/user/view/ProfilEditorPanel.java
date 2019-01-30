@@ -98,7 +98,7 @@ public class ProfilEditorPanel extends JPanel {
 
         // Username
         lb_username = new JLabel(textRepository.get("username"));
-        lb_username.setFont(FontKeeper.LABEL);     
+        lb_username.setFont(FontKeeper.LABEL);
         lb_username.setForeground(Color.WHITE);
         gridBag.gridx = 0;
         gridBag.gridy = ++gridRow;
@@ -170,7 +170,7 @@ public class ProfilEditorPanel extends JPanel {
 
         // Back button
         bt_back = new JButton(textRepository.get("back"));
-        bt_back.setFont(FontKeeper.BUTTON);   
+        bt_back.setFont(FontKeeper.BUTTON);
         bt_back.setBackground(Color.WHITE);
         bt_back.setForeground(Color.DARK_GRAY);
         bt_back.addActionListener((ActionEvent e) -> {
@@ -209,6 +209,8 @@ public class ProfilEditorPanel extends JPanel {
                     JOptionPane.ERROR_MESSAGE);
             System.exit(1);
         }
+
+        tf_email.setText(userManager.getEMailAddress());
     }
 
     /**
@@ -267,7 +269,7 @@ public class ProfilEditorPanel extends JPanel {
                         textRepository.get("Success"),
                         JOptionPane.INFORMATION_MESSAGE);
                 Logger.getLogger(RegistryPanel.class.getName()).log(Level.INFO, textRepository.get("delete_success"));
-                close();
+                exit();
             } catch (GeneralServiceException e) {
                 Logger.getLogger(ProfilEditorPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_ex"), e);
                 JOptionPane.showMessageDialog(
@@ -275,7 +277,7 @@ public class ProfilEditorPanel extends JPanel {
                         textRepository.get("generalServiceException"),
                         textRepository.get("generalServiceException_short"),
                         JOptionPane.ERROR_MESSAGE);
-                System.exit(1);
+                exit();
             }
         }
     }
@@ -284,13 +286,13 @@ public class ProfilEditorPanel extends JPanel {
      * Get a site back
      */
     private void back() {
-        MainFrame.getInstance().setFrame(new StartHubPanel(), false);
+        MainFrame.getInstance().setFrame(new StartHubPanel(), false, false);
     }
 
     /**
      * Exit program
      */
-    private void close() {
+    private void exit() {
         System.exit(0);
     }
 }

@@ -58,8 +58,8 @@ public class LoginPanel extends JPanel {
      * Default Constructor
      */
     public LoginPanel() {
-        backgroundImage = new ImageIcon(getClass().getResource("/resources/backgrounds/background-login.png")).getImage();       
-        
+        backgroundImage = new ImageIcon(getClass().getResource("/resources/backgrounds/background-login.png")).getImage();
+
         initComponent();
         userManager = UserManagementHandler.getInstance();
     }
@@ -182,7 +182,7 @@ public class LoginPanel extends JPanel {
 
             // Success
             Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, textRepository.get("login_success_short"));
-            MainFrame.getInstance().setFrame(new StartHubPanel(), false);
+            MainFrame.getInstance().setFrame(new StartHubPanel(), false, false);
         } catch (AccountNotFoundException e) {
             Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, textRepository.get("accountNotFoundException_ex"));
             lb_infoBox.setText(Designer.errorBox(textRepository.get("accountNotFoundException")));
@@ -242,7 +242,7 @@ public class LoginPanel extends JPanel {
      * Open register panel
      */
     private void openRegisterPanel() {
-        MainFrame.getInstance().setFrame(new RegistryPanel(), false);
+        MainFrame.getInstance().setFrame(new RegistryPanel(), false, false);
     }
 
     /**
