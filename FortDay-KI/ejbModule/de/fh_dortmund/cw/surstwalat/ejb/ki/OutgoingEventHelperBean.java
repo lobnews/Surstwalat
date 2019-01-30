@@ -37,22 +37,22 @@ public class OutgoingEventHelperBean {
 		sendMessage(message);
 	}
 	
-	public void sendUseItem(int gameid, int player_no, Item item) {
+	public void sendUseItem(int gameid, int player_id, Item item) {
 		ObjectMessage msg = createObjectMessage(gameid, MessageType.PLAYER_ACTION);
 		Action a = new Action();
 		a.setActionType(ActionType.USE_ITEM);
 		trySetIntProperty(msg, PropertyType.ACTION_TYPE, a.getActionType().ordinal());
-		trySetIntProperty(msg, PropertyType.PLAYER_NO, player_no);
+		trySetIntProperty(msg, PropertyType.PLAYER_ID, player_id);
 		trySetObject(msg, item);
 		sendMessage(msg);
 	}
 	
-	public void sendPlayerRoll(int gameid, int player_no) {
+	public void sendPlayerRoll(int gameid, int player_id) {
 		ObjectMessage msg = createObjectMessage(gameid, MessageType.PLAYER_ACTION);
 		Action a = new Action();
 		a.setActionType(ActionType.ROLL);
 		trySetIntProperty(msg, PropertyType.ACTION_TYPE, a.getActionType().ordinal());
-		trySetIntProperty(msg, PropertyType.PLAYER_NO, player_no);
+		trySetIntProperty(msg, PropertyType.PLAYER_ID, player_id);
 		sendMessage(msg);
 	}
 
@@ -89,6 +89,14 @@ public class OutgoingEventHelperBean {
 
 	private void sendMessage(ObjectMessage message) {
 		jmsContext.createProducer().send(eventTopic, message);
+	}
+
+	public void sendTokenMove(int gameid, int tokenid, int count) 
+	{
+		ObjectMessage message = createObjectMessage(gameid, MessageType.MOVE_TOKEN);
+		trySetIntProperty(message, PropertyType.TOKEN_ID, tokenid);
+		trySetObject(message, count);
+		sendMessage(message);
 	}
 
 }

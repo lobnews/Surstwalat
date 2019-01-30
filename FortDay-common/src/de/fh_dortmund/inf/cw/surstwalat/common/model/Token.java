@@ -18,6 +18,7 @@ import javax.persistence.Table;
 @NamedQueries(
 {
   @NamedQuery(name = "Token.getById", query = "SELECT t FROM Token t WHERE t.id = :id"),
+  @NamedQuery(name = "Token.getTokenList", query = "SELECT t FROM Token t WHERE t.playerId = :playerId"),
   @NamedQuery(name = "Token.getByPlayerIdAndTokenNumber", query = "SELECT t FROM Token t WHERE t.playerId = :playerId AND t.nr=:nr")
 
 })

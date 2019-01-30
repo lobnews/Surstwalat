@@ -25,10 +25,8 @@ import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession
 public class KiMessageBean implements MessageListener {
 	
 	@EJB
-	private OutgoingEventHelperBean sender;
+	private KiBean kibean;
 	
-    private ArrayList<Ki> kis;
-
     @Override
     public void onMessage(Message message) {
         ObjectMessage o = (ObjectMessage) message;
@@ -41,60 +39,33 @@ public class KiMessageBean implements MessageListener {
             e.printStackTrace();
         }
         switch (messageType) {
-            case MessageType.ASSIGN_PLAYER:
-                createKi(message);
-                break;
             case MessageType.ASSIGN_ACTIVE_PLAYER:
                 makeTurn(message);
                 break;
-            case MessageType.PLAYER_INVENTAR:
-                refreshInventory(message);
+            case MessageType.PLAYER_ROLL:
+                moveToken(message);
                 break;
         }
-    }
-
-    private void refreshInventory(Message message) {
-        try {
-            int player_no = message.getIntProperty(PropertyType.PLAYER_NO);
-            ObjectMessage objectMessage = (ObjectMessage) message;
-            List<Item> inventory = objectMessage.getBody(List.class);
-            kis.get(player_no).setInventory(inventory);
-        } catch (JMSException e) {
-            e.printStackTrace();
-        }
-
     }
 
     private void makeTurn(Message message) {
         try {
-        	ObjectMessage objectMessage = (ObjectMessage) message;
-            int player_no = objectMessage.getBody(Integer.class);
-        	
-        	kis.get(player_no).makeTurn();
+        	int player_id = message.getIntProperty(PropertyType.PLAYER_ID);
+        	int gameid = message.getIntProperty(PropertyType.GAME_ID);
+        	kibean.makeTurn(player_id, gameid);
         } catch (JMSException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
-
-    private void createKi(Message message) {
-    	try {
-    		
-    		int userid = message.getIntProperty(PropertyType.USER_ID);
-    		
-    		if(userid == -1)
-    		{
-    			int gameid = message.getIntProperty(PropertyType.GAME_ID);
-        		ObjectMessage objectMessage = (ObjectMessage) message;
-        		int player_no = objectMessage.getBody(Integer.class);
-        		
-    			Ki ki = new Ki(session, sender, gameid, player_no);
-    			kis.add(player_no, ki);
-    		}
-			
-		} catch (JMSException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+    private void moveToken(Message message) {
+        try {
+        	int player_id = message.getIntProperty(PropertyType.PLAYER_ID);
+        	int gameid = message.getIntProperty(PropertyType.GAME_ID);
+        	kibean.moveToken(player_id);
+        } catch (JMSException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
     }
 }
