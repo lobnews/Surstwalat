@@ -69,6 +69,7 @@ public class LocationManagementBean implements LocationManagementLocal {
 		// Generate the Fields
 		for (int i = 0; i < fieldSize; i++) {
 			Field f = new Field();
+			f.setPlayground(playground);
 			fields.add(f);
 		}
 		playground.setFields(fields);
@@ -84,7 +85,7 @@ public class LocationManagementBean implements LocationManagementLocal {
 		TypedQuery<Playground> query = entityManager.createNamedQuery("Playground.getByGameId", Playground.class);
 		query.setParameter("gameId", gameId);
 		Playground playground = query.getSingleResult();
-		entityManager.lock(playground, LockModeType.PESSIMISTIC_WRITE);
+		entityManager.lock(playground, LockModeType.PESSIMISTIC_READ);
 
 		// clear all toxic
 		for(Field f: playground.getFields()) {
@@ -180,7 +181,7 @@ public class LocationManagementBean implements LocationManagementLocal {
 		TypedQuery<Playground> query = entityManager.createNamedQuery("Playground.getByGameId", Playground.class);
 		query.setParameter("gameId", gameId);
 		Playground playground = query.getSingleResult();
-		entityManager.lock(playground, LockModeType.PESSIMISTIC_WRITE);
+		entityManager.lock(playground, LockModeType.PESSIMISTIC_READ);
 
 		for (Integer tokenId : tokenIds) {
 			// randomly set the field for the token
@@ -191,8 +192,10 @@ public class LocationManagementBean implements LocationManagementLocal {
 			}
 
 			// Set tokens and trigger event
-			Token token = entityManager.find(Token.class, tokenId);
-			playground.getField(field).setToken(token);
+			Token token = entityManager.find(Token.class, tokenId, LockModeType.PESSIMISTIC_READ);
+			Field tokenField = playground.getField(field);
+			token.setField(tokenField);
+			tokenField.setToken(entityManager.merge(token));
 			outgoingEvents.triggerPlayerOnFieldMessage(gameId, playerId, token.getId(), field);
 		}
 
