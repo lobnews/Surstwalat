@@ -1,7 +1,11 @@
 package de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces;
 
+import java.util.List;
+
+import de.fh_dortmund.inf.cw.surstwalat.common.exceptions.GameIsFullException;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Game;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
@@ -113,7 +117,7 @@ public interface UserSession{
 	 * 
 	 * @param gameID
 	 */
-	public void userJoinedGame(int gameID);
+	public void userJoinedGame(int gameID) throws GameIsFullException;
 	
 	/**
 	 * User created a game
@@ -147,4 +151,26 @@ public interface UserSession{
 	 * @param number
 	 */
 	public void moveToken(int gameID, int tokenID, int number);
+	
+	/**
+	 * Gets a List of open games
+	 * 
+	 * @return List<Game>
+	 */
+	public List<Game> getOpenGames();
+	
+	/**
+	 * Gets a List of Users in the lobby
+	 * 
+	 * @return List<Account>
+	 */
+	public List<Account> getUserInLobby();
+	
+	/**
+	 * Gets a List of Accounts in the open game
+	 * 
+	 * @param gameId
+	 * @return List<Account>
+	 */
+	public List<Account> getUsersInOpenGame(int gameid);
 }
