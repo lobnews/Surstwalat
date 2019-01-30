@@ -25,12 +25,18 @@ public class SpawnItemEventHandlerBean implements MessageListener
     @EJB
     LocationManagementLocal locationManagement;
 
+    private static int counter = 0;
     @Override
     public void onMessage(Message message)
     {
-    	System.out.println("[LOCATIONMANAGEMENT] SPAWN_ITEM received");
+        counter++;
         try
         {
+            System.out
+                .println(
+                    "[LOCATIONMANAGEMENT] SPAWN_ITEM received with Item ID:" +
+                         message.getIntProperty(PropertyType.ITEM_ID)+"Aufruf:"+counter);
+
             locationManagement
                 .addItemToPlayground(
                     message.getIntProperty(PropertyType.GAME_ID),
