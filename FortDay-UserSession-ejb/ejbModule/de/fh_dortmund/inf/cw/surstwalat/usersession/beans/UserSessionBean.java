@@ -152,11 +152,11 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
      */
     @Override
     public void deleteAccount() throws GeneralServiceException {
-        userManagement.deleteAccount(user);
-        
-        ObjectMessage msg = createObjectMessage(2, MessageType.USER_DELETE);
-        trySetObject(msg, user);
-        sendMessage(msg);
+	userManagement.deleteAccount(user);
+
+	ObjectMessage msg = createObjectMessage(2, MessageType.USER_DELETE);
+	trySetObject(msg, user);
+	sendMessage(msg);
 
 	if (LOGGING) {
 	    System.out.println("[USERSESSION] User deleted: Username: " + user.getName());
@@ -217,6 +217,11 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
      */
     @Override
     public boolean compareAccountById(int accountId) {
+	if (user == null) {
+	    System.out.println("[USERSESSION] User not found by compareAccountById()");
+	    return false;
+	}
+
 	return user.getId() == accountId;
     }
 
