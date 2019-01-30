@@ -1,18 +1,8 @@
 package de.fh_dortmund.inf.cw.surstwalat.lobbymanagement.beans;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.ejb.Stateful;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.jms.JMSContext;
@@ -25,9 +15,9 @@ import javax.persistence.TypedQuery;
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
 import de.fh_dortmund.inf.cw.surstwalat.common.exceptions.GameIsFullException;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Game;
 import de.fh_dortmund.inf.cw.surstwalat.lobbymanagement.beans.interfaces.LobbyManagementLocal;
-import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 
 /**
  * Implementation of the given interfaces (Local/Remote). Implements the logic for the Game-Lobbies (until Game-start).
@@ -107,13 +97,6 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 		sendGameCreatedMessage(game.getId(), user.getId());
 	}
 	
-	/**
-	 * This method gets triggered if a user tries to join a game. It checks if the game is full yet or not.
-	 * Also reduces the number of AI in the game if the user joined successful and removes this user from the lobby.
-	 * @param userID ID of the user that tries to join a game.
-	 * @param gameID ID of the game the user tries to join.
-	 * @exception GameIsFullException Is thrown if the game, the user tries to join, is full with human players yet.
-	 */
 	@Override
 	public void userJoinsGame(int userID, int gameID) throws GameIsFullException{
 		Account user = getAccountByUserID(userID);
@@ -126,6 +109,30 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 			user.setInLobby(false);
 			em.persist(game);
 			em.persist(user);
+			sendUserJoinedGameMessage(userID,gameID);
+		}
+	}
+	
+	public List<Account> getUsersInOpenGame(int gameid) {
+		Game g = getGameByGameID(gameid);
+		return g.getHumanUsersInGame();
+	}
+	
+	/**
+	 * This method is used to send out a message that a user joined a game.
+	 * @param gameId The ID of the games that has been started.
+	 * @param fieldsize The fieldsize of the gamefield in this game.
+	 */
+	private void sendUserJoinedGameMessage(int userId, int gameId) {
+		ObjectMessage msg = jmsContext.createObjectMessage();
+		try {
+			msg.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.USER_JOINGAME);
+			msg.setIntProperty(PropertyType.GAME_ID, gameId);
+			msg.setIntProperty(PropertyType.USER_ID, userId);
+			jmsContext.createProducer().send(eventTopic, msg);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -192,6 +199,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	 * now but logged in).
 	 * @return The list of users in the lobby right now.
 	 */
+	@Override
 	public List<Account> getUserInLobby(){
 		TypedQuery<Account> query = em.createNamedQuery("Account.getInLobby",Account.class);
 		return query.getResultList();
