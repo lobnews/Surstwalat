@@ -52,154 +52,154 @@ public class LoginPanel extends JPanel {
     private JButton bt_close;
 
     private final UserManagementHandler userManager;
-    Image backgroundImage;
+    private final Image backgroundImage;
 
     /**
      * Default Constructor
      */
     public LoginPanel() {
-        backgroundImage = new ImageIcon(getClass().getResource("/resources/backgrounds/background-login.png")).getImage();
+	backgroundImage = new ImageIcon(getClass().getResource("/resources/backgrounds/background-login.png")).getImage();
 
-        initComponent();
-        userManager = UserManagementHandler.getInstance();
+	initComponent();
+	userManager = UserManagementHandler.getInstance();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponents(g);
-        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+	super.paintComponents(g);
+	g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
 
     /**
      * Initialize ui components
      */
     private void initComponent() {
-        Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("ui_controls");
+	Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("ui_controls");
 
-        GridBagLayout gridBagLayout = new GridBagLayout();
-        setLayout(gridBagLayout);
-        setMinimumSize(new Dimension(600, 438));
+	GridBagLayout gridBagLayout = new GridBagLayout();
+	setLayout(gridBagLayout);
+	setMinimumSize(new Dimension(600, 438));
 
-        GridBagConstraints gridBag = new GridBagConstraints();
-        gridBag.fill = GridBagConstraints.HORIZONTAL;
-        gridBag.insets = new Insets(5, 5, 5, 5);
+	GridBagConstraints gridBag = new GridBagConstraints();
+	gridBag.fill = GridBagConstraints.HORIZONTAL;
+	gridBag.insets = new Insets(5, 5, 5, 5);
 
-        int gridRow = 0;
-        // Error label
-        lb_infoBox = new JLabel();
-        gridBag.gridx = 0;
-        gridBag.gridy = gridRow;
-        gridBag.gridwidth = 2;
-        this.add(lb_infoBox, gridBag);
+	int gridRow = 0;
+	// Error label
+	lb_infoBox = new JLabel();
+	gridBag.gridx = 0;
+	gridBag.gridy = gridRow;
+	gridBag.gridwidth = 2;
+	this.add(lb_infoBox, gridBag);
 
-        // Username
-        lb_username = new JLabel(textRepository.get("username"));
-        lb_username.setFont(FontKeeper.LABEL);
-        lb_username.setForeground(Color.WHITE);
-        gridBag.gridx = 0;
-        gridBag.gridy = ++gridRow;
-        gridBag.gridwidth = 1;
-        this.add(lb_username, gridBag);
+	// Username
+	lb_username = new JLabel(textRepository.get("username"));
+	lb_username.setFont(FontKeeper.LABEL);
+	lb_username.setForeground(Color.WHITE);
+	gridBag.gridx = 0;
+	gridBag.gridy = ++gridRow;
+	gridBag.gridwidth = 1;
+	this.add(lb_username, gridBag);
 
-        tf_username = new JTextField(20);
-        gridBag.gridx = 1;
-        gridBag.gridy = gridRow;
-        gridBag.gridwidth = 2;
-        this.add(tf_username, gridBag);
+	tf_username = new JTextField(20);
+	gridBag.gridx = 1;
+	gridBag.gridy = gridRow;
+	gridBag.gridwidth = 2;
+	this.add(tf_username, gridBag);
 
-        // Password
-        lb_password = new JLabel(textRepository.get("password"));
-        lb_password.setFont(FontKeeper.LABEL);
-        lb_password.setForeground(Color.WHITE);
-        gridBag.gridx = 0;
-        gridBag.gridy = ++gridRow;
-        gridBag.gridwidth = 1;
-        this.add(lb_password, gridBag);
+	// Password
+	lb_password = new JLabel(textRepository.get("password"));
+	lb_password.setFont(FontKeeper.LABEL);
+	lb_password.setForeground(Color.WHITE);
+	gridBag.gridx = 0;
+	gridBag.gridy = ++gridRow;
+	gridBag.gridwidth = 1;
+	this.add(lb_password, gridBag);
 
-        pf_password = new JPasswordField(20);
-        gridBag.gridx = 1;
-        gridBag.gridy = gridRow;
-        gridBag.gridwidth = 2;
-        this.add(pf_password, gridBag);
-        setBorder(new LineBorder(Color.GRAY));
+	pf_password = new JPasswordField(20);
+	gridBag.gridx = 1;
+	gridBag.gridy = gridRow;
+	gridBag.gridwidth = 2;
+	this.add(pf_password, gridBag);
+	setBorder(new LineBorder(Color.GRAY));
 
-        // Login button
-        bt_login = new JButton(textRepository.get("login"));
-        bt_login.setBackground(new Color(44, 15, 148));
-        bt_login.setFont(FontKeeper.BUTTON);
-        bt_login.setForeground(Color.WHITE);
-        bt_login.addActionListener((ActionEvent e) -> {
-            login();
-        });
-        gridBag.gridx = 0;
-        gridBag.gridy = ++gridRow;
-        gridBag.gridwidth = 3;
-        this.add(bt_login, gridBag);
+	// Login button
+	bt_login = new JButton(textRepository.get("login"));
+	bt_login.setBackground(new Color(44, 15, 148));
+	bt_login.setFont(FontKeeper.BUTTON);
+	bt_login.setForeground(Color.WHITE);
+	bt_login.addActionListener((ActionEvent e) -> {
+	    login();
+	});
+	gridBag.gridx = 0;
+	gridBag.gridy = ++gridRow;
+	gridBag.gridwidth = 3;
+	this.add(bt_login, gridBag);
 
-        // Registry button
-        bt_registry = new JButton(textRepository.get("signin"));
-        bt_registry.setBackground(new Color(44, 15, 148));
-        bt_registry.setFont(FontKeeper.BUTTON);
-        bt_registry.setForeground(Color.WHITE);
-        bt_registry.addActionListener((ActionEvent e) -> {
-            openRegisterPanel();
-        });
-        gridBag.gridx = 0;
-        gridBag.gridy = ++gridRow;
-        gridBag.gridwidth = 3;
-        this.add(bt_registry, gridBag);
+	// Registry button
+	bt_registry = new JButton(textRepository.get("signin"));
+	bt_registry.setBackground(new Color(44, 15, 148));
+	bt_registry.setFont(FontKeeper.BUTTON);
+	bt_registry.setForeground(Color.WHITE);
+	bt_registry.addActionListener((ActionEvent e) -> {
+	    openRegisterPanel();
+	});
+	gridBag.gridx = 0;
+	gridBag.gridy = ++gridRow;
+	gridBag.gridwidth = 3;
+	this.add(bt_registry, gridBag);
 
-        // Close button
-        bt_close = new JButton(textRepository.get("exit"));
-        bt_close.setBackground(new Color(44, 15, 148));
-        bt_close.setFont(FontKeeper.BUTTON);
-        bt_close.setForeground(Color.WHITE);
-        bt_close.addActionListener((ActionEvent e) -> {
-            exit();
-        });
-        gridBag.gridx = 0;
-        gridBag.gridy = ++gridRow;
-        gridBag.gridwidth = 3;
-        this.add(bt_close, gridBag);
+	// Close button
+	bt_close = new JButton(textRepository.get("exit"));
+	bt_close.setBackground(new Color(44, 15, 148));
+	bt_close.setFont(FontKeeper.BUTTON);
+	bt_close.setForeground(Color.WHITE);
+	bt_close.addActionListener((ActionEvent e) -> {
+	    exit();
+	});
+	gridBag.gridx = 0;
+	gridBag.gridy = ++gridRow;
+	gridBag.gridwidth = 3;
+	this.add(bt_close, gridBag);
     }
 
     /**
      * Login
      */
     private void login() {
-        Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
-        String name = tf_username.getText();
-        String password = String.valueOf(pf_password.getText());
+	Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
+	String name = tf_username.getText();
+	String password = String.valueOf(pf_password.getText());
 
-        // Validation check
-        if (!checkLoginInput(name, password)) {
-            return;
-        }
+	// Validation check
+	if (!checkLoginInput(name, password)) {
+	    return;
+	}
 
-        // Login call
-        try {
-            userManager.login(name, password);
+	// Login call
+	try {
+	    userManager.login(name, password);
 
-            // Success
-            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, textRepository.get("login_success_short"));
-            MainFrame.getInstance().setFrame(new StartHubPanel(), false, false);
-        } catch (AccountNotFoundException e) {
-            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, textRepository.get("accountNotFoundException_ex"));
-            lb_infoBox.setText(Designer.errorBox(textRepository.get("accountNotFoundException")));
+	    // Success
+	    Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, textRepository.get("login_success_short"));
+	    MainFrame.getInstance().setFrame(new StartHubPanel(), false, false);
+	} catch (AccountNotFoundException e) {
+	    Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, textRepository.get("accountNotFoundException_ex"));
+	    lb_infoBox.setText(Designer.errorBox(textRepository.get("accountNotFoundException")));
 
-        } catch (LoginFailedException e) {
-            Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, textRepository.get("loginFailedException_ex"));
-            lb_infoBox.setText(Designer.errorBox(textRepository.get("loginFailedException")));
+	} catch (LoginFailedException e) {
+	    Logger.getLogger(LoginPanel.class.getName()).log(Level.INFO, textRepository.get("loginFailedException_ex"));
+	    lb_infoBox.setText(Designer.errorBox(textRepository.get("loginFailedException")));
 
-        } catch (GeneralServiceException e) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_ex"), e);
-            JOptionPane.showMessageDialog(
-                    MainFrame.getInstance(),
-                    textRepository.get("generalServiceException"),
-                    textRepository.get("generalServiceException_short"),
-                    JOptionPane.ERROR_MESSAGE);
-            System.exit(1);
-        }
+	} catch (GeneralServiceException e) {
+	    Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_ex"), e);
+	    JOptionPane.showMessageDialog(
+		    MainFrame.getInstance(),
+		    textRepository.get("generalServiceException"),
+		    textRepository.get("generalServiceException_short"),
+		    JOptionPane.ERROR_MESSAGE);
+	    System.exit(1);
+	}
     }
 
     /**
@@ -210,45 +210,46 @@ public class LoginPanel extends JPanel {
      * @return
      */
     private boolean checkLoginInput(String name, String password) {
-        Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
-        LinkedList<String> errorMsgList = new LinkedList<>();
+	Map<String, String> textRepository = TextRepository.getInstance().getTextRepository("messages");
+	LinkedList<String> errorMsgList = new LinkedList<>();
 
-        // Check name
-        if (!Validator.isEmptyString(name)) {
-            errorMsgList.add(textRepository.get("username_empty"));
-        }
+	// Check name
+	if (!Validator.isEmptyString(name)) {
+	    errorMsgList.add(textRepository.get("username_empty"));
+	}
 
-        // Check password
-        if (!Validator.isEmptyString(password)) {
-            errorMsgList.add(textRepository.get("password_empty"));
+	// Check password
+	if (!Validator.isEmptyString(password)) {
+	    errorMsgList.add(textRepository.get("password_empty"));
 
-        }
+	}
 
-        // Error dialog
-        if (errorMsgList.size() > 0) {
-            Logger.getLogger(
-                    RegistryPanel.class.getName()).log(Level.INFO,
-                    textRepository.get("input_error_short"),
-                    errorMsgList.toString());
+	// Error dialog
+	if (errorMsgList.size() > 0) {
+	    Logger.getLogger(
+		    RegistryPanel.class.getName()).log(Level.INFO,
+		    textRepository.get("input_error_short"),
+		    errorMsgList.toString());
 
-            lb_infoBox.setText(Designer.errorBox(errorMsgList));
-            errorMsgList.clear();
-            return false;
-        }
-        return true;
+	    lb_infoBox.setText(Designer.errorBox(errorMsgList));
+	    errorMsgList.clear();
+	    return false;
+	}
+	return true;
     }
 
     /**
      * Open register panel
      */
     private void openRegisterPanel() {
-        MainFrame.getInstance().setFrame(new RegistryPanel(), false, false);
+	MainFrame.getInstance().setFrame(new RegistryPanel(), false, false);
     }
 
     /**
      * Exit program
      */
     private void exit() {
-        System.exit(0);
+	userManager.disconnect();
+	System.exit(0);
     }
 }

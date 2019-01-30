@@ -5,7 +5,10 @@
  */
 package de.fh_dortmund.inf.cw.surstwalat.client;
 
+import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import java.awt.BorderLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -16,19 +19,30 @@ import javax.swing.JPanel;
 public class MainFrame extends JFrame {
 
     private static MainFrame INSTANCE;
+    
+    private final UserManagementHandler userManager = new UserManagementHandler();
 
     public static MainFrame getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new MainFrame();
-        }
-        return INSTANCE;
+	if (INSTANCE == null) {
+	    INSTANCE = new MainFrame();
+	}
+	return INSTANCE;
     }
 
     /**
      * Creates new form MainFrame
      */
     private MainFrame() {
-        initComponents();
+	addWindowListener(new WindowAdapter() {
+	    @Override
+	    public void windowClosing(WindowEvent winEvt) {
+		userManager.logout();
+		userManager.disconnect();
+		System.exit(0);
+	    }
+	});
+
+	initComponents();
     }
 
     /**
@@ -57,52 +71,52 @@ public class MainFrame extends JFrame {
      */
     public static void main(String args[]) {
 
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+	/* Set the Nimbus look and feel */
+	//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+	/* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+	 */
+	try {
+	    for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+		if ("Nimbus".equals(info.getName())) {
+		    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+		    break;
+		}
+	    }
+	} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+	    java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	//</editor-fold>
 
-        //</editor-fold>
+	//</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            getInstance().setVisible(true);
-        });
+	/* Create and display the form */
+	java.awt.EventQueue.invokeLater(() -> {
+	    getInstance().setVisible(true);
+	});
     }
 
     public void setFrame(JPanel newFrame) {
-        setFrame(newFrame, true, true);
+	setFrame(newFrame, true, true);
     }
 
     public void setFrame(JPanel newFrame, boolean pack) {
-        setFrame(newFrame, pack, true);
+	setFrame(newFrame, pack, true);
     }
 
     public void setFrame(JPanel newFrame, boolean pack, boolean resizable) {
-        getContentPane().removeAll();
-        getContentPane().add(newFrame, BorderLayout.CENTER);
-        setMinimumSize(newFrame.getMinimumSize());
-        setMaximumSize(newFrame.getMaximumSize());
-        setResizable(resizable);
+	getContentPane().removeAll();
+	getContentPane().add(newFrame, BorderLayout.CENTER);
+	setMinimumSize(newFrame.getMinimumSize());
+	setMaximumSize(newFrame.getMaximumSize());
+	setResizable(resizable);
 
-        if (pack) {
-            pack();
-        } else {
-            revalidate();
-        }
-        repaint();
+	if (pack) {
+	    pack();
+	} else {
+	    revalidate();
+	}
+	repaint();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

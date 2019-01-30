@@ -2,6 +2,7 @@ package de.fh_dortmund.inf.cw.surstwalat.client.user.view;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import de.fh_dortmund.inf.cw.surstwalat.client.game.view.MainPanel;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -16,17 +17,19 @@ import javax.swing.JPanel;
  */
 public class StartHubPanel extends JPanel {
 
-    Map<String, String> textRepository;
-    private final Image backgroundImage;
+    private final Map<String, String> textRepository;
 
+    private final Image backgroundImage;
+    private final UserManagementHandler userManager;
 
     /**
      * Creates new form StarterPanel
      */
     public StartHubPanel() {
-        textRepository = TextRepository.getInstance().getTextRepository("ui_controls");
-        backgroundImage = new ImageIcon(getClass().getResource("/resources/backgrounds/background-start-hub.png")).getImage();
-        initComponents();
+	userManager = UserManagementHandler.getInstance();
+	textRepository = TextRepository.getInstance().getTextRepository("ui_controls");
+	backgroundImage = new ImageIcon(getClass().getResource("/resources/backgrounds/background-start-hub.png")).getImage();
+	initComponents();
     }
 
     /**
@@ -36,8 +39,8 @@ public class StartHubPanel extends JPanel {
      */
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponents(g);
-        g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+	super.paintComponents(g);
+	g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
     }
 
     /**
@@ -148,22 +151,24 @@ public class StartHubPanel extends JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bt_editProfilActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_editProfilActionPerformed
-        MainFrame.getInstance().setFrame(new ProfilEditorPanel(), false, false);
+	MainFrame.getInstance().setFrame(new ProfilEditorPanel(), false, false);
     }//GEN-LAST:event_bt_editProfilActionPerformed
 
     private void bt_closeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_closeActionPerformed
-        exit();
+	exit();
     }//GEN-LAST:event_bt_closeActionPerformed
 
     private void bt_startGameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bt_startGameActionPerformed
-        MainFrame.getInstance().setFrame(new MainPanel(), false, false);
+	MainFrame.getInstance().setFrame(new MainPanel(), false, false);
     }//GEN-LAST:event_bt_startGameActionPerformed
 
     /**
      * Exit program
      */
     private void exit() {
-        System.exit(0);
+	userManager.logout();
+	userManager.disconnect();
+	System.exit(0);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

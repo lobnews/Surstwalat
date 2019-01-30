@@ -285,6 +285,7 @@ public class RegistryPanel extends JPanel {
      * Exit program
      */
     private void exit() {
+	userManager.disconnect();
         System.exit(0);
     }
 }
