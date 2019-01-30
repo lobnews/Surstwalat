@@ -268,4 +268,8 @@ public final class UserManagementHandler implements MessageListener {
     public void joinGame(int gameId) throws GameIsFullException {
 	userSessionRemote.userJoinedGame(gameId);
     }
+    
+    public void startGame(int gameID, int fieldsize) {
+        userSessionRemote.startGame(gameID, fieldsize);
+    }
 }
