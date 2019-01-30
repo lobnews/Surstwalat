@@ -2,6 +2,8 @@ package de.fh_dortmund.inf.cw.surstwalat.health;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.ActionType;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.HealthItem;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Token;
 import de.fh_dortmund.inf.cw.surstwalat.healthmanagement.beans.interfaces.HealthManagementLocal;
 
@@ -60,7 +62,14 @@ public class HealthMessageBean implements MessageListener {
                 	System.out.println("[HEALTHMANAGEMENT] COLLISION_WITH_PLAYER received");
                 	healthManagement.killToken(o.getIntProperty(PropertyType.GAME_ID), o.getIntProperty(PropertyType.ENEMY_CHARACTER_ID));
                 	break;
-                	                
+                case MessageType.PLAYER_ACTION:
+                	System.out.println("[HEALTHMANAGEMENT] PLAYER_ACTION received");
+                	ActionType type = ActionType.values()[o.getIntProperty(PropertyType.ACTION_TYPE)];
+                	if(type == ActionType.USE_ITEM && o.isBodyAssignableTo(HealthItem.class)) {
+                		HealthItem hItem = o.getBody(HealthItem.class);
+                		healthManagement.healPlayerTokens(o.getIntProperty(PropertyType.GAME_ID), o.getIntProperty(PropertyType.PLAYER_ID), -hItem.getAmount());
+                	}
+                	break;
             }
         } catch (JMSException ex) {
             Logger.getLogger(HealthMessageBean.class.getName()).log(Level.SEVERE, null, ex);

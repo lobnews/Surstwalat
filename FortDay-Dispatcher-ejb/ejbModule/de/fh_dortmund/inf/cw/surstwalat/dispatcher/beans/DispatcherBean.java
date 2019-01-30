@@ -173,7 +173,7 @@ public class DispatcherBean implements DispatcherLocal {
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void onPlayerDeath(int playerId) {
-		Player p = entityManager.find(Player.class, playerId, LockModeType.PESSIMISTIC_READ);
+		Player p = entityManager.find(Player.class, playerId, LockModeType.PESSIMISTIC_WRITE);
 		if (p != null) {
 			p.setAlive(false);
 			eventHelper.triggerEliminatePlayerEvent(p.getGame().getId(), p.getId(), p.getPlayerNo());

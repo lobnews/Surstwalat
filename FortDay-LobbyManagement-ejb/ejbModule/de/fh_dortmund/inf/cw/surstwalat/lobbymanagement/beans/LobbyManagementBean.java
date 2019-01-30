@@ -191,6 +191,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	 * now but logged in).
 	 * @return The list of users in the lobby right now.
 	 */
+	@Override
 	public List<Account> getUserInLobby(){
 		TypedQuery<Account> query = em.createNamedQuery("Account.getInLobby",Account.class);
 		return query.getResultList();
@@ -201,6 +202,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	 * started right now.
 	 * @return The list of open games.
 	 */
+	@Override
 	public List<Game> getOpenGames(){
 		TypedQuery<Game> query = em.createNamedQuery("Game.getOpen",Game.class);
 		return query.getResultList();
