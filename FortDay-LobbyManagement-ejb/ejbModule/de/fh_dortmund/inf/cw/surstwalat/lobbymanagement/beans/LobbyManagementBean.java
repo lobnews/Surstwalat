@@ -153,6 +153,7 @@ public class LobbyManagementBean implements LobbyManagementLocal{
 	 * @param gameID ID of the game to be started.
 	 * @param fieldsize The size of the field the gamehost chose.
 	 */
+	@Override
 	public void startGame(int gameId, int fieldsize) {
 		try {
 			Game g = getGameByGameID(gameId);

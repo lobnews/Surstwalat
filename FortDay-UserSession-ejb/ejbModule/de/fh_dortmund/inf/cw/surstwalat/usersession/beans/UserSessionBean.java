@@ -20,6 +20,7 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Action;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.ActionType;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
+import de.fh_dortmund.inf.cw.surstwalat.lobbymanagement.beans.interfaces.LobbyManagementLocal;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces.UserManagementLocal;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
@@ -43,6 +44,9 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 
     @EJB
     private UserManagementLocal userManagement;
+    
+    @EJB
+    private LobbyManagementLocal lobbyManagement;
 
     @Resource(lookup = "java:global/jms/FortDayEventTopic")
     private Topic eventTopic;
@@ -275,15 +279,10 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#startRound(int, int)
      */
     @Override
-    public void startRound(int gameID, int number) {
-	ObjectMessage msg = createObjectMessage(gameID, MessageType.START_ROUND);
-	trySetIntProperty(msg, PropertyType.ROUND_NO, number);
-	sendMessage(msg);
-
-	if (LOGGING) {
-	    System.out.println("[USERSESSION] Round started: GameID: " + gameID + ", Round: " + number);
-	}
+    public void startGame(int gameID, int fieldSize) {
+    	lobbyManagement.startGame(gameID, fieldSize);
     }
+    
 
     /* (non-Javadoc)
 	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#userJoinedGame(int)
@@ -305,29 +304,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
      */
     @Override
     public void userCreatedGame() {
-	ObjectMessage msg = createObjectMessage(0, MessageType.USER_CREATEGAME);
-	trySetObject(msg, user);
-
-	sendMessage(msg);
-
-	if (LOGGING) {
-	    System.out.println("[USERSESSION] User created game: Username: " + user.getName());
-	}
-    }
-
-    /* (non-Javadoc)
-	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#endRound(int, int)
-     */
-    @Override
-    public void endRound(int gameID, int number) {
-	ObjectMessage msg = createObjectMessage(gameID, MessageType.END_ROUND);
-	trySetIntProperty(msg, PropertyType.ROUND_NO, number);
-
-	sendMessage(msg);
-
-	if (LOGGING) {
-	    System.out.println("[USERSESSION] Round ends: GameID: " + gameID + ", Round: " + number);
-	}
+        lobbyManagement.userCreatesGame(user.getId());
     }
 
     /* (non-Javadoc)
