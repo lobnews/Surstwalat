@@ -8,13 +8,14 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Stateful;
 
-@Stateful
-public class KiBean implements KiLocal {
+/**
+ * @author Marcel Scholz
+ *
+ */
+public class Ki implements KiLocal {
 	
-	@EJB
 	private UserSession session;
 	
-	@EJB
 	private OutgoingEventHelperBean sender;
 	
 	private int gameid;
@@ -23,21 +24,21 @@ public class KiBean implements KiLocal {
 	
 	private List<Item> inventory;
 	
-	@PostConstruct
+	public Ki(UserSession session, OutgoingEventHelperBean sender, int gameid, int player_no) {
+		this.session = session;
+		this.sender = sender;
+		this.gameid = gameid;
+		this.player_no = player_no;
+		init();
+	}
+
 	public void init() {
 		System.out.println("@@@FortDayKi started");
 	}
 	
-//        @Override
-	public List<Item> getInventory()
-	{
-		return null;
-	}
-
 	@Override
 	public void makeTurn() {
 		sender.sendInventoryRequest(gameid, player_no);
-		this.setInventory(getInventory());
 		
 		Item item;
 		

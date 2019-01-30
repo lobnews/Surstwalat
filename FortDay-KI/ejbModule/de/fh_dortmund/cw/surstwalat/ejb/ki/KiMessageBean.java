@@ -1,5 +1,8 @@
 package de.fh_dortmund.cw.surstwalat.ejb.ki;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
@@ -10,13 +13,21 @@ import javax.jms.ObjectMessage;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
+import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession;
 
+/**
+ * @author Marcel Scholz
+ *
+ */
 @MessageDriven(activationConfig = {
     @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Topic")}, mappedName = "java:global/jms/FortDayEventTopic")
 public class KiMessageBean implements MessageListener {
-
-    @EJB
-    private KiBean kiBean;
+	
+	@EJB
+	private OutgoingEventHelperBean sender;
+	
+    private ArrayList<Ki> kis;
 
     @Override
     public void onMessage(Message message) {
@@ -30,21 +41,24 @@ public class KiMessageBean implements MessageListener {
             e.printStackTrace();
         }
         switch (messageType) {
-            case MessageType.GAME_STARTED:
+            case MessageType.ASSIGN_PLAYER:
                 createKi(message);
                 break;
             case MessageType.ASSIGN_ACTIVE_PLAYER:
                 makeTurn(message);
                 break;
-//            case MessageType.ITEM_INVENTAR:
-//                refreshInventory(message);
-//                break;
+            case MessageType.PLAYER_INVENTAR:
+                refreshInventory(message);
+                break;
         }
     }
 
     private void refreshInventory(Message message) {
         try {
-            int userid = message.getIntProperty(PropertyType.PLAYER_NO);
+            int player_no = message.getIntProperty(PropertyType.PLAYER_NO);
+            ObjectMessage objectMessage = (ObjectMessage) message;
+            List<Item> inventory = objectMessage.getBody(List.class);
+            kis.get(player_no).setInventory(inventory);
         } catch (JMSException e) {
             e.printStackTrace();
         }
@@ -52,10 +66,11 @@ public class KiMessageBean implements MessageListener {
     }
 
     private void makeTurn(Message message) {
-        int userid;
         try {
-            userid = message.getIntProperty(PropertyType.USER1_ID);
-//            kiBean.makeTurn(userid);
+        	ObjectMessage objectMessage = (ObjectMessage) message;
+            int player_no = objectMessage.getBody(Integer.class);
+        	
+        	kis.get(player_no).makeTurn();
         } catch (JMSException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -63,25 +78,23 @@ public class KiMessageBean implements MessageListener {
     }
 
     private void createKi(Message message) {
-        try {
-            int userid = message.getIntProperty(PropertyType.USER1_ID);
-            if (userid == -1) {
-
-            }
-            userid = message.getIntProperty(PropertyType.USER2_ID);
-            if (userid == -1) {
-
-            }
-            userid = message.getIntProperty(PropertyType.USER3_ID);
-            if (userid == -1) {
-
-            }
-            userid = message.getIntProperty(PropertyType.USER4_ID);
-            if (userid == -1) {
-
-            }
-        } catch (JMSException e) {
-            e.printStackTrace();
-        }
+    	try {
+    		
+    		int userid = message.getIntProperty(PropertyType.USER_ID);
+    		
+    		if(userid == -1)
+    		{
+    			int gameid = message.getIntProperty(PropertyType.GAME_ID);
+        		ObjectMessage objectMessage = (ObjectMessage) message;
+        		int player_no = objectMessage.getBody(Integer.class);
+        		
+    			Ki ki = new Ki(session, sender, gameid, player_no);
+    			kis.add(player_no, ki);
+    		}
+			
+		} catch (JMSException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }

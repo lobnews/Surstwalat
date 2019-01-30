@@ -18,6 +18,11 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Action;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.ActionType;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 
+
+/**
+ * @author Marcel Scholz
+ *
+ */
 @Stateless
 public class OutgoingEventHelperBean {
 
