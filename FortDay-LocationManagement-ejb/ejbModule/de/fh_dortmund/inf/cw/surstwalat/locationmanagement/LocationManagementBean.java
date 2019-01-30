@@ -46,7 +46,7 @@ public class LocationManagementBean implements LocationManagementLocal
         int field = (int)(Math.random() * p.getFields().size());
 
         // while no empty field found, get new random field
-        while (p.getField(field).getItem() != null)
+        while (p.getField(field).getItem() != null )
         {
             field = (int)(Math.random() * p.getFields().size());
         }
