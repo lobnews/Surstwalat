@@ -21,6 +21,7 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Playground;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Token;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.DamageZone;
 import de.fh_dortmund.inf.cw.surstwalat.globaleventmanagement.beans.interfaces.GlobalEventManagementLocal;
+import java.io.Serializable;
 
 /**
  *
@@ -147,14 +148,12 @@ public class GlobalEventManagementBean implements GlobalEventManagementLocal {
 		try {
 			Game game = em.find(Game.class, gameId);
 			int damage = getZoneByGame(game).getDamage();
-			for (Token hitToken : token) {
 				message.setIntProperty(PropertyType.MESSAGE_TYPE, MessageType.TRIGGER_DAMAGE);
 				message.setIntProperty(PropertyType.GAME_ID, gameId);
-				message.setIntProperty(PropertyType.TOKEN_ID, hitToken.getId());
 				message.setIntProperty(PropertyType.DAMAGE, damage);
+                                message.setObject((Serializable) token);
 				jmsContext.createProducer().send(eventTopic, message);
-				System.out.println("[GLOBALEVENTMANAGEMENT] Token " + hitToken.getId() + " gets " + damage + " from zone");
-			}
+				System.out.println("[GLOBALEVENTMANAGEMENT] " + token.size() + " Token get " + damage + " from zone");
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}
