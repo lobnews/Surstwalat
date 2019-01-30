@@ -13,10 +13,10 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Token;
 @Local
 public interface EventHelperLocal {
 	void triggerNoCollisionMessage(Integer gameId);
-	void triggerPlayerOnFieldMessage(Integer gameId, Integer playerId, Integer characterId, Integer fieldId);
-	void triggerCollisionWithPlayerMessage(Integer gameId, Integer playerId, Integer characterId, Integer enemyPlayerId, Integer enemyCharacterId);
-	void triggerCollisionWithItemMessage(Integer gameId, Integer playerId, Integer characterId, Integer itemId);
-	void triggerCollisionWithOwnCharacterMessage(Integer gameId, Integer playerId, Integer characterId);
+	void triggerPlayerOnFieldMessage(Integer gameId, Integer playerId, Integer tokenId, Integer fieldId);
+	void triggerCollisionWithPlayerMessage(Integer gameId, Integer playerId, Integer tokenId, Integer enemyPlayerId, Integer enemyCharacterId);
+	void triggerCollisionWithItemMessage(Integer gameId, Integer playerId, Integer tokenId, Integer itemId);
+	void triggerCollisionWithOwnCharacterMessage(Integer gameId, Integer playerId, Integer tokenId);
 	void triggerToxicChangedMessage(Integer gameId, Integer startZone, Integer endZone);
-    void triggerCharactersInToxicMessage(Integer gameId, List<Token> characters);
+    void triggerCharactersInToxicMessage(Integer gameId, List<Token> tokens);
 }

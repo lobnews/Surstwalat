@@ -28,6 +28,7 @@ public class RemoveItemHandlerBean implements MessageListener
     @Override
     public void onMessage(Message message)
     {
+    	System.out.println("[LOCATIONMANAGEMENT] ITEM_ADD_TO_USER received");
         try
         {
             locationManagement

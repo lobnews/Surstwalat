@@ -41,10 +41,10 @@ public class GlobalEventManagementMessageReceiver implements MessageListener{
 			e.printStackTrace();
 		}
     	switch(messageType) {
-    		case MessageType.PLAYER_ROLL: playerRoll(message);break;
-    		case MessageType.START_ROUND: updateZone(message);break;
-    		case MessageType.GAME_STARTED: triggerStartingItems(message);break;
-    		case MessageType.CHARACTERS_IN_TOXIC: triggerCharacterDamage(message);break;
+    		case MessageType.PLAYER_ROLL: System.out.println("[GLOBALEVENTMANAGEMENT] PLAYER_ROLL received"); playerRoll(message); break;
+    		case MessageType.START_ROUND: System.out.println("[GLOBALEVENTMANAGEMENT] START_ROUND received"); updateZone(message); break;
+    		case MessageType.GAME_STARTED: System.out.println("[GLOBALEVENTMANAGEMENT] GAME_STARTED received"); triggerStartingItems(message); break;
+    		case MessageType.TOKENS_IN_TOXIC: System.out.println("[GLOBALEVENTMANAGEMENT] TOKENS_IN_TOXIC received"); triggerCharacterDamage(message); break;
     	}
 	}
 

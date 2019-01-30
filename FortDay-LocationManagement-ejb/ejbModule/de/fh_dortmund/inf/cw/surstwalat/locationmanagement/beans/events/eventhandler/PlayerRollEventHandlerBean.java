@@ -29,6 +29,7 @@ public class PlayerRollEventHandlerBean implements MessageListener
     @Override
     public void onMessage(Message message)
     {
+    	System.out.println("[LOCATIONMANAGEMENT] MOVE_TOKEN received");
         try
         {
             ObjectMessage om = (ObjectMessage)message;

@@ -24,12 +24,12 @@
   <module>
     <ejb>FortDay-LocationManagement-ejb.jar</ejb>
   </module>  
-  <module>
+<!--   <module>
     <ejb>FortDay-KI.jar</ejb>
-  </module>
-  <module>
+  </module> -->
+<!--   <module>
       <java>lib/FortDay-common.jar</java>
-  </module>
+  </module> -->
   <jms-destination>
     <name>java:global/jms/HealthMessageTopic</name>
     <interface-name>javax.jms.Topic</interface-name>
