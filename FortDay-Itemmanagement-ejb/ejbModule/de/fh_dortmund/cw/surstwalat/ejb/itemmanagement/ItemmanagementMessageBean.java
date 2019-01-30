@@ -27,18 +27,17 @@ public class ItemmanagementMessageBean implements MessageListener {
 
 	public void onMessage(Message message) {
 		try {
-			//int gameId = message.getIntProperty(PropertyType.GAME_ID);
 			int msgType = message.getIntProperty(PropertyType.MESSAGE_TYPE);
 			
 			
 			switch (msgType) {
 				case MessageType.TRIGGER_AIRDROP:
 					System.out.println("[ITEMMANGE] TRIGGER_AIRDROP received");
-					itemBean.spawnAirDrop(gameId);
+					itemBean.spawnAirDrop(message.getIntProperty(PropertyType.GAME_ID));
 					break;
 				case MessageType.TRIGGER_STARTING_ITEMS:
 					System.out.println("[ITEMMANGE] TRIGGER_STARTING_ITEMS received");
-					itemBean.spawnItems(gameId, dichte);
+					itemBean.spawnItems(message.getIntProperty(PropertyType.GAME_ID), dichte);
 					break;
 				case MessageType.COLLISION_WITH_ITEM:
 					System.out.println("[ITEMMANGE] COLLISION_WITH_ITEM received");
