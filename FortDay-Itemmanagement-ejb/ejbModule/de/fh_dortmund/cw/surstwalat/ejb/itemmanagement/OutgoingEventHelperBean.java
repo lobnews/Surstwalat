@@ -42,6 +42,13 @@ public class OutgoingEventHelperBean {
 		trySetObject(message, (Serializable) player.getItems());
 		sendMessage(message);
 	}
+	
+	public void sendAddItemToPlayer(Integer gameId, Integer playerId, Item item) {
+		ObjectMessage message = createObjectMessage(gameId, MessageType.ADD_ITEM_TO_PLAYER);
+		trySetIntProperty(message, PropertyType.PLAYER_ID, playerId);
+		trySetObject(message, item);
+		sendMessage(message);
+	}
 
 	private ObjectMessage createObjectMessage(Integer gameId, int messageType) {
 		ObjectMessage message = jmsContext.createObjectMessage();
