@@ -27,9 +27,9 @@
   <!-- module>
     <ejb>FortDay-KI.jar</ejb>
   </module-->
-  <module>
+<!--   <module>
       <java>lib/FortDay-common.jar</java>
-  </module>
+  </module> -->
   <jms-destination>
     <name>java:global/jms/HealthMessageTopic</name>
     <interface-name>javax.jms.Topic</interface-name>

@@ -70,7 +70,7 @@ public class DispatcherBean implements DispatcherLocal {
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void createPlayers(int gameId) {
 		// TODO Auto-generated method stub
-		Game game = entityManager.find(Game.class, gameId, LockModeType.PESSIMISTIC_WRITE);
+		Game game = entityManager.find(Game.class, gameId, LockModeType.PESSIMISTIC_READ);
 		if (game != null && (game.getPlayers() == null || game.getPlayers().size() == 0)) {
 			List<Player> players = new ArrayList<>();
 			int playerNumber = 1;
@@ -96,7 +96,7 @@ public class DispatcherBean implements DispatcherLocal {
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void playerRoll(int playerId, Dice dice) {
-		Player player = entityManager.find(Player.class, playerId, LockModeType.PESSIMISTIC_WRITE);
+		Player player = entityManager.find(Player.class, playerId, LockModeType.PESSIMISTIC_READ);
 		if (player != null) {
 			resetPlayerTimeout(player.getGame().getId());
 			if(dice == null) {
@@ -129,7 +129,7 @@ public class DispatcherBean implements DispatcherLocal {
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void dispatch(int gameId) {
-		Game game = entityManager.find(Game.class, gameId, LockModeType.PESSIMISTIC_WRITE);
+		Game game = entityManager.find(Game.class, gameId, LockModeType.PESSIMISTIC_READ);
 		TreeSet<Player> alivePlayers = new TreeSet<>(new Comparator<Player>() {
 			@Override
 			public int compare(Player p1, Player p2) {
@@ -173,7 +173,7 @@ public class DispatcherBean implements DispatcherLocal {
 	@Override
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public void onPlayerDeath(int playerId) {
-		Player p = entityManager.find(Player.class, playerId, LockModeType.PESSIMISTIC_WRITE);
+		Player p = entityManager.find(Player.class, playerId, LockModeType.PESSIMISTIC_READ);
 		if (p != null) {
 			p.setAlive(false);
 			eventHelper.triggerEliminatePlayerEvent(p.getGame().getId(), p.getId(), p.getPlayerNo());
