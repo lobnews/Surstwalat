@@ -28,12 +28,43 @@ public class ItemmanagementMessageBean implements MessageListener
     @EJB
     private ItemmanagementBean itemBean;
 
-    public void onMessage(Message message)
-    {
-        try
-        {
-            //int gameId = message.getIntProperty(PropertyType.GAME_ID);
-            int msgType = message.getIntProperty(PropertyType.MESSAGE_TYPE);
+	public void onMessage(Message message) {
+		try {
+			int msgType = message.getIntProperty(PropertyType.MESSAGE_TYPE);
+			
+			
+			switch (msgType) {
+				case MessageType.TRIGGER_AIRDROP:
+					System.out.println("[ITEMMANGE] TRIGGER_AIRDROP received");
+					itemBean.spawnAirDrop(message.getIntProperty(PropertyType.GAME_ID));
+					break;
+				case MessageType.TRIGGER_STARTING_ITEMS:
+					System.out.println("[ITEMMANGE] TRIGGER_STARTING_ITEMS received");
+					itemBean.spawnItems(message.getIntProperty(PropertyType.GAME_ID), dichte);
+					break;
+				case MessageType.COLLISION_WITH_ITEM:
+					System.out.println("[ITEMMANGE] COLLISION_WITH_ITEM received");
+					int playerID = message.getIntProperty(PropertyType.PLAYER_ID);
+					int itemID = message.getIntProperty(PropertyType.ITEM_ID);
+					itemBean.addItemToUser(playerID, itemID);
+					break;
+				case MessageType.SEND_PLAYER_INVENTAR:
+					System.out.println("[ITEMMANGE] SEND_PLAYER_INVENTAR received");
+					playerID = message.getIntProperty(PropertyType.PLAYER_ID);
+					itemBean.sendUserInventar(message.getIntProperty(PropertyType.GAME_ID), playerID);
+					break;
+				case MessageType.PLAYER_ACTION :
+					System.out.println("[ITEMMANGE] PLAYER_ACTION received");
+					playerID = message.getIntProperty(PropertyType.PLAYER_ID);
+					ObjectMessage objectMessage = (ObjectMessage) message;
+					Item item = objectMessage.getBody(Item.class);
+					itemBean.removeItem(playerID, item.getId());
+					break;
+				case MessageType.ELIMINATE_PLAYER:
+					System.out.println("[ITEMMANGE] ELIMINATE_PLAYER received");
+					//ITEMS werden nach dem Tod nicht gespawnt
+					break;
+			}
 
             //System.out.println(itemBean.name + " Ankommende Nachricht: GameID: " + gameId + ", MESSAGE_TYPE: " + msgType + "; MSG:" + message);
 
