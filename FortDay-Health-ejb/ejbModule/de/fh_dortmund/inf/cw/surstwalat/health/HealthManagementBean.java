@@ -158,5 +158,15 @@ public class HealthManagementBean implements HealthManagementLocal, HealthManage
             Logger.getLogger(HealthManagementBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+	@Override
+	public void healPlayerTokens(int gameId, int playerId, int amount) {
+		TypedQuery<Token> query = em.createNamedQuery("Token.getTokenList", Token.class);
+		query.setParameter("id", playerId);		
+		List<Token> tokens = query.getResultList();		
+		for(Token token : tokens) {
+			damageToken(gameId, token.getId(), -amount);
+		}
+	}
     
 }
