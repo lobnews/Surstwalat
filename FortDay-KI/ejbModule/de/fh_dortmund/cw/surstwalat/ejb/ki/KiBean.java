@@ -5,7 +5,6 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Player;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Token;
 import de.fh_dortmund.inf.cw.surstwalat.ki.beans.interfaces.KiLocal;
-import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -96,7 +95,7 @@ public class KiBean implements KiLocal {
 	{
 		Query getTokenList = em.createNamedQuery("Token.getTokenList");
 		getTokenList.setParameter("id", playerid);
-		List<Token> tokelist = getTokenList.getResultList();
+		List<Token> tokelist = (List) getTokenList.getResultList();
 		
 		return tokelist;
 	}
@@ -104,6 +103,6 @@ public class KiBean implements KiLocal {
 	public void moveToken(int playerid, int count) {
 		List<Token> tokelist = this.getTokens(playerid);
 		Token token = tokelist.get(0);
-		sender.sendTokenMove(gameid, token.getId(), count);;
+		sender.sendTokenMove(gameid, token.getId(), count);
 	}
 }
