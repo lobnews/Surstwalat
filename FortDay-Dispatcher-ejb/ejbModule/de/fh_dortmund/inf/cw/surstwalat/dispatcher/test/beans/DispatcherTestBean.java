@@ -2,6 +2,7 @@ package de.fh_dortmund.inf.cw.surstwalat.dispatcher.test.beans;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.ejb.DependsOn;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.inject.Inject;
