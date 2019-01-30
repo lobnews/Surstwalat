@@ -30,7 +30,7 @@ public class Playground implements Serializable
     @Column(name = "id")
     private int id;
 
-    @OneToMany
+    @OneToMany(mappedBy="playground")
     private List<Field> fields;
 
     @JoinColumn
