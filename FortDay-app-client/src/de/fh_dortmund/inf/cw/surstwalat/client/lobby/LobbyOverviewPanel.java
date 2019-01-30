@@ -6,6 +6,12 @@
 package de.fh_dortmund.inf.cw.surstwalat.client.lobby;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.EventHandler;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.EventListener;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.GameCreatedEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.GameStartedEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.UserEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.UserJoinGameEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.common.exceptions.GameIsFullException;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
@@ -14,7 +20,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
+import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -31,8 +39,6 @@ public class LobbyOverviewPanel extends JPanel {
 	userManager = UserManagementHandler.getInstance();
 
 	initComponents();
-	fillPlayerTable();
-	fillOpenGamesTable();
     }
 
     /**
@@ -55,30 +61,10 @@ public class LobbyOverviewPanel extends JPanel {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
 
-        playerTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        playerTable.setModel(new PlayerTableModel());
         jScrollPane1.setViewportView(playerTable);
 
-        openGamesTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
+        openGamesTable.setModel(new GameTableModel());
         jScrollPane2.setViewportView(openGamesTable);
 
         jLabel1.setFont(new java.awt.Font("Dialog", 0, 24)); // NOI18N
@@ -124,9 +110,8 @@ public class LobbyOverviewPanel extends JPanel {
                                 .addGap(20, 20, 20)))
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                         .addGap(11, 11, 11)))
                 .addContainerGap())
         );
@@ -152,7 +137,8 @@ public class LobbyOverviewPanel extends JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-	int gameId = MainFrame.getInstance().getGameId();
+	int row = openGamesTable.getSelectedRow();
+        int gameId = (int) openGamesTable.getModel().getValueAt(row, 0);
 	try {
 	    userManager.joinGame(gameId);
 	} catch (GameIsFullException ex) {
@@ -177,46 +163,198 @@ public class LobbyOverviewPanel extends JPanel {
     private javax.swing.JTable playerTable;
     // End of variables declaration//GEN-END:variables
 
-    /**
-     * Fill PlayerTable
-     */
-    private void fillPlayerTable() {
-	List<Account> playerList = userManager.getUserInLobby();
+//    /**
+//     * Fill PlayerTable
+//     */
+//    private void fillPlayerTable() {
+//	List<Account> playerList = userManager.getUserInLobby();
+//
+//	String[] playerColName = new String[]{"Spieler-ID", "Name", "E-Mail"};
+//	String[][] playerRow = new String[playerList.size()][playerColName.length];
+//
+//	for (int i = 0; i < playerList.size(); i++) {
+//	    String[] playerArray = new String[playerColName.length];
+//	    playerArray[0] = Integer.toString(playerList.get(i).getId());
+//	    playerArray[1] = playerList.get(i).getName();
+//	    playerArray[2] = playerList.get(i).getEmail();
+//	    playerRow[i] = playerArray;
+//	}
+//
+//	DefaultTableModel playerTableModel = new DefaultTableModel(playerRow, playerColName);
+//	playerTable.setModel(playerTableModel);
+//
+//    }
+//
+//    /**
+//     * Fill open games table
+//     */
+//    private void fillOpenGamesTable() {
+//	List<Game> openGamesList = userManager.getOpenGames();
+//
+//	String[] openGamesColName = new String[]{"Spiel-ID", "AI-Spieler", "Aktuelle Runde"};
+//	String[][] openGamesRow = new String[openGamesList.size()][openGamesColName.length];
+//
+//	for (int i = 0; i < openGamesList.size(); i++) {
+//	    String[] openGameArray = new String[openGamesColName.length];
+//	    openGameArray[0] = Integer.toString(openGamesList.get(i).getId());
+//	    openGameArray[1] = Integer.toString(openGamesList.get(i).getAiPlayerCount());
+//	    openGameArray[2] = Integer.toString(openGamesList.get(i).getCurrentRound());
+//	    openGamesRow[i] = openGameArray;
+//	}
+//
+//	DefaultTableModel openGamesTableModel = new DefaultTableModel(openGamesRow, openGamesColName);
+//	openGamesTable.setModel(openGamesTableModel);
+//    }
+    
+    private class GameTableModel implements TableModel, EventListener {
 
-	String[] playerColName = new String[]{"Spieler-ID", "Name", "E-Mail"};
-	String[][] playerRow = new String[playerList.size()][playerColName.length];
+        private List<Game> games;
+        
+        public GameTableModel() {
+            games = userManager.getOpenGames();
+        }
+        
+        @Override
+        public int getRowCount() {
+            return games.size();
+        }
 
-	for (int i = 0; i < playerList.size(); i++) {
-	    String[] playerArray = new String[playerColName.length];
-	    playerArray[0] = Integer.toString(playerList.get(i).getId());
-	    playerArray[1] = playerList.get(i).getName();
-	    playerArray[2] = playerList.get(i).getEmail();
-	    playerRow[i] = playerArray;
-	}
+        @Override
+        public int getColumnCount() {
+            return 3;
+        }
 
-	DefaultTableModel playerTableModel = new DefaultTableModel(playerRow, playerColName);
-	playerTable.setModel(playerTableModel);
+        @Override
+        public String getColumnName(int columnIndex) {
+            switch(columnIndex) {
+                case 0: return "Spiel-ID";
+                case 1: return "AI-Spieler";
+                case 2: return "Aktuelle Runde";
+                default: return "";
+            }
+        }
 
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            switch(columnIndex) {
+                case 0:
+                case 1: return Integer.class;
+                default: return String.class;
+            }
+        }
+
+        @Override
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return false;
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            Game g = games.get(rowIndex);
+            switch(columnIndex) {
+                case 0: return g.getId();
+                case 1: return g.getAiPlayerCount();
+                case 2: return g.getCurrentRound();
+                default: return "";
+            }
+        }
+
+        @Override
+        public void setValueAt(Object aValue, int rowIndex, int columnIndex) {}
+
+        @Override
+        public void addTableModelListener(TableModelListener l) {}
+
+        @Override
+        public void removeTableModelListener(TableModelListener l) {}
+        
+        @EventHandler
+        public void onGameCreate(GameCreatedEvent e) {
+            games = userManager.getOpenGames();
+            LobbyOverviewPanel.this.revalidate();
+        }
+        
+        @EventHandler
+        public void onUserLeave(GameStartedEvent e) {
+            games = userManager.getOpenGames();
+            LobbyOverviewPanel.this.revalidate();
+        }
+        
+        @EventHandler
+        public void onUserJoinGame(UserJoinGameEvent e) {
+            games = userManager.getOpenGames();
+            LobbyOverviewPanel.this.revalidate();
+        }
+        
     }
+    
+    private class PlayerTableModel implements TableModel, EventListener {
+        
+        private List<Account> accounts;
+        
+        public PlayerTableModel() {
+            accounts = userManager.getUsersInOpenGame(MainFrame.getInstance().getGameId());
+            MainFrame.getInstance().getEventManager().registerListener(this);
+        }
+        
+        @Override
+        public int getRowCount() {
+            return accounts.size();
+        }
 
-    /**
-     * Fill open games table
-     */
-    private void fillOpenGamesTable() {
-	List<Game> openGamesList = userManager.getOpenGames();
+        @Override
+        public int getColumnCount() {
+            return 3;
+        }
 
-	String[] openGamesColName = new String[]{"Spiel-ID", "AI-Spieler", "Aktuelle Runde"};
-	String[][] openGamesRow = new String[openGamesList.size()][openGamesColName.length];
+        @Override
+        public String getColumnName(int columnIndex) {
+            switch(columnIndex) {
+                case 0: return "Spieler-ID";
+                case 1: return "Name";
+                case 2: return "E-Mail";
+                default: return "";
+            }
+        }
 
-	for (int i = 0; i < openGamesList.size(); i++) {
-	    String[] openGameArray = new String[openGamesColName.length];
-	    openGameArray[0] = Integer.toString(openGamesList.get(i).getId());
-	    openGameArray[1] = Integer.toString(openGamesList.get(i).getAiPlayerCount());
-	    openGameArray[2] = Integer.toString(openGamesList.get(i).getCurrentRound());
-	    openGamesRow[i] = openGameArray;
-	}
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            switch(columnIndex) {
+                case 0: return Integer.class;
+                default: return String.class;
+            }
+        }
 
-	DefaultTableModel openGamesTableModel = new DefaultTableModel(openGamesRow, openGamesColName);
-	openGamesTable.setModel(openGamesTableModel);
+        @Override
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return false;
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            Account a = accounts.get(rowIndex);
+            switch(columnIndex) {
+                case 0: return a.getId();
+                case 1: return a.getName();
+                case 2: return a.getEmail();
+                default: return "";
+            }
+        }
+
+        @Override
+        public void setValueAt(Object aValue, int rowIndex, int columnIndex) {}
+
+        @Override
+        public void addTableModelListener(TableModelListener l) {}
+
+        @Override
+        public void removeTableModelListener(TableModelListener l) {}
+        
+        @EventHandler
+        public void onUserJoin(UserEvent e) {
+            accounts = userManager.getUsersInOpenGame(MainFrame.getInstance().getGameId());
+            LobbyOverviewPanel.this.revalidate();
+        }
+        
     }
 }
