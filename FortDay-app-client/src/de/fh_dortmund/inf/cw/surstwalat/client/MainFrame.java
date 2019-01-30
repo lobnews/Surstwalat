@@ -305,6 +305,9 @@ public class MainFrame extends JFrame implements EventListener {
 	JOptionPane.showMessageDialog(this, message);
     }
 
+    public int getGameId() {
+	return gameId;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.fh_dortmund.inf.cw.surstwalat.client.user.view.LoginPanel loginPanel1;
