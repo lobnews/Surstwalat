@@ -1,6 +1,10 @@
 package de.fh_dortmund.inf.cw.surstwalat.lobbymanagement.beans.interfaces;
 
+import java.util.List;
+
 import de.fh_dortmund.inf.cw.surstwalat.common.exceptions.GameIsFullException;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Game;
 
 /**
  * 
@@ -13,5 +17,9 @@ public interface LobbyManagement {
 	public void userTimedOut(int userID);
 	public void userCreatesGame(int userID);
 	public void userJoinsGame(int userID, int gameID) throws GameIsFullException;
-	
+	public void startGame(int gameId, int fieldsize);
+	public List<Account> getUserInLobby();
+	public List<Game> getOpenGames();
+	public List<Account> getUsersInOpenGame(int gameid);
+
 }

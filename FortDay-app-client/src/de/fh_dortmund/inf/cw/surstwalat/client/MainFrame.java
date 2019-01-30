@@ -21,21 +21,15 @@ import de.fh_dortmund.inf.cw.surstwalat.client.event.events.TokenCreatedEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.UpdateZoneEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.game.view.MainPanel;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
-import de.fh_dortmund.inf.cw.surstwalat.client.user.view.LoginPanel;
-import de.fh_dortmund.inf.cw.surstwalat.client.user.view.RegistryPanel;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.Pawn;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.PawnColor;
-import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
-import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
-import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
-import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
-import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.awt.BorderLayout;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -43,15 +37,13 @@ import javax.swing.JPanel;
  *
  * @author Lars Borisek
  */
-public class MainFrame extends javax.swing.JFrame implements EventListener {
+public class MainFrame extends JFrame implements EventListener {
 
     private static MainFrame INSTANCE;
 
     private final EventManager eventManager;
     private final UserManagementHandler userManager;
-    private final Map<String, String> textRepository;
 
-    private Account account;
     private int playerId;
     private int gameId;
     private int number;
@@ -90,11 +82,20 @@ public class MainFrame extends javax.swing.JFrame implements EventListener {
      * Creates new form MainFrame
      */
     private MainFrame() {
-	initComponents();
 	eventManager = new EventManager();
 	eventManager.registerListener(this);
 	userManager = new UserManagementHandler();
-	textRepository = TextRepository.getInstance().getTextRepository("messages");
+
+	addWindowListener(new WindowAdapter() {
+	    @Override
+	    public void windowClosing(WindowEvent winEvt) {
+		userManager.logout();
+		userManager.disconnect();
+		System.exit(0);
+	    }
+	});
+
+	initComponents();
     }
 
     /**
@@ -155,9 +156,16 @@ public class MainFrame extends javax.swing.JFrame implements EventListener {
     }
 
     public void setFrame(JPanel newFrame, boolean pack) {
+	setFrame(newFrame, pack, true);
+    }
+
+    public void setFrame(JPanel newFrame, boolean pack, boolean resizable) {
 	getContentPane().removeAll();
-	getContentPane().add(newFrame, java.awt.BorderLayout.CENTER);
-	this.setMinimumSize(newFrame.getMinimumSize());
+	getContentPane().add(newFrame, BorderLayout.CENTER);
+	setMinimumSize(newFrame.getMinimumSize());
+	setMaximumSize(newFrame.getMaximumSize());
+	setResizable(resizable);
+
 	if (pack) {
 	    pack();
 	} else {
@@ -240,9 +248,9 @@ public class MainFrame extends javax.swing.JFrame implements EventListener {
 
     @EventHandler
     public void onTokenCreated(TokenCreatedEvent e) {
-	for (int i : e.getTokens()) {
+	e.getTokens().forEach((i) -> {
 	    new Pawn(PawnColor.getByPlayerNR(e.getPlayerNR()), 25, e.getPlayerID(), i);
-	}
+	});
     }
 
     @EventHandler
