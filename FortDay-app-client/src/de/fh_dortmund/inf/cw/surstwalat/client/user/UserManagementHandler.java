@@ -1,5 +1,6 @@
 package de.fh_dortmund.inf.cw.surstwalat.client.user;
 
+import de.fh_dortmund.inf.cw.surstwalat.client.FortDayEventMessageListener;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.view.RegistryPanel;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
@@ -9,6 +10,11 @@ import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordE
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSContext;
+import javax.jms.Message;
+import javax.jms.MessageListener;
+import javax.jms.Topic;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -18,7 +24,7 @@ import javax.naming.NamingException;
  *
  * @author Stephan Klimek
  */
-public class UserManagementHandler {
+public class UserManagementHandler implements MessageListener{
 
     private static UserManagementHandler instance;
 
@@ -35,9 +41,14 @@ public class UserManagementHandler {
             String lookUpString
                     = "java:global/FortDay-ear/FortDay-UserSession-ejb/UserSessionBean!de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote";
             userSessionRemote = (UserSessionRemote) ctx.lookup(lookUpString);
+            initJMSConnection();
         } catch (NamingException e) {
             Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, e.getMessage(), e);
         }
+    }
+    
+    public void initJMSConnection() {
+        FortDayEventMessageListener.getInstance(ctx);
     }
 
     /**
@@ -137,5 +148,10 @@ public class UserManagementHandler {
      */
     public String getAccountName() {
         return userSessionRemote.getAccountName();
+    }
+
+    @Override
+    public void onMessage(Message message) {
+        
     }
 }

@@ -5,20 +5,23 @@
  */
 package de.fh_dortmund.inf.cw.surstwalat.client.game.view;
 
+import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.EventHandler;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.EventListener;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.EliminatePlayerEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.PlayerOnFieldMessage;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.Pawn;
-import de.fh_dortmund.inf.cw.surstwalat.client.util.PawnColor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.util.Random;
 import javax.swing.ImageIcon;
 
 /**
  *
  * @author Lars
  */
-public class FieldPanel extends javax.swing.JPanel {
+public class FieldPanel extends javax.swing.JPanel implements EventListener {
 
     public static final int MIN_WIDTH = 25;
     public static final int MIN_HEIGHT = 25;
@@ -28,7 +31,7 @@ public class FieldPanel extends javax.swing.JPanel {
     private final int y;
     private final int value;
 
-    private final Pawn pawn;
+    private Pawn pawn;
 
     /**
      * Creates new form FieldPanel
@@ -37,18 +40,12 @@ public class FieldPanel extends javax.swing.JPanel {
         this.x = x;
         this.y = y;
         this.value = value;
-        if (value > 0) {
-            Random r = new Random();
-            if (r.nextBoolean()) {
-                pawn = new Pawn(PawnColor.values()[r.nextInt(PawnColor.values().length)], r.nextInt(10) + 1);
-                pawn.setHealth(r.nextInt((int) pawn.getMaxHealth()));
-            } else {
-                pawn = null;
-            }
-        } else {
-            pawn = null;
-        }
+        pawn = null;
         initComponents();
+        if(value != 0) {
+            MainFrame.getInstance().getEventManager().registerListener(this);
+        }
+        value--;
     }
 
     /**
@@ -133,6 +130,30 @@ public class FieldPanel extends javax.swing.JPanel {
 
     public int getValue() {
         return value;
+    }
+    
+    @EventHandler
+    public void onPlayerEliminate(EliminatePlayerEvent e) {
+        if(pawn == null) {
+            return;
+        }
+        if(pawn.getPlayerID() == e.getPlayerID()) {
+            pawn = null;
+            updateUI();
+        }
+    }
+    
+    @EventHandler
+    public void onPlayerOnField(PlayerOnFieldMessage e) {
+        if(pawn == null) {
+            if(e.getField() == value) {
+                pawn = Pawn.getInstance(e.getTokenID());
+            }
+        } else {
+            if (pawn.getTokenID() == e.getTokenID() && value != e.getField()) {
+                pawn = null;
+            }
+        }
     }
 
     @Override

@@ -5,15 +5,32 @@
  */
 package de.fh_dortmund.inf.cw.surstwalat.client;
 
+import de.fh_dortmund.inf.cw.surstwalat.client.event.EventHandler;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.EventListener;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.EventManager;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.EventPriority;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.AssignActivePlayerEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.EliminatePlayerEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.GameStartedEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.PlayerRollEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.SetTokenHealthEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.StartRoundEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.TokenCreatedEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.UpdateZoneEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.util.Pawn;
+import de.fh_dortmund.inf.cw.surstwalat.client.util.PawnColor;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
  *
  * @author Lars Borisek
  */
-public class MainFrame extends javax.swing.JFrame {
+public class MainFrame extends javax.swing.JFrame implements EventListener {
 
     private static MainFrame INSTANCE;
+    
+    private final EventManager eventManager;
 
     public static MainFrame getInstance() {
         if (INSTANCE == null) {
@@ -27,6 +44,9 @@ public class MainFrame extends javax.swing.JFrame {
      */
     private MainFrame() {
         initComponents();
+        eventManager = new EventManager();
+        eventManager.registerListener(this);
+//        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -95,6 +115,79 @@ public class MainFrame extends javax.swing.JFrame {
         }
         repaint();
     }
+    
+    public EventManager getEventManager() {
+        return eventManager;
+    }
+    
+    @EventHandler(priority = EventPriority.LOW)
+    public void onDisplayEvent(StartRoundEvent e) {
+        if(e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
+            return;
+        }
+        showMessage(e.getDisplayMessage());
+    }
+    
+    @EventHandler(priority = EventPriority.LOW)
+    public void onDisplayEvent(AssignActivePlayerEvent e) {
+        if(e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
+            return;
+        }
+        showMessage(e.getDisplayMessage());
+    }
+    
+    @EventHandler(priority = EventPriority.LOW)
+    public void onDisplayEvent(EliminatePlayerEvent e) {
+        if(e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
+            return;
+        }
+        showMessage(e.getDisplayMessage());
+    }
+    
+    @EventHandler(priority = EventPriority.LOW)
+    public void onDisplayEvent(GameStartedEvent e) {
+        if(e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
+            return;
+        }
+        showMessage(e.getDisplayMessage());
+    }
+    
+    @EventHandler(priority = EventPriority.LOW)
+    public void onDisplayEvent(PlayerRollEvent e) {
+        if(e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
+            return;
+        }
+        showMessage(e.getDisplayMessage());
+    }
+    
+    @EventHandler(priority = EventPriority.LOW)
+    public void onDisplayEvent(UpdateZoneEvent e) {
+        if(e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
+            return;
+        }
+        showMessage(e.getDisplayMessage());
+    }
+    
+    @EventHandler
+    public void onTokenHealth(SetTokenHealthEvent e) {
+        Pawn p = Pawn.getInstance(e.getTokenID());
+        if(p == null) {
+            return;
+        }
+        p.setHealth(e.getHealth());
+    }
+    
+    @EventHandler
+    public void onTokenCreated(TokenCreatedEvent e) {
+        for(int i:e.getTokens()) {
+            new Pawn(PawnColor.getByPlayerNR(e.getPlayerNR()), 25, e.getPlayerID(), i);
+        }
+    }
+    
+    public void showMessage(String message) {
+        JOptionPane.showMessageDialog(this, message);
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.fh_dortmund.inf.cw.surstwalat.client.user.view.LoginPanel loginPanel1;

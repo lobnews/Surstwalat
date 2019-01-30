@@ -44,7 +44,7 @@ public class OutgoingEventHelperBean implements EventHelperLocal
     public void triggerPlayerOnFieldMessage(Integer gameId, Integer playerId, Integer tokenId, Integer fieldId)
     {
         ObjectMessage message = createObjectMessage(gameId, MessageType.PLAYER_ON_FIELD);
-        trySetIntProperty(message, PropertyType.PLAYER_NO, playerId);
+        trySetIntProperty(message, PropertyType.PLAYER_ID, playerId);
         trySetIntProperty(message, PropertyType.TOKEN_ID, tokenId);
         trySetIntProperty(message, PropertyType.FIELD_ID, fieldId);
         sendMessage(message);
