@@ -84,6 +84,8 @@ public class LocationManagementBean implements LocationManagementLocal
         playground.setFields(fields);
 
         entityManager.merge(playground);
+
+        outgoingEvents.triggerPlayGroundCeatedMessage(gameId);
     }
 
     // Updsate the Zone

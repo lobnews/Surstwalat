@@ -39,7 +39,6 @@ public class OutgoingEventHelperBean implements EventHelperLocal
         sendMessage(message);
     }
 
-    
     @Override
     public void triggerPlayerOnFieldMessage(Integer gameId, Integer playerId, Integer tokenId, Integer fieldId)
     {
@@ -81,8 +80,9 @@ public class OutgoingEventHelperBean implements EventHelperLocal
         ObjectMessage message = createObjectMessage(gameId, MessageType.TOKENS_IN_TOXIC);
         trySetObject(message, (Serializable)tokens);
         sendMessage(message);
-        for(Token t : tokens) {
-        	System.out.println("[LOCATIONMANAGEMENT] Token " + t.getId() + " collided with toxic");
+        for (Token t : tokens)
+        {
+            System.out.println("[LOCATIONMANAGEMENT] Token " + t.getId() + " collided with toxic");
         }
     }
 
@@ -102,6 +102,14 @@ public class OutgoingEventHelperBean implements EventHelperLocal
         ObjectMessage message = createObjectMessage(gameId, MessageType.TOXIC_CHANGE);
         sendMessage(message);
         System.out.println("[LOCATIONMANAGEMENT] Toxic changed");
+    }
+
+    @Override
+    public void triggerPlayGroundCeatedMessage(Integer gameId)
+    {
+        ObjectMessage message = createObjectMessage(gameId, MessageType.PLAYGROUND_CREATED);
+        sendMessage(message);
+        System.out.println("[LOCATIONMANAGEMENT] Playground created");
     }
 
     private ObjectMessage createObjectMessage(Integer gameId, int messageType)
