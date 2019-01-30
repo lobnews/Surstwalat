@@ -50,7 +50,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
     
     @EJB
     private LobbyManagementLocal lobbyManagement;
-
+    
     @Resource(lookup = "java:global/jms/FortDayEventTopic")
     private Topic eventTopic;
 
@@ -329,6 +329,18 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
         {
         	System.out.println("[USERSESSION] Move Token: GameID: " + gameID + ", tokenID: " + tokenID + ", number: " + number);
         }
+    }
+    
+    @Override
+    public Account getAccountById(int id) throws AccountNotFoundException, GeneralServiceException
+    {
+    	return userManagement.getAccountById(id);
+    }
+    
+    @Override
+    public Account getAccountByName(String accountName) throws AccountNotFoundException, GeneralServiceException
+    {
+    	return userManagement.getAccountByName(accountName);
     }
 
     
