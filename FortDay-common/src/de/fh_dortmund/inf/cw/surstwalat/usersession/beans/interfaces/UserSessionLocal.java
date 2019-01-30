@@ -4,7 +4,7 @@ import javax.ejb.Local;
 
 /**
  * @author Daniel Buschmann
- *
+ * The Local Interface for the UserSession
  */
 @Local
 public interface UserSessionLocal extends UserSession{

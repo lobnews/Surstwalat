@@ -15,6 +15,8 @@ import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordE
 public interface UserSession{
 
 	/**
+	 * Login for the User
+	 * 
 	 * @param username
 	 * @param password
 	 * @throws AccountNotFoundException
@@ -25,11 +27,13 @@ public interface UserSession{
                 throws AccountNotFoundException, LoginFailedException, GeneralServiceException;
 	
 	/**
-	 * 
+	 * Logout for the User
 	 */
 	public void logout();
 	
 	/**
+	 * Changes the password of the User
+	 * 
 	 * @param oldPassword
 	 * @param newPassword
 	 * @throws WrongPasswordException
@@ -39,6 +43,7 @@ public interface UserSession{
                 throws WrongPasswordException, GeneralServiceException;
 	
 	/**
+	 * Register an User
 	 * @param username
 	 * @param password
 	 * @param email
@@ -49,37 +54,43 @@ public interface UserSession{
                 throws AccountAlreadyExistException, GeneralServiceException;
 	
 	/**
-	 * 
+	 * Disconnect the User
 	 */
 	public void disconnect();
 	
 	/**
-	 * 
+	 * Timeout for the User
 	 */
 	public void timeout();
 	
 	/**
+	 * Update the Emailaddress of the User
+	 * 
 	 * @param email
 	 * @throws GeneralServiceException
 	 */
 	public void updateEmailAddress(String email) throws GeneralServiceException;
 	
 	/**
+	 * Delete the Account
+	 * 
 	 * @throws GeneralServiceException
 	 */
 	public void deleteAccount() throws GeneralServiceException;
 	
-        /**
-         * @return email
-         */
-        public String getEMailAddress();
-        
-        /**
-         * @return account name
-         */
-        public String getAccountName();
+    /**
+     * @return email
+     */
+    public String getEMailAddress();
+    
+    /**
+     * @return account name
+     */
+    public String getAccountName();
         
 	/**
+	 * Action when the Player rolls
+	 * 
 	 * @param gameID
 	 * @param playerID
 	 * @param dice
@@ -87,28 +98,36 @@ public interface UserSession{
 	public void playerRolls(int gameID, int playerID, Dice dice);
 	
 	/**
+	 * Starts the given Round
+	 * 
 	 * @param gameID
 	 * @param number
 	 */
 	public void startRound(int gameID, int number);
 	
 	/**
+	 * User joined the given game
+	 * 
 	 * @param gameID
 	 */
 	public void userJoinedGame(int gameID);
 	
 	/**
-	 * 
+	 * User created a game
 	 */
 	public void userCreatedGame();
 	
 	/**
+	 * End the given round
+	 * 
 	 * @param gameID
 	 * @param number
 	 */
 	public void endRound(int gameID,int number);
 	
 	/**
+	 * Add the given Item to the Player
+	 * 
 	 * @param gameID
 	 * @param playerID
 	 * @param item
@@ -116,9 +135,20 @@ public interface UserSession{
 	public void addItemToPlayer(int gameID, int playerID, Item item);
 	
 	/**
+	 * Use the given Item
+	 * 
 	 * @param gameID
 	 * @param playerID
 	 * @param item
 	 */
 	public void useItem(int gameID, int playerID, Item item);
+	
+	/**
+	 * Moves a Token by the given number
+	 * 
+	 * @param gameID
+	 * @param tokenID
+	 * @param number
+	 */
+	public void moveToken(int gameID, int tokenID, int number);
 }

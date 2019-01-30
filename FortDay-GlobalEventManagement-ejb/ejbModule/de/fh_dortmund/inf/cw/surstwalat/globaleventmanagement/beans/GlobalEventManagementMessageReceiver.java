@@ -26,28 +26,38 @@ import de.fh_dortmund.inf.cw.surstwalat.globaleventmanagement.beans.interfaces.G
 		mappedName = "java:global/jms/FortDayEventTopic")
 public class GlobalEventManagementMessageReceiver implements MessageListener{
 
-	@EJB 
-	private GlobalEventManagementLocal globalEventManagement;
-	
-	@Override
-	public void onMessage(Message message) {
-    	ObjectMessage o = (ObjectMessage) message;
-    	int messageType = -1;
-    	try {
-			messageType = o.getIntProperty(PropertyType.MESSAGE_TYPE);
-		} catch (JMSException e) {
-			//nothing to do, message type is still -1, switch-case will catch nothing
-			System.out.println("Unable to get Message_Type from message at GlobalEventManagement.");
-			e.printStackTrace();
-		}
-    	switch(messageType) {
-    		case MessageType.PLAYER_ROLL: System.out.println("[GLOBALEVENTMANAGEMENT] PLAYER_ROLL received"); playerRoll(message); break;
-    		case MessageType.START_ROUND: System.out.println("[GLOBALEVENTMANAGEMENT] START_ROUND received"); updateZone(message); break;
-    		case MessageType.GAME_STARTED: System.out.println("[GLOBALEVENTMANAGEMENT] GAME_STARTED received"); triggerStartingItems(message); break;
-    		case MessageType.TOKENS_IN_TOXIC: System.out.println("[GLOBALEVENTMANAGEMENT] TOKENS_IN_TOXIC received"); triggerCharacterDamage(message); break;
-    	}
-	}
+    @EJB 
+    private GlobalEventManagementLocal globalEventManagement;
 
+    /**
+     * listens to messages and calls the methods to handle them
+     * 
+     * @param message 
+     */
+    @Override
+    public void onMessage(Message message) {
+        ObjectMessage o = (ObjectMessage) message;
+        int messageType = -1;
+        try {
+                        messageType = o.getIntProperty(PropertyType.MESSAGE_TYPE);
+                } catch (JMSException e) {
+                        //nothing to do, message type is still -1, switch-case will catch nothing
+                        System.out.println("Unable to get Message_Type from message at GlobalEventManagement.");
+                        e.printStackTrace();
+                }
+        switch(messageType) {
+                case MessageType.PLAYER_ROLL: System.out.println("[GLOBALEVENTMANAGEMENT] PLAYER_ROLL received"); playerRoll(message); break;
+                case MessageType.START_ROUND: System.out.println("[GLOBALEVENTMANAGEMENT] START_ROUND received"); updateZone(message); break;
+                case MessageType.GAME_STARTED: System.out.println("[GLOBALEVENTMANAGEMENT] GAME_STARTED received"); triggerStartingItems(message); break;
+                case MessageType.TOKENS_IN_TOXIC: System.out.println("[GLOBALEVENTMANAGEMENT] TOKENS_IN_TOXIC received"); triggerCharacterDamage(message); break;
+        }
+    }
+
+    /**
+     * handles the player roll message, if the result of the roll is a 6 it calls a method to trigger an airdrop
+     * 
+     * @param message 
+     */
     public void playerRoll (Message message) {
     	try {
     		if(message.getBody(Integer.class) == 6)
@@ -61,6 +71,11 @@ public class GlobalEventManagementMessageReceiver implements MessageListener{
     	}
     }
     
+    /**
+     * handles the start round message and triggers the update of the damage zone
+     * 
+     * @param message 
+     */
     public void updateZone(Message message) {
     	try {
 			int gameId = message.getIntProperty(PropertyType.GAME_ID);
@@ -71,7 +86,11 @@ public class GlobalEventManagementMessageReceiver implements MessageListener{
 			e.printStackTrace();
 		}
     }
-    
+    /**
+     * handles the game started message and calls a message to trigger the starting items to be placed
+     * 
+     * @param message 
+     */
     public void triggerStartingItems(Message message) {
 		try {
 			int gameId = message.getIntProperty(PropertyType.GAME_ID);
@@ -81,6 +100,11 @@ public class GlobalEventManagementMessageReceiver implements MessageListener{
 		}
     }
     
+    /**
+     * handles the tokens in toxic message and calls a method to trigger damage on the given tokens
+     * 
+     * @param message 
+     */
     public void triggerCharacterDamage(Message message)
     {
     	try {

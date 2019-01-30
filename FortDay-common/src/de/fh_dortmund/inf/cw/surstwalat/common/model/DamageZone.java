@@ -16,6 +16,8 @@ import javax.persistence.Table;
 /**
  * 
  * @author Rebekka Michel
+ * 
+ * Damage zone
  */
 
 @Table(name="DamageZone")
@@ -43,45 +45,100 @@ public class DamageZone implements Serializable{
 	@Column(name="nextZoneSize")
 	private int nextZoneSize;
 	
+        /**
+         * @return the id of the zone
+         */
 	public int getId() {
 		return id;
 	}
+        /**
+         * set the id of the zone
+         * 
+         * @param id 
+         */
 	public void setId(int id) {
 		this.id = id;
 	}
+        /**
+         * @return game object of the game that this zone belongs to
+         */
 	public Game getGame() {
 		return game;
 	}
+        /**
+         * set the game this zone belongs to
+         * 
+         * @param game 
+         */
 	public void setGame(Game game) {
 		this.game = game;
 	}
+        /**
+         * @return damage of the zone
+         */
 	public int getDamage() {
 		return damage;
 	}
+        /**
+         * set the damage of the zone
+         * 
+         * @param damage 
+         */
 	public void setDamage(int damage) {
 		this.damage = damage;
 	}
+        /**
+         * @return the begin of the current damage zone
+         */
 	public int getCurrentZoneBegin() {
 		return currentZoneBegin;
 	}
+        /**
+         * set the begin of the current zone
+         * 
+         * @param currentZoneBegin 
+         */
 	public void setCurrentZoneBegin(int currentZoneBegin) {
 		this.currentZoneBegin = currentZoneBegin;
 	}
+        /**
+         * @return the size of the current zone
+         */
 	public int getCurrentZoneSize() {
 		return currentZoneSize;
 	}
+        /**
+         * set the size of the current zone
+         * 
+         * @param currentZoneSize 
+         */
 	public void setCurrentZoneSize(int currentZoneSize) {
 		this.currentZoneSize = currentZoneSize;
 	}
+        /**
+         * @return the begin of the next zone
+         */
 	public int getNextZoneBegin() {
 		return nextZoneBegin;
 	}
+        /**
+         * set the begin of the next zone
+         * @param nextZoneBegin 
+         */
 	public void setNextZoneBegin(int nextZoneBegin) {
 		this.nextZoneBegin = nextZoneBegin;
 	}
+        /**
+         * @return the size of the next zone
+         */
 	public int getNextZoneSize() {
 		return nextZoneSize;
 	}
+        /**
+         * set the size of the next zone
+         * 
+         * @param nextZoneSize 
+         */
 	public void setNextZoneSize(int nextZoneSize) {
 		this.nextZoneSize = nextZoneSize;
 	}
