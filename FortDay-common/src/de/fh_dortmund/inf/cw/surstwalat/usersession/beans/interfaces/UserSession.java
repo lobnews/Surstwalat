@@ -81,6 +81,14 @@ public interface UserSession {
     public String getAccountName();
 
     /**
+     * Compare id with logged in account id
+     *
+     * @param accountId account id
+     * @return is id same as current account id
+     */
+    public boolean compareAccountById(int accountId);
+
+    /**
      * @param accountName
      * @return account
      * @throws AccountNotFoundException if account not exist

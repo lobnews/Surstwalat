@@ -60,40 +60,40 @@ public class MainFrame extends javax.swing.JFrame implements EventListener {
     private boolean canInteractPawn = false;
 
     public static MainFrame getInstance() {
-        if (INSTANCE == null) {
-            INSTANCE = new MainFrame();
-        }
-        return INSTANCE;
+	if (INSTANCE == null) {
+	    INSTANCE = new MainFrame();
+	}
+	return INSTANCE;
     }
-    
+
     public void addItem(Item i) {
-        inventar.add(i);
-        eventManager.fireEvent(new InventoryChangedEvent());
+	inventar.add(i);
+	eventManager.fireEvent(new InventoryChangedEvent());
     }
-    
+
     public void removeItem(Item i) {
-        inventar.remove(i);
-        eventManager.fireEvent(new InventoryChangedEvent());
+	inventar.remove(i);
+	eventManager.fireEvent(new InventoryChangedEvent());
     }
 
     public List<Item> getInventar() {
-        return inventar;
+	return inventar;
     }
 
     public void setInventar(List<Item> inventar) {
-        this.inventar = inventar;
-        eventManager.fireEvent(new InventoryChangedEvent());
+	this.inventar = inventar;
+	eventManager.fireEvent(new InventoryChangedEvent());
     }
-    
+
     /**
      * Creates new form MainFrame
      */
     private MainFrame() {
-        initComponents();
-        eventManager = new EventManager();
-        eventManager.registerListener(this);
-        userManager = new UserManagementHandler();
-        textRepository = TextRepository.getInstance().getTextRepository("messages");
+	initComponents();
+	eventManager = new EventManager();
+	eventManager.registerListener(this);
+	userManager = new UserManagementHandler();
+	textRepository = TextRepository.getInstance().getTextRepository("messages");
     }
 
     /**
@@ -122,178 +122,173 @@ public class MainFrame extends javax.swing.JFrame implements EventListener {
      */
     public static void main(String args[]) {
 
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+	/* Set the Nimbus look and feel */
+	//<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+	/* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+	 */
+	try {
+	    for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+		if ("Nimbus".equals(info.getName())) {
+		    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+		    break;
+		}
+	    }
+	} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
+	    java.util.logging.Logger.getLogger(MainFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+	}
+	//</editor-fold>
 
-        //</editor-fold>
+	//</editor-fold>
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> {
-            getInstance().setVisible(true);
-            getInstance().setFrame(new MainPanel(), false);
-        });
+	/* Create and display the form */
+	java.awt.EventQueue.invokeLater(() -> {
+	    getInstance().setVisible(true);
+	    getInstance().setFrame(new MainPanel(), false);
+	});
     }
 
     public void setFrame(JPanel newFrame) {
-        setFrame(newFrame, true);
+	setFrame(newFrame, true);
     }
 
     public void setFrame(JPanel newFrame, boolean pack) {
-        getContentPane().removeAll();
-        getContentPane().add(newFrame, java.awt.BorderLayout.CENTER);
-        this.setMinimumSize(newFrame.getMinimumSize());
-        if (pack) {
-            pack();
-        } else {
-            revalidate();
-        }
-        repaint();
+	getContentPane().removeAll();
+	getContentPane().add(newFrame, java.awt.BorderLayout.CENTER);
+	this.setMinimumSize(newFrame.getMinimumSize());
+	if (pack) {
+	    pack();
+	} else {
+	    revalidate();
+	}
+	repaint();
     }
 
     public EventManager getEventManager() {
-        return eventManager;
+	return eventManager;
     }
 
     @EventHandler(priority = EventPriority.LOW)
     public void onDisplayEvent(StartRoundEvent e) {
-        if (e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
-            return;
-        }
-        showMessage(e.getDisplayMessage());
+	if (e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
+	    return;
+	}
+	showMessage(e.getDisplayMessage());
     }
 
     @EventHandler(priority = EventPriority.LOW)
     public void onDisplayEvent(AssignActivePlayerEvent e) {
-        if (e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
-            return;
-        }
-        showMessage(e.getDisplayMessage());
-        if(e.getPlayerID() == playerId) {
-            canInteractItem = true;
-        }
+	if (e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
+	    return;
+	}
+	showMessage(e.getDisplayMessage());
+	if (e.getPlayerID() == playerId) {
+	    canInteractItem = true;
+	}
     }
 
     @EventHandler(priority = EventPriority.LOW)
     public void onDisplayEvent(EliminatePlayerEvent e) {
-        if (e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
-            return;
-        }
-        showMessage(e.getDisplayMessage());
+	if (e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
+	    return;
+	}
+	showMessage(e.getDisplayMessage());
     }
 
     @EventHandler(priority = EventPriority.LOW)
     public void onDisplayEvent(GameStartedEvent e) {
-        if (e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
-            return;
-        }
-        showMessage(e.getDisplayMessage());
+	if (e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
+	    return;
+	}
+	showMessage(e.getDisplayMessage());
     }
 
     @EventHandler(priority = EventPriority.LOW)
     public void onDisplayEvent(PlayerRollEvent e) {
-        if (e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
-            return;
-        }
-        showMessage(e.getDisplayMessage());
-        if(e.getGameID() == gameId && e.getPlayerNR() == playerNr) {
-            canInteractPawn = true;
-            number = e.getNumber();
-        }
+	if (e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
+	    return;
+	}
+	showMessage(e.getDisplayMessage());
+	if (e.getGameID() == gameId && e.getPlayerNR() == playerNr) {
+	    canInteractPawn = true;
+	    number = e.getNumber();
+	}
     }
 
     @EventHandler(priority = EventPriority.LOW)
     public void onDisplayEvent(UpdateZoneEvent e) {
-        if (e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
-            return;
-        }
-        showMessage(e.getDisplayMessage());
+	if (e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
+	    return;
+	}
+	showMessage(e.getDisplayMessage());
     }
 
     @EventHandler
     public void onTokenHealth(SetTokenHealthEvent e) {
-        Pawn p = Pawn.getInstance(e.getTokenID());
-        if (p == null) {
-            return;
-        }
-        p.setHealth(e.getHealth());
+	Pawn p = Pawn.getInstance(e.getTokenID());
+	if (p == null) {
+	    return;
+	}
+	p.setHealth(e.getHealth());
     }
 
     @EventHandler
     public void onTokenCreated(TokenCreatedEvent e) {
-        for (int i : e.getTokens()) {
-            new Pawn(PawnColor.getByPlayerNR(e.getPlayerNR()), 25, e.getPlayerID(), i);
-        }
+	for (int i : e.getTokens()) {
+	    new Pawn(PawnColor.getByPlayerNR(e.getPlayerNR()), 25, e.getPlayerID(), i);
+	}
     }
 
     @EventHandler
     public void onDisplayEvent(AssignPlayerEvent e) {
-        try {
-            playerNr = e.getPlayerNR();
-            gameId = e.getGameID();
-            playerId = e.getPlayerID();
-            account = userManager.getAccountById(e.getUserID());
-        } catch (AccountNotFoundException ex) {
-            Logger.getLogger(LoginPanel.class.getName()).log(Level.SEVERE, textRepository.get("accountNotFoundException_ex"), ex);
-        } catch (GeneralServiceException ex) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_ex"), ex);
-        }
+	if (userManager.compareAccountById(e.getUserID())) {
+	    playerNr = e.getPlayerNR();
+	    gameId = e.getGameID();
+	    playerId = e.getPlayerID();
+	}
     }
-    
+
     @EventHandler
     public void onItemAdd(ItemAddToUserEvent e) {
-        if(playerId != e.getPlayerID()) {
-            return;
-        }
-        addItem(e.getItem());
+	if (playerId != e.getPlayerID()) {
+	    return;
+	}
+	addItem(e.getItem());
     }
-    
+
     @EventHandler
     public void onPlayerInventar(PlayerInventarEvent e) {
-        if(playerId != e.getPlayerID()) {
-            return;
-        }
-        setInventar(e.getItems());
+	if (playerId != e.getPlayerID()) {
+	    return;
+	}
+	setInventar(e.getItems());
     }
-    
+
     @EventHandler
     public void onDiceInteract(DiceInteractEvent e) {
-        if(canInteractItem) {
-            userManager.playerRolls(gameId, playerId, e.getD());
-            canInteractItem = false;
-        }
+	if (canInteractItem) {
+	    userManager.playerRolls(gameId, playerId, e.getD());
+	    canInteractItem = false;
+	}
     }
-    
+
     @EventHandler
     public void onHealthInteract(HealthInteractEvent e) {
-        if(canInteractItem) {
-            userManager.useItem(gameId, playerId, e.getHealth());
-        }
+	if (canInteractItem) {
+	    userManager.useItem(gameId, playerId, e.getHealth());
+	}
     }
-    
+
     @EventHandler
     public void onPawnInteract(PawnInteractEvent e) {
-        if(canInteractPawn) {
-            userManager.moveToken(gameId, e.getTokenID(), number);
-            canInteractPawn = false;
-        }
+	if (canInteractPawn) {
+	    userManager.moveToken(gameId, e.getTokenID(), number);
+	    canInteractPawn = false;
+	}
     }
 
     public void showMessage(String message) {
-        JOptionPane.showMessageDialog(this, message);
+	JOptionPane.showMessageDialog(this, message);
     }
 
 

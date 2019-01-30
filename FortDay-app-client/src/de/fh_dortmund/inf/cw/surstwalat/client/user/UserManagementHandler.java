@@ -35,20 +35,20 @@ public class UserManagementHandler implements MessageListener {
      * Handler constructor for UserManagement
      */
     public UserManagementHandler() {
-        // LookUp to UserSessionRemote
-        try {
-            ctx = new InitialContext();
-            String lookUpString
-                    = "java:global/FortDay-ear/FortDay-UserSession-ejb/UserSessionBean!de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote";
-            userSessionRemote = (UserSessionRemote) ctx.lookup(lookUpString);
-            initJMSConnection();
-        } catch (NamingException e) {
-            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, e.getMessage(), e);
-        }
+	// LookUp to UserSessionRemote
+	try {
+	    ctx = new InitialContext();
+	    String lookUpString
+		    = "java:global/FortDay-ear/FortDay-UserSession-ejb/UserSessionBean!de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote";
+	    userSessionRemote = (UserSessionRemote) ctx.lookup(lookUpString);
+	    initJMSConnection();
+	} catch (NamingException e) {
+	    Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, e.getMessage(), e);
+	}
     }
 
     public void initJMSConnection() {
-        FortDayEventMessageListener.getInstance(ctx);
+	FortDayEventMessageListener.getInstance(ctx);
     }
 
     /**
@@ -57,10 +57,10 @@ public class UserManagementHandler implements MessageListener {
      * @return instance of UserManagementHandler
      */
     public static UserManagementHandler getInstance() {
-        if (instance == null) {
-            instance = new UserManagementHandler();
-        }
-        return instance;
+	if (instance == null) {
+	    instance = new UserManagementHandler();
+	}
+	return instance;
     }
 
     /**
@@ -69,36 +69,36 @@ public class UserManagementHandler implements MessageListener {
      * @return new instance of UserManagementHandler
      */
     public static UserManagementHandler getNewInstance() {
-        return new UserManagementHandler();
+	return new UserManagementHandler();
     }
 
     /**
      * Register new account
      *
-     * @param name account name
-     * @param email account email
+     * @param name     account name
+     * @param email    account email
      * @param password accout password
      * @throws AccountAlreadyExistException if the account already exists.
-     * @throws GeneralServiceException if there is a general service exception
+     * @throws GeneralServiceException      if there is a general service exception
      */
     public void register(String name, String email, String password)
-            throws AccountAlreadyExistException, GeneralServiceException {
-    	System.out.println(userSessionRemote == null);
-        userSessionRemote.register(name, password, email);
+	    throws AccountAlreadyExistException, GeneralServiceException {
+	System.out.println(userSessionRemote == null);
+	userSessionRemote.register(name, password, email);
     }
 
     /**
      * Login user
      *
-     * @param name account name
+     * @param name     account name
      * @param password account password
      * @throws AccountNotFoundException if account not exist
-     * @throws LoginFailedException if input datas not match the account
-     * @throws GeneralServiceException if there is a general service exception
+     * @throws LoginFailedException     if input datas not match the account
+     * @throws GeneralServiceException  if there is a general service exception
      */
     public void login(String name, String password)
-            throws AccountNotFoundException, LoginFailedException, GeneralServiceException {
-        userSessionRemote.login(name, password);
+	    throws AccountNotFoundException, LoginFailedException, GeneralServiceException {
+	userSessionRemote.login(name, password);
     }
 
     /**
@@ -106,12 +106,12 @@ public class UserManagementHandler implements MessageListener {
      *
      * @param curPassword current password
      * @param newPassword new password
-     * @throws WrongPasswordException if old password is wrong
+     * @throws WrongPasswordException  if old password is wrong
      * @throws GeneralServiceException if there is a general service exception
      */
     public void changePassword(String curPassword, String newPassword)
-            throws WrongPasswordException, GeneralServiceException {
-        userSessionRemote.changePassword(curPassword, newPassword);
+	    throws WrongPasswordException, GeneralServiceException {
+	userSessionRemote.changePassword(curPassword, newPassword);
     }
 
     /**
@@ -121,7 +121,7 @@ public class UserManagementHandler implements MessageListener {
      * @throws GeneralServiceException if there is a general service exception
      */
     public void updateEmailAddress(String email) throws GeneralServiceException {
-        userSessionRemote.updateEmailAddress(email);
+	userSessionRemote.updateEmailAddress(email);
     }
 
     /**
@@ -130,7 +130,7 @@ public class UserManagementHandler implements MessageListener {
      * @throws GeneralServiceException if there is a general service exception
      */
     public void deleteAccount() throws GeneralServiceException {
-        userSessionRemote.deleteAccount();
+	userSessionRemote.deleteAccount();
     }
 
     /**
@@ -139,7 +139,7 @@ public class UserManagementHandler implements MessageListener {
      * @return email address
      */
     public String getEMailAddress() {
-        return userSessionRemote.getEMailAddress();
+	return userSessionRemote.getEMailAddress();
     }
 
     /**
@@ -148,7 +148,7 @@ public class UserManagementHandler implements MessageListener {
      * @return name
      */
     public String getAccountName() {
-        return userSessionRemote.getAccountName();
+	return userSessionRemote.getAccountName();
     }
 
     /**
@@ -157,10 +157,10 @@ public class UserManagementHandler implements MessageListener {
      * @param accountName
      * @return account
      * @throws AccountNotFoundException if account not exist
-     * @throws GeneralServiceException if there is a general service exception
+     * @throws GeneralServiceException  if there is a general service exception
      */
     public Account getAccountByName(String accountName) throws AccountNotFoundException, GeneralServiceException {
-        return userSessionRemote.getAccountByName(accountName);
+	return userSessionRemote.getAccountByName(accountName);
     }
 
     /**
@@ -169,26 +169,62 @@ public class UserManagementHandler implements MessageListener {
      * @param accountId
      * @return account
      * @throws AccountNotFoundException if account not exist
-     * @throws GeneralServiceException if there is a general service exception
+     * @throws GeneralServiceException  if there is a general service exception
      */
     public Account getAccountById(int accountId) throws AccountNotFoundException, GeneralServiceException {
-        return userSessionRemote.getAccountById(accountId);
+	return userSessionRemote.getAccountById(accountId);
     }
 
+    /**
+     * On message listener
+     *
+     * @param message incomming message
+     */
     @Override
     public void onMessage(Message message) {
 
     }
-    
+
+    /**
+     * player rolls the dice
+     * 
+     * @param gameID
+     * @param playerID
+     * @param dice 
+     */
     public void playerRolls(int gameID, int playerID, Dice dice) {
-        userSessionRemote.playerRolls(gameID, playerID, dice);
+	userSessionRemote.playerRolls(gameID, playerID, dice);
     }
-    
+
+    /**
+     * use an item
+     * 
+     * @param gameID
+     * @param playerID
+     * @param item 
+     */
     public void useItem(int gameID, int playerID, Item item) {
-        userSessionRemote.useItem(gameID, playerID, item);
+	userSessionRemote.useItem(gameID, playerID, item);
     }
-    
+
+    /**
+     * Move Token
+     * 
+     * @param gameID
+     * @param token
+     * @param number
+     */
     public void moveToken(int gameID, int token, int number) {
-        
+
+    }
+
+    /**
+     * Compare id with logged in account id
+     *
+     * @param accountId account id
+     * @return is id same as current account id
+     */
+    public boolean compareAccountById(int accountId) {
+	return userSessionRemote.compareAccountById(accountId);
     }
 }
