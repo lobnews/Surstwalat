@@ -4,6 +4,7 @@ import de.fh_dortmund.inf.cw.surstwalat.client.FortDayEventMessageListener;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.view.RegistryPanel;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Game;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
@@ -11,6 +12,7 @@ import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralService
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.LoginFailedException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordException;
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.jms.Message;
@@ -187,10 +189,10 @@ public class UserManagementHandler implements MessageListener {
 
     /**
      * player rolls the dice
-     * 
+     *
      * @param gameID
      * @param playerID
-     * @param dice 
+     * @param dice
      */
     public void playerRolls(int gameID, int playerID, Dice dice) {
 	userSessionRemote.playerRolls(gameID, playerID, dice);
@@ -198,10 +200,10 @@ public class UserManagementHandler implements MessageListener {
 
     /**
      * use an item
-     * 
+     *
      * @param gameID
      * @param playerID
-     * @param item 
+     * @param item
      */
     public void useItem(int gameID, int playerID, Item item) {
 	userSessionRemote.useItem(gameID, playerID, item);
@@ -209,13 +211,13 @@ public class UserManagementHandler implements MessageListener {
 
     /**
      * Move Token
-     * 
+     *
      * @param gameID
      * @param token
      * @param number
      */
     public void moveToken(int gameID, int token, int number) {
-        userSessionRemote.moveToken(gameID, token, number);
+	userSessionRemote.moveToken(gameID, token, number);
 
     }
 
@@ -227,5 +229,23 @@ public class UserManagementHandler implements MessageListener {
      */
     public boolean compareAccountById(int accountId) {
 	return userSessionRemote.compareAccountById(accountId);
+    }
+
+    public List<Account> getUserInLobby() {
+//	return userSessionRemote.getUserInLobby();
+	return null;
+    }
+    
+    public List<Game> getOpenGames() {
+//	return userSessionRemote.getOpenGames();
+	return null;
+    }
+
+    public void createGame() {
+	userSessionRemote.userCreatedGame();
+    }
+
+    public void joinGame(int gameId) {
+	userSessionRemote.userJoinedGame(gameId);
     }
 }
