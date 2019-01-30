@@ -173,4 +173,20 @@ public interface UserSession{
 	 * @return List<Account>
 	 */
 	public List<Account> getUsersInOpenGame(int gameid);
+	
+	/**
+	 * Gets the account by name
+	 * 
+	 * @param id
+	 * @return Account
+	 */
+	public Account getAccountByName(String accountName) throws AccountNotFoundException, GeneralServiceException;
+	
+	/**
+	 * Gets the account by ID
+	 * 
+	 * @param id
+	 * @return Account
+	 */
+	public Account getAccountById(int id) throws AccountNotFoundException, GeneralServiceException;
 }
