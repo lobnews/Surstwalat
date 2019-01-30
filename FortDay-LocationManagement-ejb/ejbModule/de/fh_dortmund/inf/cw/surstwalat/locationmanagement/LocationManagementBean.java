@@ -39,9 +39,8 @@ public class LocationManagementBean implements LocationManagementLocal
         TypedQuery<Playground> query = entityManager.createNamedQuery("Playground.getByGameId", Playground.class);
         query.setParameter("gameId", gameId);
         Playground p = query.getSingleResult();
-        
-        entityManager.lock(p, LockModeType.PESSIMISTIC_READ);
 
+        entityManager.lock(p, LockModeType.PESSIMISTIC_READ);
 
         // get random field
         int field = (int)(Math.random() * p.getFields().size());
@@ -111,7 +110,6 @@ public class LocationManagementBean implements LocationManagementLocal
         }
 
         checkForTokensInToxic(playground);
-        outgoingEvents.triggerNoCollisionMessage(gameId);
 
     }
 
@@ -128,7 +126,14 @@ public class LocationManagementBean implements LocationManagementLocal
             }
         }
         if (tokens.size() > 0)
+        {
             outgoingEvents.triggerCharactersInToxicMessage(playground.getGame().getId(), tokens);
+        }
+        else
+        {
+            outgoingEvents.triggerNoCollisionMessage(playground.getGame().getId());
+
+        }
 
     }
 
