@@ -31,7 +31,13 @@ public class LocationManagementBean implements LocationManagementLocal
     @PersistenceContext(unitName = "FortDayDB")
     protected EntityManager entityManager;
 
-    // Adding an Item to the Playground
+    /**
+     * 
+     * Adding an Item to the Playground
+     * 
+     * @param gameId
+     * @param itemId
+     */
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void addItemToPlayground(int gameId, int itemId)
     {
@@ -61,7 +67,12 @@ public class LocationManagementBean implements LocationManagementLocal
 
     }
 
-    // create the Playground
+    /**
+     * create the Playground
+     * 
+     * @param gameId
+     * @param fieldSize
+     */
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void createPlayground(int gameId, int fieldSize)
     {
@@ -88,7 +99,13 @@ public class LocationManagementBean implements LocationManagementLocal
         outgoingEvents.triggerPlayGroundCeatedMessage(gameId);
     }
 
-    // Updsate the Zone
+    /**
+     * Update the Zone
+     * 
+     * @param gameId
+     * @param zoneBegin
+     * @param zoneSize
+     */
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void updateZone(int gameId, int zoneBegin, int zoneSize)
@@ -115,7 +132,11 @@ public class LocationManagementBean implements LocationManagementLocal
 
     }
 
-    // Check if Tokens are in Toxic
+    /**
+     * Check if Tokens are in Toxic
+     * 
+     * @param playground
+     */
     private void checkForTokensInToxic(Playground playground)
     {
         List<Token> tokens = new ArrayList<Token>();
@@ -139,7 +160,13 @@ public class LocationManagementBean implements LocationManagementLocal
 
     }
 
-    // move the token
+    /**
+     * move the token
+     * 
+     * @param gameId
+     * @param tokenId
+     * @param count
+     */
     public void moveToken(int gameId, int tokenId, int count)
     {
         // get the playground
@@ -170,7 +197,15 @@ public class LocationManagementBean implements LocationManagementLocal
         }
     }
 
-    // check for collision, return true, if own token was hit
+    /**
+     * check for collision, return true, if own token was hit
+     * 
+     * @param playground
+     * @param token
+     * @param pos
+     * @param count
+     * @return
+     */
     private boolean checkForCollisionWithPlayer(Playground playground, Token token, int pos, int count)
     {
         // check for collision
@@ -204,7 +239,15 @@ public class LocationManagementBean implements LocationManagementLocal
         return false;
     }
 
-    // check if item was hit.
+    /**
+     * check if item was hit.
+     * 
+     * @param playground
+     * @param token
+     * @param pos
+     * @param count
+     * @return
+     */
     private boolean checkForCollisionWithItem(Playground playground, Token token, int pos, int count)
     {
         // check if item is on field
@@ -222,7 +265,13 @@ public class LocationManagementBean implements LocationManagementLocal
         return false;
     }
 
-    // add a token to the playground
+    /**
+     * add a token to the playground
+     * 
+     * @param gameId
+     * @param playerId
+     * @param tokenIds
+     */
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void addTokenToPlayground(int gameId, int playerId, List<Integer> tokenIds)
     {
@@ -268,7 +317,12 @@ public class LocationManagementBean implements LocationManagementLocal
 
     }
 
-    // remove an item from playground
+    /**
+     * remove an item from playground
+     * 
+     * @param gameId
+     * @param itemId
+     */
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void removeItemFromPlayground(int gameId, int itemId)
     {
