@@ -4,6 +4,7 @@ import javax.ejb.Remote;
 
 /**
  * @author Daniel Buschmann
+ * The Local Interface for the UserSession
  *
  */
 @Remote

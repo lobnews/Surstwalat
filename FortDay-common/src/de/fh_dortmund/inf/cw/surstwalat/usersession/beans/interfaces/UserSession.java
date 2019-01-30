@@ -13,68 +13,77 @@ import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordE
  * @author Daniel Buschmann
  *
  */
-public interface UserSession {
+public interface UserSession{
 
-    /**
-     * @param username
-     * @param password
-     * @throws AccountNotFoundException
-     * @throws LoginFailedException
-     * @throws GeneralServiceException
-     */
-    public void login(String username, String password)
-	    throws AccountNotFoundException, LoginFailedException, GeneralServiceException;
-
-    /**
-     *
-     */
-    public void logout();
-
-    /**
-     * @param oldPassword
-     * @param newPassword
-     * @throws WrongPasswordException
-     * @throws GeneralServiceException
-     */
-    public void changePassword(String oldPassword, String newPassword)
-	    throws WrongPasswordException, GeneralServiceException;
-
-    /**
-     * @param username
-     * @param password
-     * @param email
-     * @throws AccountAlreadyExistException
-     * @throws GeneralServiceException
-     */
-    public void register(String username, String password, String email)
-	    throws AccountAlreadyExistException, GeneralServiceException;
-
-    /**
-     *
-     */
-    public void disconnect();
-
-    /**
-     *
-     */
-    public void timeout();
-
-    /**
-     * @param email
-     * @throws GeneralServiceException
-     */
-    public void updateEmailAddress(String email) throws GeneralServiceException;
-
-    /**
-     * @throws GeneralServiceException
-     */
-    public void deleteAccount() throws GeneralServiceException;
-
+	/**
+	 * Login for the User
+	 * 
+	 * @param username
+	 * @param password
+	 * @throws AccountNotFoundException
+	 * @throws LoginFailedException
+	 * @throws GeneralServiceException
+	 */
+	public void login(String username, String password) 
+                throws AccountNotFoundException, LoginFailedException, GeneralServiceException;
+	
+	/**
+	 * Logout for the User
+	 */
+	public void logout();
+	
+	/**
+	 * Changes the password of the User
+	 * 
+	 * @param oldPassword
+	 * @param newPassword
+	 * @throws WrongPasswordException
+	 * @throws GeneralServiceException
+	 */
+	public void changePassword(String oldPassword, String newPassword) 
+                throws WrongPasswordException, GeneralServiceException;
+	
+	/**
+	 * Register an User
+	 * @param username
+	 * @param password
+	 * @param email
+	 * @throws AccountAlreadyExistException
+	 * @throws GeneralServiceException
+	 */
+	public void register(String username, String password, String email) 
+                throws AccountAlreadyExistException, GeneralServiceException;
+	
+	/**
+	 * Disconnect the User
+	 */
+	public void disconnect();
+	
+	/**
+	 * Timeout for the User
+	 */
+	public void timeout();
+	
+	/**
+	 * Update the Emailaddress of the User
+	 * 
+	 * @param email
+	 * @throws GeneralServiceException
+	 */
+	public void updateEmailAddress(String email) throws GeneralServiceException;
+	
+	/**
+	 * Delete the Account
+	 * 
+	 * @throws GeneralServiceException
+	 */
+	public void deleteAccount() throws GeneralServiceException;
+	
     /**
      * @return email
      */
     public String getEMailAddress();
-
+    
     /**
      * @return account name
      */
@@ -140,4 +149,13 @@ public interface UserSession {
      * @param item
      */
     public void useItem(int gameID, int playerID, Item item);
+	
+	/**
+	 * Moves a Token by the given number
+	 * 
+	 * @param gameID
+	 * @param tokenID
+	 * @param number
+	 */
+	public void moveToken(int gameID, int tokenID, int number);
 }

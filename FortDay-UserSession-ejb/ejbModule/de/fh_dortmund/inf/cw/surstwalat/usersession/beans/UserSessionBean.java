@@ -240,7 +240,6 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 
         sendMessage(msg);
 		System.out.println("[USERSESSION] Player uses Item: GameID: " + gameID + ", Username: " + user.getName() + ", PlayerID: " + playerID);
-
     }
 
     /* (non-Javadoc)
@@ -306,6 +305,20 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
         sendMessage(msg);
         
 		System.out.println("[USERSESSION] Add item to Player: GameID: " + gameID + ", Username: " + user.getName() + ", PlayerID: " + playerID);
+    }
+    
+    /* (non-Javadoc)
+ 	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#moveToken(int, int, int)
+      */
+    @Override
+    public void moveToken(int gameID, int tokenID, int number) {
+    	ObjectMessage msg = createObjectMessage(gameID, MessageType.MOVE_TOKEN);
+    	trySetIntProperty(msg, PropertyType.TOKEN_ID, tokenID);
+    	trySetObject(msg, number);
+    	
+    	sendMessage(msg);
+
+    	System.out.println("[USERSESSION] Move Token: GameID: " + gameID + ", tokenID: " + tokenID + ", number: " + number);
     }
 
     
