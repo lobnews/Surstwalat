@@ -1,6 +1,7 @@
 package de.fh_dortmund.inf.cw.surstwalat.usersession.beans;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.annotation.Resource;
 import javax.ejb.EJB;
@@ -15,10 +16,12 @@ import javax.jms.Topic;
 
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
+import de.fh_dortmund.inf.cw.surstwalat.common.exceptions.GameIsFullException;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Action;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.ActionType;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Game;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.lobbymanagement.beans.interfaces.LobbyManagementLocal;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.beans.interfaces.UserManagementLocal;
@@ -213,7 +216,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
         Action a = new Action();
         a.setActionType(ActionType.ROLL);
         trySetIntProperty(msg, PropertyType.ACTION_TYPE, a.getActionType().ordinal());
-        trySetIntProperty(msg, PropertyType.PLAYER_NO, playerID);
+        trySetIntProperty(msg, PropertyType.PLAYER_ID, playerID);
         trySetObject(msg, dice);
 
         sendMessage(msg);
@@ -233,7 +236,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
         Action a = new Action();
         a.setActionType(ActionType.USE_ITEM);
         trySetIntProperty(msg, PropertyType.ACTION_TYPE, a.getActionType().ordinal());
-        trySetIntProperty(msg, PropertyType.PLAYER_NO, playerID);
+        trySetIntProperty(msg, PropertyType.PLAYER_ID, playerID);
         trySetObject(msg, item);
 
         sendMessage(msg);
@@ -242,6 +245,24 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
         {
         	System.out.println("[USERSESSION] Player uses Item: GameID: " + gameID + ", Username: " + user.getName() + ", PlayerID: " + playerID);
         }
+    }
+    
+    /* (non-Javadoc)
+ 	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#getUserInLobby()
+      */
+    @Override
+    public List<Account> getUserInLobby()
+    {
+    	return lobbyManagement.getUserInLobby();
+    }
+    
+    /* (non-Javadoc)
+ 	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#getOpenGames()
+      */
+    @Override
+    public List<Game> getOpenGames()
+    {
+    	return lobbyManagement.getOpenGames();
     }
 
     /* (non-Javadoc)
@@ -252,21 +273,20 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
     	lobbyManagement.startGame(gameID, fieldSize);
     }
     
+    /* (non-Javadoc)
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#getUsersInOpenGame(int)
+     */
+    @Override
+    public List<Account> getUsersInOpenGame(int gameid){
+    	return lobbyManagement.getUsersInOpenGame(gameid);
+    }
 
     /* (non-Javadoc)
 	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#userJoinedGame(int)
      */
     @Override
-    public void userJoinedGame(int gameID) {
-        ObjectMessage msg = createObjectMessage(gameID, MessageType.USER_JOINGAME);
-        trySetObject(msg, user);
-
-        sendMessage(msg);
-        
-        if (LOGGING)
-        {
-        	System.out.println("[USERSESSION] User joined game: GameID: " + gameID + ", Username: " + user.getName());
-        }
+    public void userJoinedGame(int gameID) throws GameIsFullException {
+        lobbyManagement.userJoinsGame(user.getId(), gameID);
     }
 
     /* (non-Javadoc)
@@ -283,7 +303,7 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
     @Override
     public void addItemToPlayer(int gameID, int playerID, Item item) {
         ObjectMessage msg = createObjectMessage(gameID, MessageType.ADD_ITEM_TO_PLAYER);
-        trySetIntProperty(msg, PropertyType.PLAYER_NO, playerID);
+        trySetIntProperty(msg, PropertyType.PLAYER_ID, playerID);
         trySetObject(msg, item);
 
         sendMessage(msg);
