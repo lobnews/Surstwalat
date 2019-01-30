@@ -28,6 +28,7 @@ public class UpdateZoneEventHandlerBean implements MessageListener
     @Override
     public void onMessage(Message message)
     {
+    	System.out.println("[LOCATIONMANAGEMENT] UPDATE_ZONE received");
         try
         {
             locationManagement

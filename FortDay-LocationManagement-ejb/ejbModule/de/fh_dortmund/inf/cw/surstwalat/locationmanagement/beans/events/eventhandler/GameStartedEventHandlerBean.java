@@ -29,6 +29,7 @@ public class GameStartedEventHandlerBean implements MessageListener
     @Override
     public void onMessage(Message message)
     {
+    	System.out.println("[LOCATIONMANAGEMENT] GAME_STARTED received");
         try
         {
             locationManagement.createPlayground(message.getIntProperty(PropertyType.GAME_ID),message.getIntProperty(PropertyType.GAME_FIELDSIZE));

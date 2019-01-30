@@ -47,7 +47,7 @@ public interface MessageType {
     public static final int PLAYER_ON_FIELD = 112;
     public static final int COLLISION_WITH_PLAYER = 113;
     public static final int COLLISION_WITH_ITEM = 114;
-    public static final int CHARACTERS_IN_TOXIC = 115;
+    public static final int TOKENS_IN_TOXIC = 115;
     public static final int COLLISION_WITH_OWN_CHARACTER = 116;
     public static final int TOXIC_CHANGE = 117;
     

@@ -41,52 +41,59 @@ public class OutgoingEventHelperBean implements EventHelperLocal
 
     
     @Override
-    public void triggerPlayerOnFieldMessage(Integer gameId, Integer playerId, Integer characterId, Integer fieldId)
+    public void triggerPlayerOnFieldMessage(Integer gameId, Integer playerId, Integer tokenId, Integer fieldId)
     {
         ObjectMessage message = createObjectMessage(gameId, MessageType.PLAYER_ON_FIELD);
         trySetIntProperty(message, PropertyType.PLAYER_NO, playerId);
-        trySetIntProperty(message, PropertyType.CHARACTER_ID, characterId);
+        trySetIntProperty(message, PropertyType.TOKEN_ID, tokenId);
         trySetIntProperty(message, PropertyType.FIELD_ID, fieldId);
         sendMessage(message);
+        System.out.println("[LOCATIONMANAGEMENT] Token " + tokenId + " on field " + fieldId);
     }
 
     @Override
-    public void triggerCollisionWithPlayerMessage(Integer gameId, Integer playerId, Integer characterId,
-                                                  Integer enemyPlayerId, Integer enemyCharacterId)
+    public void triggerCollisionWithPlayerMessage(Integer gameId, Integer playerId, Integer tokenId,
+                                                  Integer enemyPlayerId, Integer enemyTokenId)
     {
         ObjectMessage message = createObjectMessage(gameId, MessageType.COLLISION_WITH_PLAYER);
         trySetIntProperty(message, PropertyType.PLAYER_NO, playerId);
-        trySetIntProperty(message, PropertyType.CHARACTER_ID, characterId);
-        trySetIntProperty(message, PropertyType.ENEMY_CHARACTER_ID, enemyCharacterId);
+        trySetIntProperty(message, PropertyType.TOKEN_ID, tokenId);
+        trySetIntProperty(message, PropertyType.ENEMY_CHARACTER_ID, enemyTokenId);
         trySetIntProperty(message, PropertyType.ENEMY_PLAYER_ID, enemyPlayerId);
         sendMessage(message);
+        System.out.println("[LOCATIONMANAGEMENT] Token " + tokenId + " collided with token " + enemyTokenId);
     }
 
     @Override
-    public void triggerCollisionWithItemMessage(Integer gameId, Integer playerId, Integer characterId, Integer itemId)
+    public void triggerCollisionWithItemMessage(Integer gameId, Integer playerId, Integer tokenId, Integer itemId)
     {
         ObjectMessage message = createObjectMessage(gameId, MessageType.COLLISION_WITH_ITEM);
         trySetIntProperty(message, PropertyType.PLAYER_NO, playerId);
-        trySetIntProperty(message, PropertyType.CHARACTER_ID, characterId);
+        trySetIntProperty(message, PropertyType.TOKEN_ID, tokenId);
         trySetIntProperty(message, PropertyType.ITEM_ID, itemId);
         sendMessage(message);
+        System.out.println("[LOCATIONMANAGEMENT] Token " + tokenId + " collided with item " + itemId);
     }
 
     @Override
-    public void triggerCharactersInToxicMessage(Integer gameId, List<Token> characters)
+    public void triggerCharactersInToxicMessage(Integer gameId, List<Token> tokens)
     {
-        ObjectMessage message = createObjectMessage(gameId, MessageType.CHARACTERS_IN_TOXIC);
-        trySetObject(message, (Serializable)characters);
+        ObjectMessage message = createObjectMessage(gameId, MessageType.TOKENS_IN_TOXIC);
+        trySetObject(message, (Serializable)tokens);
         sendMessage(message);
+        for(Token t : tokens) {
+        	System.out.println("[LOCATIONMANAGEMENT] Token " + t.getId() + " collided with toxic");
+        }
     }
 
     @Override
-    public void triggerCollisionWithOwnCharacterMessage(Integer gameId, Integer playerId, Integer characterId)
+    public void triggerCollisionWithOwnCharacterMessage(Integer gameId, Integer playerId, Integer tokenId)
     {
         ObjectMessage message = createObjectMessage(gameId, MessageType.COLLISION_WITH_OWN_CHARACTER);
         trySetIntProperty(message, PropertyType.PLAYER_NO, playerId);
-        trySetIntProperty(message, PropertyType.CHARACTER_ID, characterId);
+        trySetIntProperty(message, PropertyType.TOKEN_ID, tokenId);
         sendMessage(message);
+        System.out.println("[LOCATIONMANAGEMENT] Player " + playerId + " collided with own token");
     }
 
     @Override
@@ -94,6 +101,7 @@ public class OutgoingEventHelperBean implements EventHelperLocal
     {
         ObjectMessage message = createObjectMessage(gameId, MessageType.TOXIC_CHANGE);
         sendMessage(message);
+        System.out.println("[LOCATIONMANAGEMENT] Toxic changed");
     }
 
     private ObjectMessage createObjectMessage(Integer gameId, int messageType)
