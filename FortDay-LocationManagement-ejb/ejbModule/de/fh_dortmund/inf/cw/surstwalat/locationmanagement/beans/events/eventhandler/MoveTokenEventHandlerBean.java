@@ -20,7 +20,7 @@ import de.fh_dortmund.inf.cw.surstwalat.locationmanagement.beans.interfaces.Loca
       propertyValue = PropertyType.MESSAGE_TYPE + " = " + MessageType.MOVE_TOKEN) //TODO: Anderes Event
 }, mappedName = "java:global/jms/FortDayEventTopic")
 
-public class PlayerRollEventHandlerBean implements MessageListener
+public class MoveTokenEventHandlerBean implements MessageListener
 {
 
     @EJB
