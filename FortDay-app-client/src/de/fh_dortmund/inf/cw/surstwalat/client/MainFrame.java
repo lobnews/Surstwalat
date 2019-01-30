@@ -86,7 +86,7 @@ public class MainFrame extends JFrame implements EventListener {
     private MainFrame() {
 	eventManager = new EventManager();
 	eventManager.registerListener(this);
-	userManager = new UserManagementHandler();
+	userManager = UserManagementHandler.getInstance();
 
 	addWindowListener(new WindowAdapter() {
 	    @Override

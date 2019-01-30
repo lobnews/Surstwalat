@@ -217,6 +217,11 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
      */
     @Override
     public boolean compareAccountById(int accountId) {
+	if (user == null) {
+	    System.out.println("[USERSESSION] User not found by compareAccountById()");
+	    return false;
+	}
+
 	return user.getId() == accountId;
     }
 
