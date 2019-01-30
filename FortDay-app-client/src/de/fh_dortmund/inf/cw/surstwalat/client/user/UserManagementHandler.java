@@ -3,6 +3,8 @@ package de.fh_dortmund.inf.cw.surstwalat.client.user;
 import de.fh_dortmund.inf.cw.surstwalat.client.FortDayEventMessageListener;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.view.RegistryPanel;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
@@ -176,5 +178,17 @@ public class UserManagementHandler implements MessageListener {
     @Override
     public void onMessage(Message message) {
 
+    }
+    
+    public void playerRolls(int gameID, int playerID, Dice dice) {
+        userSessionRemote.playerRolls(gameID, playerID, dice);
+    }
+    
+    public void useItem(int gameID, int playerID, Item item) {
+        userSessionRemote.useItem(gameID, playerID, item);
+    }
+    
+    public void moveToken(int gameID, int token, int number) {
+        
     }
 }

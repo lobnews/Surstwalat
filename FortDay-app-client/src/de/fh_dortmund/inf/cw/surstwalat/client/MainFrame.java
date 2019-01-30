@@ -6,8 +6,14 @@ import de.fh_dortmund.inf.cw.surstwalat.client.event.EventManager;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.EventPriority;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.AssignActivePlayerEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.AssignPlayerEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.DiceInteractEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.EliminatePlayerEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.GameStartedEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.HealthInteractEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.InventoryChangedEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.ItemAddToUserEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.PawnInteractEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.PlayerInventarEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.PlayerRollEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.SetTokenHealthEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.StartRoundEvent;
@@ -21,8 +27,11 @@ import de.fh_dortmund.inf.cw.surstwalat.client.util.Pawn;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.PawnColor;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -44,6 +53,11 @@ public class MainFrame extends javax.swing.JFrame implements EventListener {
     private Account account;
     private int playerId;
     private int gameId;
+    private int number;
+    private int playerNr;
+    private List<Item> inventar = new LinkedList<>();
+    private boolean canInteractItem = false;
+    private boolean canInteractPawn = false;
 
     public static MainFrame getInstance() {
         if (INSTANCE == null) {
@@ -51,7 +65,26 @@ public class MainFrame extends javax.swing.JFrame implements EventListener {
         }
         return INSTANCE;
     }
+    
+    public void addItem(Item i) {
+        inventar.add(i);
+        eventManager.fireEvent(new InventoryChangedEvent());
+    }
+    
+    public void removeItem(Item i) {
+        inventar.remove(i);
+        eventManager.fireEvent(new InventoryChangedEvent());
+    }
 
+    public List<Item> getInventar() {
+        return inventar;
+    }
+
+    public void setInventar(List<Item> inventar) {
+        this.inventar = inventar;
+        eventManager.fireEvent(new InventoryChangedEvent());
+    }
+    
     /**
      * Creates new form MainFrame
      */
@@ -149,6 +182,9 @@ public class MainFrame extends javax.swing.JFrame implements EventListener {
             return;
         }
         showMessage(e.getDisplayMessage());
+        if(e.getPlayerID() == playerId) {
+            canInteractItem = true;
+        }
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -173,6 +209,10 @@ public class MainFrame extends javax.swing.JFrame implements EventListener {
             return;
         }
         showMessage(e.getDisplayMessage());
+        if(e.getGameID() == gameId && e.getPlayerNR() == playerNr) {
+            canInteractPawn = true;
+            number = e.getNumber();
+        }
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -202,6 +242,7 @@ public class MainFrame extends javax.swing.JFrame implements EventListener {
     @EventHandler
     public void onDisplayEvent(AssignPlayerEvent e) {
         try {
+            playerNr = e.getPlayerNR();
             gameId = e.getGameID();
             playerId = e.getPlayerID();
             account = userManager.getAccountById(e.getUserID());
@@ -209,6 +250,45 @@ public class MainFrame extends javax.swing.JFrame implements EventListener {
             Logger.getLogger(LoginPanel.class.getName()).log(Level.SEVERE, textRepository.get("accountNotFoundException_ex"), ex);
         } catch (GeneralServiceException ex) {
             Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_ex"), ex);
+        }
+    }
+    
+    @EventHandler
+    public void onItemAdd(ItemAddToUserEvent e) {
+        if(playerId != e.getPlayerID()) {
+            return;
+        }
+        addItem(e.getItem());
+    }
+    
+    @EventHandler
+    public void onPlayerInventar(PlayerInventarEvent e) {
+        if(playerId != e.getPlayerID()) {
+            return;
+        }
+        setInventar(e.getItems());
+    }
+    
+    @EventHandler
+    public void onDiceInteract(DiceInteractEvent e) {
+        if(canInteractItem) {
+            userManager.playerRolls(gameId, playerId, e.getD());
+            canInteractItem = false;
+        }
+    }
+    
+    @EventHandler
+    public void onHealthInteract(HealthInteractEvent e) {
+        if(canInteractItem) {
+            userManager.useItem(gameId, playerId, e.getHealth());
+        }
+    }
+    
+    @EventHandler
+    public void onPawnInteract(PawnInteractEvent e) {
+        if(canInteractPawn) {
+            userManager.moveToken(gameId, e.getTokenID(), number);
+            canInteractPawn = false;
         }
     }
 
