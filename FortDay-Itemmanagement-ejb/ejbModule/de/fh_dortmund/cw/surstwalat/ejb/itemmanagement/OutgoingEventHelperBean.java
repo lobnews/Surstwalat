@@ -41,6 +41,7 @@ public class OutgoingEventHelperBean {
 		trySetIntProperty(message, PropertyType.PLAYER_ID, player.getId());
 		trySetObject(message, (Serializable) player.getItems());
 		sendMessage(message);
+		System.out.println("[ITEMMANAG_" + gameId + "] Sende Spieler[" + player.getId() + "] Inventar");
 	}
 
 	private ObjectMessage createObjectMessage(Integer gameId, int messageType) {
