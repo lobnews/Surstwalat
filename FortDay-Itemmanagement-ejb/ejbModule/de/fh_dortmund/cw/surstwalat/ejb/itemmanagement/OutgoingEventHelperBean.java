@@ -29,7 +29,7 @@ public class OutgoingEventHelperBean {
 	private Topic eventTopic;
 
 	public void sendAddItemToPlayground(Integer gameId, Item item, int pos) {
-		ObjectMessage message = createObjectMessage(gameId, MessageType.ITEM_SPAWN);
+		ObjectMessage message = createObjectMessage(gameId, MessageType.SPAWN_ITEM);
 		trySetIntProperty(message, PropertyType.ITEM_ID, item.getId());
 		trySetIntProperty(message, PropertyType.ITEM_POS, pos);
 		sendMessage(message);
