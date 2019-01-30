@@ -17,92 +17,114 @@ import javax.persistence.Query;
  */
 @Stateless
 public class KiBean implements KiLocal {
-	
-	@EJB
-	private OutgoingEventHelperBean sender;
-	
-	@PersistenceContext
-	private EntityManager em;
-	
-	private int gameid;
-	
-	private int player_id;
-	
-	private Player player;
-	
-	private List<Item> inventory;
 
-	public void init() {
-		System.out.println("@@@FortDayKi started");
-	}
-	
-	public void makeTurn(int playerid, int game_id) {
-		
-		this.getInventory(playerid);
-		
-		this.setGameid(game_id);
-		
-		Item item;
-		
-		if(!inventory.isEmpty())
-		{
-			item = inventory.get(0);
-			sender.sendUseItem(gameid, player.getPlayerNo(), item);
-		}
-		else
-		{
-			sender.sendPlayerRoll(gameid,player.getPlayerNo());
-		}
-	}
+    @EJB
+    private OutgoingEventHelperBean sender;
 
-	private void getInventory(int playerid) {
-		Query getInventory = em.createNamedQuery("Player.getById");
-		getInventory.setParameter("id", playerid);
-		Player player = (Player) getInventory.getSingleResult();
-		this.setPlayer(player);
-		this.setInventory(player.getItems());
-	}
+    @PersistenceContext
+    private EntityManager em;
 
-	public Player getPlayer() {
-		return player;
-	}
+    private int gameid;
+    private int player_id;
+    private Player player;
+    private List<Item> inventory;
 
-	public void setPlayer(Player player) {
-		this.player = player;
-	}
+    /**
+     * Inizialization
+     */
+    public void init() {
+	System.out.println("@@@FortDayKi started");
+    }
 
-	public int getGameid() {
-		return gameid;
-	}
+    /**
+     * Make Turn
+     *
+     * @param playerid player id
+     * @param game_id  game id
+     */
+    public void makeTurn(int playerid, int game_id) {
 
-	public void setGameid(int gameid) {
-		this.gameid = gameid;
-	}
+	this.getInventory(playerid);
+	this.setGameid(game_id);
+	Item item;
 
-	public int getPlayerid() {
-		return player_id;
+	if (!inventory.isEmpty()) {
+	    item = inventory.get(0);
+	    sender.sendUseItem(gameid, player.getPlayerNo(), item);
+	} else {
+	    sender.sendPlayerRoll(gameid, player.getPlayerNo());
 	}
+    }
 
-	public void setPlayerid(int playerid) {
-		this.player_id = playerid;
-	}
+    /**
+     * Set inventory
+     *
+     * @param inventory
+     */
+    public void setInventory(List<Item> inventory) {
+	this.inventory = inventory;
+    }
 
-	public void setInventory(List<Item> inventory) {
-		this.inventory = inventory;
-	}
-	
-	public List<Token> getTokens(int playerid)
-	{
-		Query getTokenList = em.createNamedQuery("Token.getTokenList");
-		getTokenList.setParameter("id", playerid);
-		List<Token> tokelist = (List) getTokenList.getResultList();
-		
-		return tokelist;
-	}
+    /**
+     * Get inventory
+     *
+     * @param playerid player id
+     */
+    private void getInventory(int playerid) {
+	Query getInventory = em.createNamedQuery("Player.getById");
+	getInventory.setParameter("id", playerid);
+	player = (Player) getInventory.getSingleResult();
+	this.setPlayer(player);
+	this.setInventory(player.getItems());
+    }
 
-	public void moveToken(int playerid, int count) {
-		List<Token> tokelist = this.getTokens(playerid);
-		Token token = tokelist.get(0);
-		sender.sendTokenMove(gameid, token.getId(), count);
-	}
+    /**
+     * Get token list
+     *
+     * @param playerid player id
+     * @return List of Tokens
+     */
+    public List<Token> getTokens(int playerid) {
+	Query getTokenList = em.createNamedQuery("Token.getTokenList");
+	getTokenList.setParameter("id", playerid);
+	List<Token> tokelist = (List) getTokenList.getResultList();
+
+	return tokelist;
+    }
+
+    /**
+     * Move token
+     *
+     * @param playerid player id
+     * @param count    count
+     */
+    public void moveToken(int playerid, int count) {
+	List<Token> tokelist = this.getTokens(playerid);
+	Token token = tokelist.get(0);
+	sender.sendTokenMove(gameid, token.getId(), count);
+    }
+
+    public Player getPlayer() {
+	return player;
+    }
+
+    public void setPlayer(Player player) {
+	this.player = player;
+    }
+
+    public int getGameid() {
+	return gameid;
+    }
+
+    public void setGameid(int gameid) {
+	this.gameid = gameid;
+    }
+
+    public int getPlayerid() {
+	return player_id;
+    }
+
+    public void setPlayerid(int playerid) {
+	this.player_id = playerid;
+    }
 }
