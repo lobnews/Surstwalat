@@ -27,9 +27,11 @@ public class InventoryPanel extends javax.swing.JPanel implements EventListener{
     public InventoryPanel() {
         initComponents();
         for(int i = 0; i < 25; i++) {
-            panels[i] = new ItemPanel();
-            add(panels[i]);
+            ItemPanel ip = new ItemPanel();
+            panels[i] = ip;
+            itemPanels.add(ip);
         }
+        MainFrame.getInstance().getEventManager().registerListener(this);
     }
 
     @EventHandler
@@ -41,6 +43,7 @@ public class InventoryPanel extends javax.swing.JPanel implements EventListener{
             } else {
                 panels[i].setItem(null);
             }
+            panels[i].revalidate();
         }
         revalidate();
     }
@@ -54,13 +57,14 @@ public class InventoryPanel extends javax.swing.JPanel implements EventListener{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        itemPanels = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
 
         setLayout(new java.awt.BorderLayout());
 
-        jPanel1.setLayout(new java.awt.GridLayout(5, 5));
-        add(jPanel1, java.awt.BorderLayout.CENTER);
+        itemPanels.setMinimumSize(new java.awt.Dimension(150, 150));
+        itemPanels.setLayout(new java.awt.GridLayout(5, 5));
+        add(itemPanels, java.awt.BorderLayout.CENTER);
 
         jButton1.setText("Normaler Würfel");
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -77,7 +81,7 @@ public class InventoryPanel extends javax.swing.JPanel implements EventListener{
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel itemPanels;
     private javax.swing.JButton jButton1;
-    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

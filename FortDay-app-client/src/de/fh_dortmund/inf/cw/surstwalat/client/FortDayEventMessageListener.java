@@ -8,7 +8,17 @@ package de.fh_dortmund.inf.cw.surstwalat.client;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.Event;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.AssignActivePlayerEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.AssignPlayerEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.EliminatePlayerEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.GameStartedEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.ItemAddToUserEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.ItemSpawnEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.PlayerInventarEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.PlayerOnFieldMessage;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.SetTokenHealthEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.StartRoundEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.TokenCreatedEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.TokenDeathEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.UpdateZoneEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
@@ -66,18 +76,46 @@ public class FortDayEventMessageListener implements MessageListener {
                 return;
             }
             
-            ObjectMessage objectMessage = (ObjectMessage) message;
-            System.out.printf("Read MessageType %d\n", objectMessage.getIntProperty(PropertyType.MESSAGE_TYPE));
             Event e;
-            switch(objectMessage.getIntProperty(PropertyType.MESSAGE_TYPE)) {
+            switch(message.getIntProperty(PropertyType.MESSAGE_TYPE)) {
+                case MessageType.ASSIGN_ACTIVE_PLAYER:
+                    e = new AssignActivePlayerEvent(message);
+                    break;
                 case MessageType.ASSIGN_PLAYER:
-                    e = new AssignPlayerEvent(objectMessage);
+                    e = new AssignPlayerEvent(message);
+                    break;
+                case MessageType.ELIMINATE_PLAYER:
+                    e = new EliminatePlayerEvent(message);
+                    break;
+                case MessageType.GAME_STARTED:
+                    e = new GameStartedEvent(message);
+                    break;
+                case MessageType.ITEM_ADD_TO_USER:
+                    e = new ItemAddToUserEvent(message);
+                    break;
+                case MessageType.ITEM_SPAWN:
+                    e = new ItemSpawnEvent(message);
+                    break;
+                case MessageType.PLAYER_INVENTAR:
+                    e = new PlayerInventarEvent(message);
+                    break;
+                case MessageType.PLAYER_ON_FIELD:
+                    e = new PlayerOnFieldMessage(message);
+                    break;
+                case MessageType.SET_TOKEN_HEALTH:
+                    e = new SetTokenHealthEvent(message);
                     break;
                 case MessageType.START_ROUND:
-                    e = new StartRoundEvent(objectMessage);
+                    e = new StartRoundEvent(message);
                     break;
-                case MessageType.ASSIGN_ACTIVE_PLAYER:
-                    e = new AssignActivePlayerEvent(objectMessage);
+                case MessageType.TOKEN_CREATED:
+                    e = new TokenCreatedEvent(message);
+                    break;
+                case MessageType.TOKEN_DEATH:
+                    e = new TokenDeathEvent(message);
+                    break;
+                case MessageType.UPDATE_ZONE:
+                    e = new UpdateZoneEvent(message);
                     break;
                 default:
                     return;

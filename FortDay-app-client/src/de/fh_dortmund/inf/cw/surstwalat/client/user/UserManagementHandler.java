@@ -189,6 +189,6 @@ public class UserManagementHandler implements MessageListener {
     }
     
     public void moveToken(int gameID, int token, int number) {
-        
+        userSessionRemote.moveToken(gameID, token, number);
     }
 }

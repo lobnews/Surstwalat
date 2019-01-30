@@ -78,6 +78,7 @@ public class ItemPanel extends javax.swing.JPanel {
 
         itemLabel = new javax.swing.JLabel();
 
+        setMinimumSize(new java.awt.Dimension(30, 30));
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 formMouseClicked(evt);

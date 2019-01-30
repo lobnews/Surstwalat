@@ -27,6 +27,7 @@ import de.fh_dortmund.inf.cw.surstwalat.client.util.Pawn;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.PawnColor;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Dice;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Item;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
@@ -144,7 +145,8 @@ public class MainFrame extends javax.swing.JFrame implements EventListener {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> {
             getInstance().setVisible(true);
-            getInstance().setFrame(new MainPanel(), false);
+//            getInstance().setFrame(new MainPanel(), false);
+//            getInstance().addItem(new Dice(new int[]{1,2,3,4,5,6}, "Ich bin ein Text"));
         });
     }
 
@@ -200,7 +202,12 @@ public class MainFrame extends javax.swing.JFrame implements EventListener {
         if (e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
             return;
         }
+        if(e.getGameID() != gameId) {
+            return;
+        }
+        getInstance().setFrame(new MainPanel(), false);
         showMessage(e.getDisplayMessage());
+        
     }
 
     @EventHandler(priority = EventPriority.LOW)

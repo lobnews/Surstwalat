@@ -9,6 +9,7 @@ import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.EventHandler;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.EventListener;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.EliminatePlayerEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.ItemAddToUserEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.ItemSpawnEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.PawnInteractEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.PlayerOnFieldMessage;
@@ -45,7 +46,7 @@ public class FieldPanel extends javax.swing.JPanel implements EventListener {
     private Pawn pawn;
     private boolean zone = false;
     private boolean nextZone = false;
-    private boolean item;
+    private int itemID = -1;
     
     static {
         BufferedImage imageCache = null;
@@ -205,6 +206,13 @@ public class FieldPanel extends javax.swing.JPanel implements EventListener {
     }
     
     @EventHandler
+    public void onItemAddToUser(ItemAddToUserEvent e) {
+        if(itemID == e.getItem().getId()) {
+            itemID = -1;
+        }
+    }
+    
+    @EventHandler
     public void onZoneUpdate(UpdateZoneEvent e) {
         zone = false;
         nextZone = false;
@@ -240,7 +248,7 @@ public class FieldPanel extends javax.swing.JPanel implements EventListener {
         if(pawn == null) {
             if(e.getField() == value) {
                 pawn = Pawn.getInstance(e.getTokenID());
-                item = false;
+                itemID = -1;
             }
         } else {
             if (pawn.getTokenID() == e.getTokenID() && value != e.getField()) {
@@ -254,7 +262,7 @@ public class FieldPanel extends javax.swing.JPanel implements EventListener {
         if(e.getItemPos() != value) {
             return;
         }
-        item = true;
+        itemID = e.getItemID();
     }
 
     @Override
@@ -276,7 +284,7 @@ public class FieldPanel extends javax.swing.JPanel implements EventListener {
             foregroundLabel.setIcon(new ImageIcon(newBackground));
             foregroundLayer.repaint();
         }
-        if(item) {
+        if(itemID >= 0) {
             BufferedImage newBackground = new BufferedImage(itemLayer.getWidth(), itemLayer.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
             Graphics2D g2D = (Graphics2D) newBackground.getGraphics();
             g2D.drawImage(ITEM_IMAGE, 0, 0, newBackground.getWidth(), newBackground.getHeight(), 0, 0, ITEM_IMAGE.getWidth(), ITEM_IMAGE.getHeight(), null);
