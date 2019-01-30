@@ -150,6 +150,31 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
         return user.getName();
     }
 
+    /**
+     * Get account by account name
+     *
+     * @param accountName
+     * @return account
+     * @throws AccountNotFoundException if account not exist
+     * @throws GeneralServiceException if there is a general service exception
+     */
+    @Override
+    public Account getAccountByName(String accountName) throws AccountNotFoundException, GeneralServiceException {
+        return userManagement.getAccountByName(accountName);
+    }
+
+    /**
+     * Get account by account id
+     *
+     * @param accountId
+     * @return account
+     * @throws AccountNotFoundException if account not exist
+     * @throws GeneralServiceException if there is a general service exception
+     */
+    @Override
+    public Account getAccountById(int accountId) throws AccountNotFoundException, GeneralServiceException {
+        return userManagement.getAccountById(accountId);
+    }
 
     /* (non-Javadoc)
 	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#logout()
@@ -328,5 +353,4 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
     private void sendMessage(ObjectMessage msg) {
         jmsContext.createProducer().send(eventTopic, msg);
     }
-
 }

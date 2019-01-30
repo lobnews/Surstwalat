@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.fh_dortmund.inf.cw.surstwalat.client;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.event.EventHandler;
@@ -10,6 +5,7 @@ import de.fh_dortmund.inf.cw.surstwalat.client.event.EventListener;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.EventManager;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.EventPriority;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.AssignActivePlayerEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.event.events.AssignPlayerEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.EliminatePlayerEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.GameStartedEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.PlayerRollEvent;
@@ -17,8 +13,18 @@ import de.fh_dortmund.inf.cw.surstwalat.client.event.events.SetTokenHealthEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.StartRoundEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.TokenCreatedEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.UpdateZoneEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.view.LoginPanel;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.view.RegistryPanel;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.Pawn;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.PawnColor;
+import de.fh_dortmund.inf.cw.surstwalat.client.util.TextRepository;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
+import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -29,8 +35,14 @@ import javax.swing.JPanel;
 public class MainFrame extends javax.swing.JFrame implements EventListener {
 
     private static MainFrame INSTANCE;
-    
+
     private final EventManager eventManager;
+    private final UserManagementHandler userManager;
+    private final Map<String, String> textRepository;
+
+    private Account account;
+    private int playerId;
+    private int gameId;
 
     public static MainFrame getInstance() {
         if (INSTANCE == null) {
@@ -46,7 +58,8 @@ public class MainFrame extends javax.swing.JFrame implements EventListener {
         initComponents();
         eventManager = new EventManager();
         eventManager.registerListener(this);
-//        this.setLocationRelativeTo(null);
+        userManager = new UserManagementHandler();
+        textRepository = TextRepository.getInstance().getTextRepository("messages");
     }
 
     /**
@@ -115,79 +128,92 @@ public class MainFrame extends javax.swing.JFrame implements EventListener {
         }
         repaint();
     }
-    
+
     public EventManager getEventManager() {
         return eventManager;
     }
-    
+
     @EventHandler(priority = EventPriority.LOW)
     public void onDisplayEvent(StartRoundEvent e) {
-        if(e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
+        if (e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
             return;
         }
         showMessage(e.getDisplayMessage());
     }
-    
+
     @EventHandler(priority = EventPriority.LOW)
     public void onDisplayEvent(AssignActivePlayerEvent e) {
-        if(e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
+        if (e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
             return;
         }
         showMessage(e.getDisplayMessage());
     }
-    
+
     @EventHandler(priority = EventPriority.LOW)
     public void onDisplayEvent(EliminatePlayerEvent e) {
-        if(e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
+        if (e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
             return;
         }
         showMessage(e.getDisplayMessage());
     }
-    
+
     @EventHandler(priority = EventPriority.LOW)
     public void onDisplayEvent(GameStartedEvent e) {
-        if(e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
+        if (e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
             return;
         }
         showMessage(e.getDisplayMessage());
     }
-    
+
     @EventHandler(priority = EventPriority.LOW)
     public void onDisplayEvent(PlayerRollEvent e) {
-        if(e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
+        if (e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
             return;
         }
         showMessage(e.getDisplayMessage());
     }
-    
+
     @EventHandler(priority = EventPriority.LOW)
     public void onDisplayEvent(UpdateZoneEvent e) {
-        if(e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
+        if (e.getDisplayMessage() == null || e.getDisplayMessage().isEmpty()) {
             return;
         }
         showMessage(e.getDisplayMessage());
     }
-    
+
     @EventHandler
     public void onTokenHealth(SetTokenHealthEvent e) {
         Pawn p = Pawn.getInstance(e.getTokenID());
-        if(p == null) {
+        if (p == null) {
             return;
         }
         p.setHealth(e.getHealth());
     }
-    
+
     @EventHandler
     public void onTokenCreated(TokenCreatedEvent e) {
-        for(int i:e.getTokens()) {
+        for (int i : e.getTokens()) {
             new Pawn(PawnColor.getByPlayerNR(e.getPlayerNR()), 25, e.getPlayerID(), i);
         }
     }
-    
+
+    @EventHandler
+    public void onDisplayEvent(AssignPlayerEvent e) {
+        try {
+            gameId = e.getGameID();
+            playerId = e.getPlayerID();
+            account = userManager.getAccountById(e.getUserID());
+        } catch (AccountNotFoundException ex) {
+            Logger.getLogger(LoginPanel.class.getName()).log(Level.SEVERE, textRepository.get("accountNotFoundException_ex"), ex);
+        } catch (GeneralServiceException ex) {
+            Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, textRepository.get("generalServiceException_ex"), ex);
+        }
+    }
+
     public void showMessage(String message) {
         JOptionPane.showMessageDialog(this, message);
     }
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private de.fh_dortmund.inf.cw.surstwalat.client.user.view.LoginPanel loginPanel1;

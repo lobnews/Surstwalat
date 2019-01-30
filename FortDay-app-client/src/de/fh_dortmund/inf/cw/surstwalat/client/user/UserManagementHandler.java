@@ -2,6 +2,7 @@ package de.fh_dortmund.inf.cw.surstwalat.client.user;
 
 import de.fh_dortmund.inf.cw.surstwalat.client.FortDayEventMessageListener;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.view.RegistryPanel;
+import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountAlreadyExistException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.AccountNotFoundException;
 import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.GeneralServiceException;
@@ -10,11 +11,8 @@ import de.fh_dortmund.inf.cw.surstwalat.usermanagement.exceptions.WrongPasswordE
 import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSessionRemote;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSContext;
 import javax.jms.Message;
 import javax.jms.MessageListener;
-import javax.jms.Topic;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -24,7 +22,7 @@ import javax.naming.NamingException;
  *
  * @author Stephan Klimek
  */
-public class UserManagementHandler implements MessageListener{
+public class UserManagementHandler implements MessageListener {
 
     private static UserManagementHandler instance;
 
@@ -46,7 +44,7 @@ public class UserManagementHandler implements MessageListener{
             Logger.getLogger(RegistryPanel.class.getName()).log(Level.SEVERE, e.getMessage(), e);
         }
     }
-    
+
     public void initJMSConnection() {
         FortDayEventMessageListener.getInstance(ctx);
     }
@@ -150,8 +148,32 @@ public class UserManagementHandler implements MessageListener{
         return userSessionRemote.getAccountName();
     }
 
+    /**
+     * Get account by account name
+     *
+     * @param accountName
+     * @return account
+     * @throws AccountNotFoundException if account not exist
+     * @throws GeneralServiceException if there is a general service exception
+     */
+    public Account getAccountByName(String accountName) throws AccountNotFoundException, GeneralServiceException {
+        return userSessionRemote.getAccountByName(accountName);
+    }
+
+    /**
+     * Get account by account id
+     *
+     * @param accountId
+     * @return account
+     * @throws AccountNotFoundException if account not exist
+     * @throws GeneralServiceException if there is a general service exception
+     */
+    public Account getAccountById(int accountId) throws AccountNotFoundException, GeneralServiceException {
+        return userSessionRemote.getAccountById(accountId);
+    }
+
     @Override
     public void onMessage(Message message) {
-        
+
     }
 }
