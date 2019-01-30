@@ -270,6 +270,6 @@ public final class UserManagementHandler implements MessageListener {
     }
     
     public void startGame(int gameID, int fieldsize) {
-        
+        userSessionRemote.startGame(gameID, fieldsize);
     }
 }
