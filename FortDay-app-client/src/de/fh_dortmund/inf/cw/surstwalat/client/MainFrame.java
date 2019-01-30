@@ -308,6 +308,10 @@ public class MainFrame extends JFrame implements EventListener {
     public int getGameId() {
 	return gameId;
     }
+
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
+    }
     
     public void startGame() {
         userManager.startGame(gameId, 40);
