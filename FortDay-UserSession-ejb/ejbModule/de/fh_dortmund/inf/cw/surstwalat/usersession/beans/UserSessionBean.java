@@ -39,11 +39,9 @@ import de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession
  *
  */
 @Stateful
-public class UserSessionBean implements UserSessionLocal, UserSessionRemote
-{
+public class UserSessionBean implements UserSessionLocal, UserSessionRemote {
 
-    private boolean LOGGING = true;
-
+    private final boolean LOGGING = true;
     @Inject
     private JMSContext jmsContext;
 
@@ -61,113 +59,108 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote
     /**
      * Login account
      *
-     * @param username
-     *            account name
-     * @param password
-     *            account password
-     * @throws AccountNotFoundException
-     *             if account not exist
-     * @throws LoginFailedException
-     *             if input datas not match the account
-     * @throws GeneralServiceException
-     *             if there is a general service exception
+     * @param username account name
+     * @param password account password
+     * @throws AccountNotFoundException if account not exist
+     * @throws LoginFailedException     if input datas not match the account
+     * @throws GeneralServiceException  if there is a general service exception
      */
     @Override
     public void login(String username, String password)
-        throws AccountNotFoundException, LoginFailedException, GeneralServiceException
-    {
-        Account localAccount = new Account();
-        localAccount.setName(username);
-        password = HashManager.hashPassword(password);
-        localAccount.setPassword(password);
-        user = userManagement.login(localAccount);
+	    throws AccountNotFoundException, LoginFailedException, GeneralServiceException {
+	Account localAccount = new Account();
+	localAccount.setName(username);
+	password = HashManager.hashPassword(password);
+	localAccount.setPassword(password);
+	user = userManagement.login(localAccount);
 
-        System.out.println("[USERSESSION]  login !!! + " + user.getName());
+	ObjectMessage msg = createObjectMessage(0, MessageType.USER_LOGIN);
+	trySetObject(msg, user);
+	sendMessage(msg);
+
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] User login: Username: " + user.getName());
+	}
     }
 
     /**
      * Update account password
      *
-     * @param curPassword
-     *            current password
-     * @param newPassword
-     *            new password
-     * @throws WrongPasswordException
-     *             if current password is wrong
-     * @throws GeneralServiceException
-     *             if there is a general service exception
+     * @param curPassword current password
+     * @param newPassword new password
+     * @throws WrongPasswordException  if current password is wrong
+     * @throws GeneralServiceException if there is a general service exception
      */
     @Override
     public void changePassword(String curPassword, String newPassword)
-        throws WrongPasswordException, GeneralServiceException
-    {
-        curPassword = HashManager.hashPassword(curPassword);
-        newPassword = HashManager.hashPassword(newPassword);
+	    throws WrongPasswordException, GeneralServiceException {
+	curPassword = HashManager.hashPassword(curPassword);
+	newPassword = HashManager.hashPassword(newPassword);
 
-        if (user.getPassword().contentEquals(curPassword))
-        {
-            user.setPassword(newPassword);
-            userManagement.changePassword(user);
-        }
-        else
-        {
-            throw new WrongPasswordException();
-        }
+	if (user.getPassword().contentEquals(curPassword)) {
+	    user.setPassword(newPassword);
+	    userManagement.changePassword(user);
+	} else {
+	    throw new WrongPasswordException();
+	}
     }
 
     /**
      * Update account password
      *
-     * @param username
-     *            account name
-     * @param password
-     *            password
-     * @param email
-     *            email address
-     * @throws AccountAlreadyExistException
-     *             if the account already exists.
-     * @throws GeneralServiceException
-     *             if there is a general service exception
+     * @param username account name
+     * @param password password
+     * @param email    email address
+     * @throws AccountAlreadyExistException if the account already exists.
+     * @throws GeneralServiceException      if there is a general service exception
      */
     @Override
     public void register(String username, String password, String email)
-        throws AccountAlreadyExistException, GeneralServiceException
-    {
-        Account localAccount = new Account();
-        localAccount.setName(username);
-        password = HashManager.hashPassword(password);
-        localAccount.setPassword(password);
-        localAccount.setEmail(email);
-        userManagement.register(localAccount);
+	    throws AccountAlreadyExistException, GeneralServiceException {
+	Account localAccount = new Account();
+	localAccount.setName(username);
+	password = HashManager.hashPassword(password);
+	localAccount.setPassword(password);
+	localAccount.setEmail(email);
+	userManagement.register(localAccount);
+
+	ObjectMessage msg = createObjectMessage(2, MessageType.USER_REGISTER);
+	trySetObject(msg, localAccount);
+	sendMessage(msg);
+
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] User registered: Username: " + localAccount.getName());
+	}
     }
 
     /**
      * Update account email address
      *
-     * @param email
-     *            new email address
-     * @throws GeneralServiceException
-     *             if there is a general service exception
+     * @param email new email address
+     * @throws GeneralServiceException if there is a general service exception
      */
     @Override
-    public void updateEmailAddress(String email)
-        throws GeneralServiceException
-    {
-        user.setEmail(email);
-        userManagement.updateEmailAddress(user);
+    public void updateEmailAddress(String email) throws GeneralServiceException {
+	user.setEmail(email);
+	userManagement.updateEmailAddress(user);
     }
 
     /**
      * Remove account
      *
-     * @throws GeneralServiceException
-     *             if there is a general service exception
+     * @throws GeneralServiceException if there is a general service exception
      */
     @Override
-    public void deleteAccount()
-        throws GeneralServiceException
-    {
-        userManagement.deleteAccount(user);
+    public void deleteAccount() throws GeneralServiceException {
+	userManagement.deleteAccount(user);
+
+	ObjectMessage msg = createObjectMessage(2, MessageType.USER_DELETE);
+	trySetObject(msg, user);
+	sendMessage(msg);
+
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] User deleted: Username: " + user.getName());
+	}
     }
 
     /**
@@ -176,9 +169,8 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote
      * @return email address
      */
     @Override
-    public String getEMailAddress()
-    {
-        return user.getEmail();
+    public String getEMailAddress() {
+	return user.getEmail();
     }
 
     /**
@@ -187,224 +179,212 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote
      * @return account name
      */
     @Override
-    public String getAccountName()
-    {
-        return user.getName();
+    public String getAccountName() {
+	return user.getName();
     }
 
-    /* (non-Javadoc)
-     * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#logout()
+    /**
+     * Get account by account name
+     *
+     * @param accountName
+     * @return account
+     * @throws AccountNotFoundException if account not exist
+     * @throws GeneralServiceException  if there is a general service exception
      */
     @Override
-    public void logout()
-    {
-        ObjectMessage msg = createObjectMessage(2, MessageType.USER_LOGOUT);
-        trySetObject(msg, user);
-        sendMessage(msg);
+    public Account getAccountByName(String accountName) throws AccountNotFoundException, GeneralServiceException {
+	return userManagement.getAccountByName(accountName);
+    }
 
-        if (LOGGING)
-        {
-            //        	System.out.println("[USERSESSION] User logged out: Username: " + user.getName());
-        }
+    /**
+     * Get account by account id
+     *
+     * @param accountId
+     * @return account
+     * @throws AccountNotFoundException if account not exist
+     * @throws GeneralServiceException  if there is a general service exception
+     */
+    @Override
+    public Account getAccountById(int accountId) throws AccountNotFoundException, GeneralServiceException {
+	return userManagement.getAccountById(accountId);
+    }
+
+    /**
+     * Compare id with logged in account id
+     *
+     * @param accountId account id
+     * @return is id same as current account id
+     */
+    @Override
+    public boolean compareAccountById(int accountId) {
+	if (user == null) {
+	    System.out.println("[USERSESSION] User not found by compareAccountById()");
+	    return false;
+	}
+
+	return user.getId() == accountId;
     }
 
     /* (non-Javadoc)
-     * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#disconnect()
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#logout()
+     */
+    @Override
+    public void logout() {
+	ObjectMessage msg = createObjectMessage(2, MessageType.USER_LOGOUT);
+	trySetObject(msg, user);
+	sendMessage(msg);
+
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] User logged out: Username: " + user.getName());
+	}
+    }
+
+    /* (non-Javadoc)
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#disconnect()
      */
     @Remove
     @Override
-    public void disconnect()
-    {
-        if (LOGGING)
-        {
-            //            System.out.println("[USERSESSION] User disconnected: Username: " + user.getName());
-        }
-        ObjectMessage msg = createObjectMessage(-1, MessageType.USER_DISCONNECT);
-        trySetObject(msg, user);
-        sendMessage(msg);
+    public void disconnect() {
+	ObjectMessage msg = createObjectMessage(-1, MessageType.USER_DISCONNECT);
+	trySetObject(msg, user);
+	sendMessage(msg);
 
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] Client disconnected");
+	}
     }
 
     /* (non-Javadoc)
-     * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#timeout()
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#timeout()
      */
     @Remove
     @Override
-    public void timeout()
-    {
-        ObjectMessage msg = createObjectMessage(-1, MessageType.USER_TIMEOUT);
-        trySetObject(msg, user);
-        sendMessage(msg);
+    public void timeout() {
+	ObjectMessage msg = createObjectMessage(-1, MessageType.USER_TIMEOUT);
+	trySetObject(msg, user);
+	sendMessage(msg);
 
-        if (LOGGING)
-        {
-            System.out.println("[USERSESSION] User timed out: Username: " + user.getName());
-        }
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] User timed out: Username: " + user.getName());
+	}
     }
 
     /* (non-Javadoc)
-     * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#playerRolls(int, int, de.fh_dortmund.inf.cw.surstwalat.common.model.Dice)
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#playerRolls(int, int, de.fh_dortmund.inf.cw.surstwalat.common.model.Dice)
      */
     @Override
-    public void playerRolls(int gameID, int playerID, Dice dice)
-    {
-        ObjectMessage msg = createObjectMessage(gameID, MessageType.PLAYER_ACTION);
-        Action a = new Action();
-        a.setActionType(ActionType.ROLL);
-        trySetIntProperty(msg, PropertyType.ACTION_TYPE, a.getActionType().ordinal());
-        trySetIntProperty(msg, PropertyType.PLAYER_ID, playerID);
-        trySetObject(msg, dice);
+    public void playerRolls(int gameID, int playerID, Dice dice) {
+	ObjectMessage msg = createObjectMessage(gameID, MessageType.PLAYER_ACTION);
+	Action a = new Action();
+	a.setActionType(ActionType.ROLL);
+	trySetIntProperty(msg, PropertyType.ACTION_TYPE, a.getActionType().ordinal());
+	trySetIntProperty(msg, PropertyType.PLAYER_ID, playerID);
+	trySetObject(msg, dice);
 
-        sendMessage(msg);
+	sendMessage(msg);
 
-        if (LOGGING)
-        {
-            System.out
-                .println(
-                    "[USERSESSION] Player rolls: GameID: " + gameID + ", Username: " + user.getName() + ", PlayerID: " +
-                         playerID);
-        }
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] Player rolls: GameID: " + gameID + ", Username: " + user.getName() + ", PlayerID: " + playerID);
+	}
     }
 
     /* (non-Javadoc)
-     * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#useItem(int, int, de.fh_dortmund.inf.cw.surstwalat.common.model.Item)
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#useItem(int, int, de.fh_dortmund.inf.cw.surstwalat.common.model.Item)
      */
     @Override
-    public void useItem(int gameID, int playerID, Item item)
-    {
-        ObjectMessage msg = createObjectMessage(gameID, MessageType.PLAYER_ACTION);
-        Action a = new Action();
-        a.setActionType(ActionType.USE_ITEM);
-        trySetIntProperty(msg, PropertyType.ACTION_TYPE, a.getActionType().ordinal());
-        trySetIntProperty(msg, PropertyType.PLAYER_ID, playerID);
-        trySetObject(msg, item);
+    public void useItem(int gameID, int playerID, Item item) {
+	ObjectMessage msg = createObjectMessage(gameID, MessageType.PLAYER_ACTION);
+	Action a = new Action();
+	a.setActionType(ActionType.USE_ITEM);
+	trySetIntProperty(msg, PropertyType.ACTION_TYPE, a.getActionType().ordinal());
+	trySetIntProperty(msg, PropertyType.PLAYER_ID, playerID);
+	trySetObject(msg, item);
 
-        sendMessage(msg);
+	sendMessage(msg);
 
-        if (LOGGING)
-        {
-            System.out
-                .println(
-                    "[USERSESSION] Player uses Item: GameID: " + gameID + ", Username: " + user.getName() +
-                         ", PlayerID: " + playerID);
-        }
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] Player uses Item: GameID: " + gameID + ", Username: " + user.getName() + ", PlayerID: " + playerID);
+	}
     }
 
     /* (non-Javadoc)
-     * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#getUserInLobby()
-      */
-    @Override
-    public List<Account> getUserInLobby()
-    {
-        return lobbyManagement.getUserInLobby();
-    }
-
-    /* (non-Javadoc)
-     * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#getOpenGames()
-      */
-    @Override
-    public List<Game> getOpenGames()
-    {
-        return lobbyManagement.getOpenGames();
-    }
-
-    /* (non-Javadoc)
-     * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#startRound(int, int)
+ 	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#getUserInLobby()
      */
     @Override
-    public void startGame(int gameID, int fieldSize)
-    {
-        lobbyManagement.startGame(gameID, fieldSize);
+    public List<Account> getUserInLobby() {
+	return lobbyManagement.getUserInLobby();
     }
 
     /* (non-Javadoc)
-     * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#getUsersInOpenGame(int)
+ 	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#getOpenGames()
      */
     @Override
-    public List<Account> getUsersInOpenGame(int gameid)
-    {
-        return lobbyManagement.getUsersInOpenGame(gameid);
+    public List<Game> getOpenGames() {
+	return lobbyManagement.getOpenGames();
     }
 
     /* (non-Javadoc)
-     * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#userJoinedGame(int)
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#startRound(int, int)
      */
     @Override
-    public void userJoinedGame(int gameID)
-        throws GameIsFullException
-    {
-        lobbyManagement.userJoinsGame(user.getId(), gameID);
+    public void startGame(int gameID, int fieldSize) {
+	lobbyManagement.startGame(gameID, fieldSize);
     }
 
     /* (non-Javadoc)
-     * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#userCreatedGame()
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#getUsersInOpenGame(int)
      */
     @Override
-    public void userCreatedGame()
-    {
-        lobbyManagement.userCreatesGame(user.getId());
+    public List<Account> getUsersInOpenGame(int gameid) {
+	return lobbyManagement.getUsersInOpenGame(gameid);
     }
 
     /* (non-Javadoc)
-     * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#addItemToPlayer(int, int, de.fh_dortmund.inf.cw.surstwalat.common.model.Item)
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#userJoinedGame(int)
      */
     @Override
-    public void addItemToPlayer(int gameID, int playerID, Item item)
-    {
-        ObjectMessage msg = createObjectMessage(gameID, MessageType.ADD_ITEM_TO_PLAYER);
-        trySetIntProperty(msg, PropertyType.PLAYER_ID, playerID);
-        trySetObject(msg, item);
-
-        sendMessage(msg);
-
-        if (LOGGING)
-        {
-            System.out
-                .println(
-                    "[USERSESSION] Add item to Player: GameID: " + gameID + ", Username: " + user.getName() +
-                         ", PlayerID: " + playerID);
-        }
+    public void userJoinedGame(int gameID) throws GameIsFullException {
+	lobbyManagement.userJoinsGame(user.getId(), gameID);
     }
 
     /* (non-Javadoc)
-     * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#moveToken(int, int, int)
-    */
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#userCreatedGame()
+     */
     @Override
-    public void moveToken(int gameID, int tokenID, int number)
-    {
-        ObjectMessage msg = createObjectMessage(gameID, MessageType.MOVE_TOKEN);
-        trySetIntProperty(msg, PropertyType.TOKEN_ID, tokenID);
-        trySetObject(msg, number);
-
-        sendMessage(msg);
-
-        if (LOGGING)
-        {
-            System.out
-                .println(
-                    "[USERSESSION] Move Token: GameID: " + gameID + ", tokenID: " + tokenID + ", number: " + number);
-        }
+    public void userCreatedGame() {
+	lobbyManagement.userCreatesGame(user.getId());
     }
 
+    /* (non-Javadoc)
+	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#addItemToPlayer(int, int, de.fh_dortmund.inf.cw.surstwalat.common.model.Item)
+     */
     @Override
-    public Account getAccountById(int id)
-        throws AccountNotFoundException, GeneralServiceException
-    {
-        return userManagement.getAccountById(id);
+    public void addItemToPlayer(int gameID, int playerID, Item item) {
+	ObjectMessage msg = createObjectMessage(gameID, MessageType.ADD_ITEM_TO_PLAYER);
+	trySetIntProperty(msg, PropertyType.PLAYER_ID, playerID);
+	trySetObject(msg, item);
+
+	sendMessage(msg);
+
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] Add item to Player: GameID: " + gameID + ", Username: " + user.getName() + ", PlayerID: " + playerID);
+	}
     }
 
+    /* (non-Javadoc)
+ 	 * @see de.fh_dortmund.inf.cw.surstwalat.usersession.beans.interfaces.UserSession#moveToken(int, int, int)
+     */
     @Override
-    public Account getAccountByName(String accountName)
-        throws AccountNotFoundException, GeneralServiceException
-    {
-        return userManagement.getAccountByName(accountName);
-    }
+    public void moveToken(int gameID, int tokenID, int number) {
+	ObjectMessage msg = createObjectMessage(gameID, MessageType.MOVE_TOKEN);
+	trySetIntProperty(msg, PropertyType.TOKEN_ID, tokenID);
+	trySetObject(msg, number);
 
-    @Override
-    public boolean compareAccountById(int accountId)
-    {
-        System.out.println("USER:" + user);
-        return true;
+	sendMessage(msg);
+
+	if (LOGGING) {
+	    System.out.println("[USERSESSION] Move Token: GameID: " + gameID + ", tokenID: " + tokenID + ", number: " + number);
+	}
     }
 
     // General methods for generating and sending messages below //
@@ -414,12 +394,11 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote
      * @param messageType
      * @return
      */
-    private ObjectMessage createObjectMessage(Integer gameId, int messageType)
-    {
-        ObjectMessage msg = jmsContext.createObjectMessage();
-        trySetIntProperty(msg, PropertyType.MESSAGE_TYPE, messageType);
-        trySetIntProperty(msg, PropertyType.GAME_ID, gameId);
-        return msg;
+    private ObjectMessage createObjectMessage(Integer gameId, int messageType) {
+	ObjectMessage msg = jmsContext.createObjectMessage();
+	trySetIntProperty(msg, PropertyType.MESSAGE_TYPE, messageType);
+	trySetIntProperty(msg, PropertyType.GAME_ID, gameId);
+	return msg;
     }
 
     /* Tries to set an Int Property; JMSException when failed */
@@ -428,16 +407,12 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote
      * @param propertyType
      * @param value
      */
-    private void trySetIntProperty(Message msg, String propertyType, Integer value)
-    {
-        try
-        {
-            msg.setIntProperty(propertyType, value);
-        }
-        catch (JMSException e)
-        {
-            System.out.println("Failed to set" + propertyType.toString() + "to " + value);
-        }
+    private void trySetIntProperty(Message msg, String propertyType, Integer value) {
+	try {
+	    msg.setIntProperty(propertyType, value);
+	} catch (JMSException e) {
+	    System.out.println("Failed to set" + propertyType + "to " + value);
+	}
     }
 
     /* Tries to set a String Property; JMSException when failed */
@@ -446,16 +421,12 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote
      * @param propertyType
      * @param value
      */
-    private void trySetStringProperty(Message msg, String propertyType, String value)
-    {
-        try
-        {
-            msg.setStringProperty(propertyType, value);
-        }
-        catch (JMSException e)
-        {
-            System.out.println("Failed to set" + propertyType.toString() + "to " + value);
-        }
+    private void trySetStringProperty(Message msg, String propertyType, String value) {
+	try {
+	    msg.setStringProperty(propertyType, value);
+	} catch (JMSException e) {
+	    System.out.println("Failed to set" + propertyType + "to " + value);
+	}
     }
 
     /* Tries to set an Object Property; JMSException when failed */
@@ -463,25 +434,19 @@ public class UserSessionBean implements UserSessionLocal, UserSessionRemote
      * @param msg
      * @param object
      */
-    private void trySetObject(ObjectMessage msg, Serializable object)
-    {
-        try
-        {
-            msg.setObject(object);
-        }
-        catch (JMSException e)
-        {
-            System.out.println("Failed to set object to" + object);
-        }
+    private void trySetObject(ObjectMessage msg, Serializable object) {
+	try {
+	    msg.setObject(object);
+	} catch (JMSException e) {
+	    System.out.println("Failed to set object to" + object);
+	}
     }
 
     /* Sends the given ObjectMessage */
     /**
      * @param msg
      */
-    private void sendMessage(ObjectMessage msg)
-    {
-        jmsContext.createProducer().send(eventTopic, msg);
+    private void sendMessage(ObjectMessage msg) {
+	jmsContext.createProducer().send(eventTopic, msg);
     }
-
 }

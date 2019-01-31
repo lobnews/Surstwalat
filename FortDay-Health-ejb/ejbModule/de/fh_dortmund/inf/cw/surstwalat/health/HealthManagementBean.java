@@ -35,7 +35,7 @@ import javax.persistence.TypedQuery;
 @Stateless
 public class HealthManagementBean implements HealthManagementLocal, HealthManagementRemote{
     
-    private static final int MAX_HEALTH = 100;
+    private static final int MAX_HEALTH = 7;
     
     @Inject
     private JMSContext jmsContext;

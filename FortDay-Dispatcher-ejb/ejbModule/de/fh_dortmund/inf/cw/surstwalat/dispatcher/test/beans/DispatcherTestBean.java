@@ -23,7 +23,7 @@ import de.fh_dortmund.inf.cw.surstwalat.common.model.Game;
  * @author Johannes Heiderich
  */
 @Singleton
-//@Startup
+@Startup
 public class DispatcherTestBean {
 
 	public int gameId;

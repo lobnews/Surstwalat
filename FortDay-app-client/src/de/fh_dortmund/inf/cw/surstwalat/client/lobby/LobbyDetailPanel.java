@@ -9,6 +9,7 @@ import de.fh_dortmund.inf.cw.surstwalat.client.MainFrame;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.EventHandler;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.EventListener;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.UserJoinGameEvent;
+import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.common.model.Account;
 import java.util.LinkedList;
 import java.util.List;
@@ -98,7 +99,11 @@ public class LobbyDetailPanel extends javax.swing.JPanel {
         private List<Account> accounts;
         
         public LobbyPlayerModel() {
-            accounts = MainFrame.getInstance().getUserManager().getUserInLobby();
+            if(MainFrame.getInstance().getGameId() > 0) {
+                accounts = UserManagementHandler.getInstance().getUsersInOpenGame(MainFrame.getInstance().getGameId());
+            } else {
+                accounts = new LinkedList<>();
+            }
             MainFrame.getInstance().getEventManager().registerListener(this);
         }
         
@@ -153,7 +158,11 @@ public class LobbyDetailPanel extends javax.swing.JPanel {
         
         @EventHandler
         public void onPlayerJoin(UserJoinGameEvent e) {
-            accounts = MainFrame.getInstance().getUserManager().getUserInLobby();
+            if(MainFrame.getInstance().getGameId() > 0) {
+                accounts = UserManagementHandler.getInstance().getUsersInOpenGame(MainFrame.getInstance().getGameId());
+            } else {
+                accounts = new LinkedList<>();
+            }
             LobbyDetailPanel.this.revalidate();
         }
     }
