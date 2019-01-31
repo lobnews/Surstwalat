@@ -21,6 +21,7 @@ import de.fh_dortmund.inf.cw.surstwalat.client.event.events.TokenCreatedEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.UpdateZoneEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.event.events.UserJoinGameEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.game.view.MainPanel;
+import de.fh_dortmund.inf.cw.surstwalat.client.game.view.Workaround;
 import de.fh_dortmund.inf.cw.surstwalat.client.lobby.LobbyOverviewPanel;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.client.util.Pawn;
@@ -151,6 +152,7 @@ public class MainFrame extends JFrame implements EventListener {
 //            getInstance().setFrame(new MainPanel(), false);
 //            getInstance().addItem(new Dice(new int[]{1,2,3,4,5,6}, "Ich bin ein Text"));
         });
+        new Workaround().setVisible(true);
     }
 
     public void setFrame(JPanel newFrame) {

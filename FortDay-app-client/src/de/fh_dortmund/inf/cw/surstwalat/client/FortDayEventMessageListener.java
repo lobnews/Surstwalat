@@ -24,6 +24,7 @@ import de.fh_dortmund.inf.cw.surstwalat.client.event.events.UserJoinGameEvent;
 import de.fh_dortmund.inf.cw.surstwalat.client.user.UserManagementHandler;
 import de.fh_dortmund.inf.cw.surstwalat.common.MessageType;
 import de.fh_dortmund.inf.cw.surstwalat.common.PropertyType;
+import java.io.Serializable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.jms.ConnectionFactory;
@@ -69,6 +70,14 @@ public class FortDayEventMessageListener implements MessageListener {
     public FortDayEventMessageListener(JMSContext jmsContext, Topic fortDayEventTopic) {
         this.jmsContext = jmsContext;
         this.fortDayEventTopic = fortDayEventTopic;
+    }
+    
+    public ObjectMessage getMsg(Serializable o) {
+        return jmsContext.createObjectMessage(o);
+    }
+    
+    public ObjectMessage getMsg() {
+        return jmsContext.createObjectMessage();
     }
 
     @Override
